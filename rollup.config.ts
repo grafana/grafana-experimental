@@ -8,15 +8,17 @@ const pkg = require('./package.json');
 
 const libraryName = pkg.name;
 
-const buildCjsPackage = ({ env }) => {
-  return {
+const env = process.env.NODE_ENV || 'production';
+
+export default [
+  {
     input: 'src/index.ts',
     output: [
       {
         file: `dist/index.${env}.js`,
         name: libraryName,
         format: 'cjs',
-        sourcemap: true,
+        sourcemap: env === 'production' ? true : 'inline',
         chunkFileNames: `[name].${env}.js`,
         strict: false,
         exports: 'named',
@@ -26,6 +28,9 @@ const buildCjsPackage = ({ env }) => {
         },
       },
     ],
+    watch: {
+      include: './src/**',
+    },
     external: ['react', '@grafana/data', '@grafana/ui', '@emotion/css'],
     plugins: [
       typescript({
@@ -38,6 +43,5 @@ const buildCjsPackage = ({ env }) => {
       resolve(),
       env === 'production' && terser(),
     ],
-  };
-};
-export default [buildCjsPackage({ env: 'development' }), buildCjsPackage({ env: 'production' })];
+  },
+];

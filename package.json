@@ -5,12 +5,15 @@
   "main": "index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "watch 'npm run bundle' ./src",
-    "build": "yarn clean && yarn typecheck && yarn bundle",
+    "dev": "yarn clean && yarn build:dev --watch",
+    "build:dev": "yarn build:prod --environment NODE_ENV:development",
+    "build:prod": "yarn typecheck && yarn bundle",
+    "build": "yarn clean && yarn build:dev && yarn build:prod",
     "bundle": "rollup -c rollup.config.ts",
     "clean": "rimraf ./dist ./compiled",
     "typecheck": "tsc --noEmit",
     "publish": "npm publish  --access=public --scope=grafana",
+    "start": "yarn dev",
     "test": "jest --notify --watch"
   },
   "files": [
