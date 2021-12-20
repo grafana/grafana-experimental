@@ -33,7 +33,8 @@ export type SuggestionKindProvider = () => CustomSuggestionKind[];
 
 export interface ColumnDefinition {
   name: string;
-  type?: FieldType;
+  type?: string;
+  description?: string;
   // Text used for automplete. If not provided name is used.
   completion?: string;
 }

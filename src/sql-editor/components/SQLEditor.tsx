@@ -276,6 +276,8 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
               insertText: x.completion ?? x.name,
               kind: CompletionItemKind.Field,
               sortText: CompletionItemPriority.High,
+              detail: x.type,
+              documentation: x.description
             }))
           : [];
       }
