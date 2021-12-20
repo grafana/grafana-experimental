@@ -1,5 +1,5 @@
 import { CodeEditor, Monaco, monacoTypes } from '@grafana/ui';
-import React, { useMemo } from 'react';
+import React, {  useEffect, useMemo, useRef } from 'react';
 import { getStatementPosition } from '../standardSql/getStatementPosition';
 import { getStandardSuggestions } from '../standardSql/getStandardSuggestions';
 import { initSuggestionsKindRegistry, SuggestionKindRegistyItem } from '../standardSql/suggestionsKindRegistry';
@@ -31,6 +31,7 @@ import {
   initStandardSuggestions,
 } from '../standardSql/standardSuggestionsRegistry';
 import { initStatementPositionResolvers } from '../standardSql/statementPositionResolversRegistry';
+import { sqlEditorLog } from '../utils/debugger';
 
 const STANDARD_SQL_LANGUAGE = 'sql';
 
@@ -60,11 +61,22 @@ const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
 const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistyItem>>();
 
 export const SQLEditor: React.FC<SQLEditorProps> = ({ onChange, query, language = { id: STANDARD_SQL_LANGUAGE } }) => {
+  const langUid = useRef<string>();
   // create unique language id for each SQLEditor instance
   const id = useMemo(() => {
     const uid = v4();
-    return `${language.id}-${uid}`;
+    const id =  `${language.id}-${uid}`;
+    langUid.current = id;
+    return id;
   }, [language.id]);
+
+  useEffect(() => {
+    return () => {
+      INSTANCE_CACHE.delete(langUid.current);
+      sqlEditorLog(`Removing instance cache ${langUid.current}`, false, INSTANCE_CACHE);
+    }
+  }, [])
+
 
   return (
     <CodeEditor
