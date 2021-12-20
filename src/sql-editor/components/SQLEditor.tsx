@@ -25,7 +25,7 @@ import {
   StatementPositionResolversRegistryItem,
   SuggestionsRegistyItem,
 } from '../standardSql/types';
-import {
+import { 
   initFunctionsRegistry,
   initOperatorsRegistry,
   initStandardSuggestions,
@@ -36,8 +36,10 @@ import { sqlEditorLog } from '../utils/debugger';
 const STANDARD_SQL_LANGUAGE = 'sql';
 
 interface LanguageDefinition extends monacoTypes.languages.ILanguageExtensionPoint {
-  // TODO: Will allow providing a custom language definition.
-  loadLanguage?: (module: any) => Promise<void>;
+  loadLanguage?: (module: any) => Promise<{
+    language: monacoTypes.languages.IMonarchLanguage; 
+    conf: monacoTypes.languages.LanguageConfiguration;
+  }>;
   // Provides API for customizing the autocomplete
   completionProvider?: (m: Monaco) => SQLCompletionItemProvider;
 }
@@ -76,7 +78,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ onChange, query, language 
       sqlEditorLog(`Removing instance cache ${langUid.current}`, false, INSTANCE_CACHE);
     }
   }, [])
-
+ 
 
   return (
     <CodeEditor
@@ -94,63 +96,65 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ onChange, query, language 
 };
 
 export const registerLanguageAndSuggestions = async (monaco: Monaco, l: LanguageDefinition, lid: string) => {
-  if (!l.loadLanguage) {
-    // Assume lanuage based on standard Monaco SQL definition
-    const defaultSQLLanguage = await getSQLLangConf(monaco);
-    monaco.languages.register({ id: lid });
-    monaco.languages.setMonarchTokensProvider(lid, { ...defaultSQLLanguage.language });
-    monaco.languages.setLanguageConfiguration(lid, { ...defaultSQLLanguage.conf });
+  let languageLoader = getSQLLangConf;
 
-    if (l.completionProvider) {
-      const customProvider = l.completionProvider(monaco);
-      extendStandardRegistries(l.id, lid, customProvider);
-      const languageSuggestionsRegistries = LANGUAGES_CACHE.get(l.id)!;
-      const instanceSuggestionsRegistry = INSTANCE_CACHE.get(lid)!;
+  if(l.loadLanguage){
+    sqlEditorLog(`Loading custom SQL dialect ${l.id}/${lid}`, false);
+    languageLoader =  l.loadLanguage;
+  }
+    
+  const { language, conf } = await languageLoader(monaco);
+  monaco.languages.register({ id: lid });
+  monaco.languages.setMonarchTokensProvider(lid, { ...language });
+  monaco.languages.setLanguageConfiguration(lid, { ...conf });
+  
+  if (l.completionProvider) {
+    const customProvider = l.completionProvider(monaco);
+    extendStandardRegistries(l.id, lid, customProvider);
+    const languageSuggestionsRegistries = LANGUAGES_CACHE.get(l.id)!;
+    const instanceSuggestionsRegistry = INSTANCE_CACHE.get(lid)!;
 
-      const completionProvider: monacoTypes.languages.CompletionItemProvider['provideCompletionItems'] = async (
-        model,
+    const completionProvider: monacoTypes.languages.CompletionItemProvider['provideCompletionItems'] = async (
+      model,
+      position,
+      context,
+      token
+    ) => {
+      const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
+      const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
+      const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
+      const ctx: PositionContext = {
         position,
-        context,
-        token
-      ) => {
-        const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
-        const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
-        const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
-        const ctx: PositionContext = {
-          position,
-          currentToken,
-          statementPosition,
-          kind,
-          range: monaco.Range.fromPositions(position),
-        };
-
-        // // Completely custom suggestions - hope this won't we needed
-        // let ci;
-        // if (customProvider.provideCompletionItems) {
-        //   ci = customProvider.provideCompletionItems(model, position, context, token, ctx);
-        // }
-
-        const stdSuggestions = await getStandardSuggestions(
-          monaco,
-          currentToken,
-          kind,
-          ctx,
-          instanceSuggestionsRegistry
-        );
-
-        return {
-          // ...ci,
-          suggestions: stdSuggestions,
-        };
+        currentToken,
+        statementPosition,
+        kind,
+        range: monaco.Range.fromPositions(position),
       };
 
-      monaco.languages.registerCompletionItemProvider(lid, {
-        ...customProvider,
-        provideCompletionItems: completionProvider,
-      });
-    }
-  } else {
-    // TODO custom dialect support
+      // // Completely custom suggestions - hope this won't we needed
+      // let ci;
+      // if (customProvider.provideCompletionItems) {
+      //   ci = customProvider.provideCompletionItems(model, position, context, token, ctx);
+      // }
+
+      const stdSuggestions = await getStandardSuggestions(
+        monaco,
+        currentToken,
+        kind,
+        ctx,
+        instanceSuggestionsRegistry
+      );
+
+      return {
+        // ...ci,
+        suggestions: stdSuggestions,
+      };
+    };
+
+    monaco.languages.registerCompletionItemProvider(lid, {
+      ...customProvider,
+      provideCompletionItems: completionProvider,
+    });
   }
 };
 
