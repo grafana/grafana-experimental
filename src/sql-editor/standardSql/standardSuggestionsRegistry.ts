@@ -80,6 +80,7 @@ export const initStandardSuggestions =
             ...functions.list().map((f) => ({
               label: f.name,
               insertText: `${f.name}($0)`,
+              documentation: f.description,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
               kind: CompletionItemKind.Function,
               command: TRIGGER_SUGGEST,
@@ -95,6 +96,7 @@ export const initStandardSuggestions =
             ...functions.list().map((f) => ({
               label: f.name,
               insertText: `${f.name}()`,
+              documentation: f.description,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
               kind: CompletionItemKind.Function,
               command: TRIGGER_SUGGEST,
@@ -136,6 +138,7 @@ export const initStandardSuggestions =
               .map((o) => ({
                 label: o.operator,
                 insertText: `${o.operator} `,
+                documentation: o.description,
                 command: TRIGGER_SUGGEST,
                 sortText: CompletionItemPriority.High,
                 kind: CompletionItemKind.Operator,
@@ -167,6 +170,7 @@ export const initStandardSuggestions =
               .map((o) => ({
                 label: o.operator,
                 insertText: `${o.operator} `,
+                documentation: o.description,
                 command: TRIGGER_SUGGEST,
                 sortText: CompletionItemPriority.High,
                 kind: CompletionItemKind.Operator,

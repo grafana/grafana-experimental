@@ -52,6 +52,7 @@ export interface SQLCompletionItemProvider
   supportedFunctions?: () => Array<{
     id: string;
     name: string;
+    description?: string;
   }>;
 
   /**
@@ -62,6 +63,7 @@ export interface SQLCompletionItemProvider
     id: string;
     operator: string;
     type: OperatorType;
+    description?: string;
   }>;
 
   /**
