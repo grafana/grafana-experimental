@@ -1,4 +1,3 @@
-import { FieldType } from '@grafana/data';
 import { Monaco, monacoTypes } from '@grafana/ui';
 import { StatementPositionResolver, SuggestionsResolver } from './standardSql/types';
 import { LinkedToken } from './utils/LinkedToken';
