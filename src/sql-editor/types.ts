@@ -117,6 +117,18 @@ export enum OperatorType {
   Logical,
 }
 
+export enum MacroType {
+  Value,
+  Filter,
+  Group,
+}
+
+export enum ArgType {
+  Column = 'column',
+  RelativeTimeString = '5m',
+  Fill = 'previous',
+}
+
 export enum TokenType {
   Parenthesis = 'delimiter.parenthesis.sql',
   Whitespace = 'white.sql',
@@ -171,6 +183,9 @@ export enum SuggestionKind {
   SortOrderDirectionKeyword = 'sortOrderDirectionKeyword',
   ComparisonOperators = 'comparisonOperators',
   LogicalOperators = 'logicalOperators',
+  ValueMacro = 'valueMacro',
+  FilterMacro = 'filterMacro',
+  GroupMacro = 'groupMacro',
 }
 
 // TODO: export from grafana/ui

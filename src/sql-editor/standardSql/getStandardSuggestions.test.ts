@@ -4,8 +4,8 @@ import { singleLineFullQuery } from '../mocks/testData';
 import { linkedTokenBuilder } from '../utils/linkedTokenBuilder';
 import { TextModel } from '../mocks/TextModel';
 import { Registry } from '@grafana/data';
-import { initStandardSuggestions } from './standardSuggestionsRegistry';
-import { FunctionsRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
+import { initMacrosRegistry, initStandardSuggestions } from './standardSuggestionsRegistry';
+import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
 import { OperatorType, SuggestionKind, CustomSuggestion, PositionContext } from '../types';
 import { getStandardSuggestions } from './getStandardSuggestions';
 
@@ -57,7 +57,8 @@ describe('getStandardSuggestions', () => {
     const suggestionsRegistry = new Registry(
       initStandardSuggestions(
         new Registry<FunctionsRegistryItem>(() => [customFunction]),
-        new Registry<OperatorsRegistryItem>(() => [])
+        new Registry<OperatorsRegistryItem>(() => []),
+        new Registry<MacrosRegistryItem>(() => [])
       )
     );
 
@@ -82,7 +83,8 @@ describe('getStandardSuggestions', () => {
     const suggestionsRegistry = new Registry(
       initStandardSuggestions(
         new Registry<FunctionsRegistryItem>(() => [customFunction]),
-        new Registry<OperatorsRegistryItem>(() => [])
+        new Registry<OperatorsRegistryItem>(() => []),
+        new Registry<MacrosRegistryItem>(() => [])
       )
     );
 
@@ -109,7 +111,8 @@ describe('getStandardSuggestions', () => {
     const suggestionsRegistry = new Registry(
       initStandardSuggestions(
         new Registry<FunctionsRegistryItem>(() => []),
-        new Registry<OperatorsRegistryItem>(() => [customLogicalOperator])
+        new Registry<OperatorsRegistryItem>(() => [customLogicalOperator]),
+        new Registry<MacrosRegistryItem>(() => [])
       )
     );
 
@@ -136,7 +139,8 @@ describe('getStandardSuggestions', () => {
     const suggestionsRegistry = new Registry(
       initStandardSuggestions(
         new Registry<FunctionsRegistryItem>(() => []),
-        new Registry<OperatorsRegistryItem>(() => [customComparisonOperator])
+        new Registry<OperatorsRegistryItem>(() => [customComparisonOperator]),
+        new Registry<MacrosRegistryItem>(() => [])
       )
     );
 
@@ -163,7 +167,8 @@ describe('getStandardSuggestions', () => {
     const suggestionsRegistry = new Registry(
       initStandardSuggestions(
         new Registry<FunctionsRegistryItem>(() => []),
-        new Registry<OperatorsRegistryItem>(() => [customLogicalOperator])
+        new Registry<OperatorsRegistryItem>(() => [customLogicalOperator]),
+        new Registry<MacrosRegistryItem>(() => [])
       )
     );
 
@@ -178,11 +183,33 @@ describe('getStandardSuggestions', () => {
     expect(result).toHaveLength(0);
   });
 
+  it("suggests $__time(dateColumn) macro when in column position", async () => {
+    const suggestionsRegistry = new Registry(
+      initStandardSuggestions(
+        new Registry<FunctionsRegistryItem>(() => []),
+        new Registry<OperatorsRegistryItem>(() => []),
+        new Registry<MacrosRegistryItem>(initMacrosRegistry)
+      )
+    );
+
+    const result = await getStandardSuggestions(
+      MonacoMock,
+      token,
+      [SuggestionKind.ValueMacro],
+      posContextMock as PositionContext,
+      suggestionsRegistry
+    );
+      
+    expect(result).toHaveLength(1);
+    expect(result[0].label).toEqual("$__time");
+  });
+
   it('suggests SELECT and SELECT FROM from the standard registry', async () => {
     const suggestionsRegistry = new Registry(
       initStandardSuggestions(
         new Registry<FunctionsRegistryItem>(() => []),
-        new Registry<OperatorsRegistryItem>(() => [])
+        new Registry<OperatorsRegistryItem>(() => []),
+        new Registry<MacrosRegistryItem>(() => [])
       )
     );
 

@@ -22,7 +22,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.AfterSelectKeyword,
       name: StatementPosition.AfterSelectKeyword,
-      kind: [SuggestionKind.FunctionsWithArguments, SuggestionKind.Columns],
+      kind: [SuggestionKind.FunctionsWithArguments, SuggestionKind.Columns, SuggestionKind.ValueMacro],
     },
     {
       id: StatementPosition.AfterSelectFuncFirstArgument,
@@ -65,7 +65,6 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
         SuggestionKind.LimitKeyword,
       ],
     },
-
     {
       id: StatementPosition.WhereKeyword,
       name: StatementPosition.WhereKeyword,
@@ -79,7 +78,11 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereValue,
       name: StatementPosition.WhereValue,
-      kind: [],
+      kind: [
+        SuggestionKind.Columns,
+        SuggestionKind.FilterMacro,
+        SuggestionKind.ValueMacro,
+      ],
     },
     {
       id: StatementPosition.AfterWhereValue,
@@ -104,12 +107,15 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.AfterOrderByKeywords,
       name: StatementPosition.AfterOrderByKeywords,
-      kind: [SuggestionKind.Columns],
+      kind: [SuggestionKind.Columns, SuggestionKind.GroupMacro],
     },
     {
       id: StatementPosition.AfterOrderByFunction,
       name: StatementPosition.AfterOrderByFunction,
-      kind: [SuggestionKind.SortOrderDirectionKeyword, SuggestionKind.LimitKeyword],
+      kind: [
+        SuggestionKind.SortOrderDirectionKeyword,
+        SuggestionKind.LimitKeyword,
+      ],
     },
     {
       id: StatementPosition.AfterOrderByDirection,

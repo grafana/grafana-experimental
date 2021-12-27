@@ -1,9 +1,11 @@
 import { Registry } from '@grafana/data';
 import { TRIGGER_SUGGEST } from '../utils/commands';
 import {
+  ArgType,
   CompletionItemInsertTextRule,
   CompletionItemKind,
   CompletionItemPriority,
+  MacroType,
   OperatorType,
   SuggestionKind,
 } from '../types';
@@ -23,7 +25,8 @@ import {
   WHERE,
   WITH,
 } from './language';
-import { FunctionsRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
+import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
+import { VALUE_MACROS } from './macros';
 
 /**
  * This registry glues particular SuggestionKind with an async function that provides completion items for it.
@@ -31,7 +34,11 @@ import { FunctionsRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } 
  */
 
 export const initStandardSuggestions =
-  (functions: Registry<FunctionsRegistryItem>, operators: Registry<OperatorsRegistryItem>) =>
+  (
+    functions: Registry<FunctionsRegistryItem>,
+    operators: Registry<OperatorsRegistryItem>,
+    macros: Registry<MacrosRegistryItem>
+  ) =>
   (): SuggestionsRegistyItem[] =>
     [
       {
@@ -55,6 +62,24 @@ export const initStandardSuggestions =
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.Medium,
             },
+          ]),
+      },
+      {
+        id: SuggestionKind.ValueMacro,
+        name: SuggestionKind.ValueMacro,
+        suggestions: (_, m) =>
+          Promise.resolve([
+            ...macros
+              .list()
+              .filter((m) => m.type === MacroType.Value)
+              .map((m) => ({
+                label: m.name,
+                insertText: `${"\\" + m.name}${argsString(m.args)}`,
+                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+                kind: CompletionItemKind.Function,
+                documentation: m.description,
+                command: TRIGGER_SUGGEST,
+              })),
           ]),
       },
       {
@@ -183,7 +208,7 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: 'GROUP BY',
+              label: "GROUP BY",
               insertText: `${GROUP} ${BY} `,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.MediumHigh,
@@ -197,7 +222,7 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: 'ORDER BY',
+              label: "ORDER BY",
               insertText: `${ORDER} ${BY} `,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.Medium,
@@ -211,7 +236,7 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: 'LIMIT',
+              label: "LIMIT",
               insertText: `${LIMIT} `,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.MediumLow,
@@ -241,6 +266,8 @@ export const initFunctionsRegistry = (): FunctionsRegistryItem[] => [
   })),
 ];
 
+export const initMacrosRegistry = (): MacrosRegistryItem[] => [...VALUE_MACROS];
+
 export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
   ...STD_OPERATORS.map((o) => ({
     id: o,
@@ -250,3 +277,10 @@ export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
   })),
   ...LOGICAL_OPERATORS.map((o) => ({ id: o, name: o, operator: o, type: OperatorType.Logical })),
 ];
+
+function argsString(args: ArgType[]): string {
+  return "("
+    .concat(args.map((t, i) => `\${${i}:${t.toString()}}`).join(", "))
+    .concat(")");
+}
+

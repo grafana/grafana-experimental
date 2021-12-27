@@ -21,12 +21,14 @@ import { v4 } from 'uuid';
 import { Registry } from '@grafana/data';
 import {
   FunctionsRegistryItem,
+  MacrosRegistryItem,
   OperatorsRegistryItem,
   StatementPositionResolversRegistryItem,
   SuggestionsRegistyItem,
 } from '../standardSql/types';
 import { 
   initFunctionsRegistry,
+  initMacrosRegistry,
   initOperatorsRegistry,
   initStandardSuggestions,
 } from '../standardSql/standardSuggestionsRegistry';
@@ -57,6 +59,7 @@ interface LanguageRegistries {
   operators: Registry<OperatorsRegistryItem>;
   suggestionKinds: Registry<SuggestionKindRegistyItem>;
   positionResolvers: Registry<StatementPositionResolversRegistryItem>;
+  macros: Registry<MacrosRegistryItem>;
 }
 
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
@@ -96,6 +99,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ onChange, query, language 
 };
 
 export const registerLanguageAndSuggestions = async (monaco: Monaco, l: LanguageDefinition, lid: string) => {
+  console.log("registering");
   let languageLoader = getSQLLangConf;
 
   if(l.loadLanguage){
@@ -168,7 +172,7 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
   if (!INSTANCE_CACHE.has(lid)) {
     INSTANCE_CACHE.set(
       lid,
-      new Registry(initStandardSuggestions(languageRegistries.functions, languageRegistries.operators))
+      new Registry(initStandardSuggestions(languageRegistries.functions, languageRegistries.operators, languageRegistries.macros))
     );
   }
 
@@ -296,6 +300,7 @@ function initializeLanguageRegistries(id: string) {
       operators: new Registry(initOperatorsRegistry),
       suggestionKinds: new Registry(initSuggestionsKindRegistry),
       positionResolvers: new Registry(initStatementPositionResolvers),
+      macros: new Registry(initMacrosRegistry),
     });
   }
 
