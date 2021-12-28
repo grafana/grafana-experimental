@@ -74,7 +74,7 @@ export const initStandardSuggestions =
               .filter((m) => m.type === MacroType.Value)
               .map((m) => ({
                 label: m.name,
-                insertText: `${"\\" + m.name}${argsString(m.args)}`,
+                insertText: `${"\\" + m.text}${argsString(m.args)}`,
                 insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
                 kind: CompletionItemKind.Function,
                 documentation: m.description,
@@ -278,7 +278,10 @@ export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
   ...LOGICAL_OPERATORS.map((o) => ({ id: o, name: o, operator: o, type: OperatorType.Logical })),
 ];
 
-function argsString(args: ArgType[]): string {
+function argsString(args?: ArgType[]): string {
+  if (!args) {
+    return "()";
+  }
   return "("
     .concat(args.map((t, i) => `\${${i}:${t.toString()}}`).join(", "))
     .concat(")");

@@ -4,9 +4,9 @@ import { singleLineFullQuery } from '../mocks/testData';
 import { linkedTokenBuilder } from '../utils/linkedTokenBuilder';
 import { TextModel } from '../mocks/TextModel';
 import { Registry } from '@grafana/data';
-import { initMacrosRegistry, initStandardSuggestions } from './standardSuggestionsRegistry';
+import { initStandardSuggestions } from './standardSuggestionsRegistry';
 import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
-import { OperatorType, SuggestionKind, CustomSuggestion, PositionContext } from '../types';
+import { OperatorType, SuggestionKind, CustomSuggestion, PositionContext, MacroType } from '../types';
 import { getStandardSuggestions } from './getStandardSuggestions';
 
 describe('getStandardSuggestions', () => {
@@ -184,11 +184,18 @@ describe('getStandardSuggestions', () => {
   });
 
   it("suggests $__time(dateColumn) macro when in column position", async () => {
+    const customMacro: MacrosRegistryItem = {
+      name: '$__time',
+      id: '$__time',
+      text: '$__time',
+      type: MacroType.Value,
+    }
+
     const suggestionsRegistry = new Registry(
       initStandardSuggestions(
         new Registry<FunctionsRegistryItem>(() => []),
         new Registry<OperatorsRegistryItem>(() => []),
-        new Registry<MacrosRegistryItem>(initMacrosRegistry)
+        new Registry<MacrosRegistryItem>(() => [customMacro])
       )
     );
 
