@@ -1,7 +1,7 @@
 import { attachDebugger, createLogger } from "@grafana/ui";
 
 let sqlEditorLogger = { logger : () => {}}
-let sqlEditorLog = () => {}
+let sqlEditorLog:(...t: any[]) => void  = () => {}
 
 if (attachDebugger && createLogger) {
      sqlEditorLogger = createLogger('SQLEditor');
