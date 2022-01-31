@@ -47,9 +47,20 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       name: StatementPosition.AfterSelectFuncFirstArgument,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
         return Boolean(
-          previousKeyword?.value === SELECT &&
+          (previousKeyword?.value.toLowerCase() === 'select' || previousKeyword?.value.toLowerCase() === 'as')  &&
             (previousNonWhiteSpace?.is(TokenType.Parenthesis, '(') || currentToken?.is(TokenType.Parenthesis, '()'))
         );
+      },
+    },
+    {
+      id: StatementPosition.SelectAlias,
+      name: StatementPosition.SelectAlias,
+      resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
+        if (previousNonWhiteSpace?.value === ',' && previousKeyword?.value.toLowerCase() === 'as') {
+          return true
+        }
+  
+        return false;
       },
     },
 

@@ -123,6 +123,10 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
       const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
       const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
       const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
+      
+      sqlEditorLog('Statement position', false, statementPosition);
+      sqlEditorLog('Suggestion kinds', false, kind);
+
       const ctx: PositionContext = {
         position,
         currentToken,
