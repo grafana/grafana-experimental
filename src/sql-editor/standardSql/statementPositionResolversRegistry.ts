@@ -190,5 +190,20 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
         Boolean(previousKeyword?.is(TokenType.Keyword, DESC) || previousKeyword?.is(TokenType.Keyword, ASC)),
     },
+    {
+      id: StatementPosition.AfterIsOperator,
+      name: StatementPosition.AfterIsOperator,
+      resolve: ( currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash ) => {
+        return Boolean(previousNonWhiteSpace?.is(TokenType.Operator, 'IS'))
+      }
+    },
+    {
+      id: StatementPosition.AfterIsNotOperator,
+      name: StatementPosition.AfterIsNotOperator,
+      resolve: ( currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash ) => {
+        return Boolean(previousNonWhiteSpace?.is(TokenType.Operator, 'NOT') && previousNonWhiteSpace.getPreviousNonWhiteSpaceToken()?.is(TokenType.Operator, 'IS'))
+      }
+    }
+
   ];
 }
