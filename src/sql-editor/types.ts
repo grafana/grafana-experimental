@@ -154,6 +154,8 @@ export enum StatementPosition {
   AfterOrderByKeywords = 'afterOrderByKeywords',
   AfterOrderByFunction = 'afterOrderByFunction',
   AfterOrderByDirection = 'afterOrderByDirection',
+  AfterIsOperator = 'afterIsOperator',
+  AfterIsNotOperator = 'afterIsNotOperator',
 }
 
 export enum SuggestionKind {
@@ -171,6 +173,9 @@ export enum SuggestionKind {
   SortOrderDirectionKeyword = 'sortOrderDirectionKeyword',
   ComparisonOperators = 'comparisonOperators',
   LogicalOperators = 'logicalOperators',
+  BoolValues = 'boolValues',
+  NullValue = 'nullValue',
+  NotKeyword = 'notKeyword',
 }
 
 // TODO: export from grafana/ui

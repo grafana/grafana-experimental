@@ -116,5 +116,15 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
       name: StatementPosition.AfterOrderByDirection,
       kind: [SuggestionKind.LimitKeyword],
     },
+    {
+      id: StatementPosition.AfterIsOperator,
+      name: StatementPosition.AfterOrderByDirection,
+      kind: [SuggestionKind.NotKeyword, SuggestionKind.NullValue, SuggestionKind.BoolValues],
+    },
+    {
+      id: StatementPosition.AfterIsNotOperator,
+      name: StatementPosition.AfterOrderByDirection,
+      kind: [SuggestionKind.NullValue, SuggestionKind.BoolValues],
+    },
   ];
 };
