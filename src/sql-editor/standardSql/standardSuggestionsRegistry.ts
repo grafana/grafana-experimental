@@ -234,6 +234,23 @@ export const initStandardSuggestions =
               sortText: CompletionItemPriority.Medium,
               kind: CompletionItemKind.Keyword,
             },
+            {
+              label: 'ORDER BY(ascending)',
+              insertText: `${ORDER} ${BY} $1 ASC `,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.MediumLow,
+              kind: CompletionItemKind.Snippet,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            {
+              label: 'ORDER BY(descending)',
+              insertText: `${ORDER} ${BY} $1 DESC`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.MediumLow,
+              kind: CompletionItemKind.Snippet,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            
           ]),
       },
       {

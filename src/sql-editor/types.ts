@@ -139,6 +139,7 @@ export enum StatementPosition {
   AfterSelectKeyword = 'afterSelectKeyword',
   AfterSelectArguments = 'afterSelectArguments',
   AfterSelectFuncFirstArgument = 'afterSelectFuncFirstArgument',
+  SelectAlias = 'selectAlias',
   AfterFromKeyword = 'afterFromKeyword',
   AfterTable = 'afterTable',
   SchemaFuncFirstArgument = 'schemaFuncFirstArgument',

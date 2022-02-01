@@ -40,6 +40,11 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
       kind: [SuggestionKind.Tables],
     },
     {
+      id: StatementPosition.SelectAlias,
+      name: StatementPosition.SelectAlias,
+      kind: [SuggestionKind.Columns, SuggestionKind.FunctionsWithArguments],
+    },
+    {
       id: StatementPosition.FromKeyword,
       name: StatementPosition.FromKeyword,
       kind: [SuggestionKind.FromKeyword],
