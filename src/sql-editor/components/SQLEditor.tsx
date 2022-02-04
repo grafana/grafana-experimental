@@ -88,7 +88,8 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ onChange, query, language 
       onBlur={onChange}
       showMiniMap={false}
       showLineNumbers={true}
-      onBeforeEditorMount={(m: Monaco) => {
+      // Using onEditorDidMount instead of onBeforeEditorMount to support Grafana < 8.2.x
+      onEditorDidMount={(_, m: Monaco) => {
         registerLanguageAndSuggestions(m, language, id);
       }}
     />
