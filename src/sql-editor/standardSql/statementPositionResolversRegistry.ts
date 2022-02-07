@@ -47,9 +47,20 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       name: StatementPosition.AfterSelectFuncFirstArgument,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
         return Boolean(
-          previousKeyword?.value === SELECT &&
+          (previousKeyword?.value.toLowerCase() === 'select' || previousKeyword?.value.toLowerCase() === 'as')  &&
             (previousNonWhiteSpace?.is(TokenType.Parenthesis, '(') || currentToken?.is(TokenType.Parenthesis, '()'))
         );
+      },
+    },
+    {
+      id: StatementPosition.SelectAlias,
+      name: StatementPosition.SelectAlias,
+      resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
+        if (previousNonWhiteSpace?.value === ',' && previousKeyword?.value.toLowerCase() === 'as') {
+          return true
+        }
+  
+        return false;
       },
     },
 
@@ -190,5 +201,20 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
         Boolean(previousKeyword?.is(TokenType.Keyword, DESC) || previousKeyword?.is(TokenType.Keyword, ASC)),
     },
+    {
+      id: StatementPosition.AfterIsOperator,
+      name: StatementPosition.AfterIsOperator,
+      resolve: ( currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash ) => {
+        return Boolean(previousNonWhiteSpace?.is(TokenType.Operator, 'IS'))
+      }
+    },
+    {
+      id: StatementPosition.AfterIsNotOperator,
+      name: StatementPosition.AfterIsNotOperator,
+      resolve: ( currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash ) => {
+        return Boolean(previousNonWhiteSpace?.is(TokenType.Operator, 'NOT') && previousNonWhiteSpace.getPreviousNonWhiteSpaceToken()?.is(TokenType.Operator, 'IS'))
+      }
+    }
+
   ];
 }

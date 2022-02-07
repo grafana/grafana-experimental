@@ -189,7 +189,7 @@ export const initStandardSuggestions =
         name: SuggestionKind.ComparisonOperators,
         suggestions: (_, m) =>
           Promise.resolve(
-            operators
+            [...operators
               .list()
               .filter((o) => o.type === OperatorType.Comparison)
               .map((o) => ({
@@ -199,7 +199,38 @@ export const initStandardSuggestions =
                 command: TRIGGER_SUGGEST,
                 sortText: CompletionItemPriority.High,
                 kind: CompletionItemKind.Operator,
-              }))
+              })),
+              {
+                label: 'IN (...)',
+                insertText: `IN ( $0 )`,
+                command: TRIGGER_SUGGEST,
+                sortText: CompletionItemPriority.MediumHigh,
+                kind: CompletionItemKind.Operator,
+                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+              },
+              {
+                label: 'NOT IN (...)',
+                insertText: `NOT IN ( $0 )`,
+                command: TRIGGER_SUGGEST,
+                sortText: CompletionItemPriority.MediumHigh,
+                kind: CompletionItemKind.Operator,
+                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,  
+              },
+              {
+                label: 'IS',
+                insertText: `IS`,
+                command: TRIGGER_SUGGEST,
+                sortText: CompletionItemPriority.MediumHigh,
+                kind: CompletionItemKind.Operator,
+              },
+              {
+                label: 'IS NOT',
+                insertText: `IS NOT`,
+                command: TRIGGER_SUGGEST,
+                sortText: CompletionItemPriority.MediumHigh,
+                kind: CompletionItemKind.Operator,
+              },
+            ]
           ),
       },
       {
@@ -228,6 +259,23 @@ export const initStandardSuggestions =
               sortText: CompletionItemPriority.Medium,
               kind: CompletionItemKind.Keyword,
             },
+            {
+              label: 'ORDER BY(ascending)',
+              insertText: `${ORDER} ${BY} $1 ASC `,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.MediumLow,
+              kind: CompletionItemKind.Snippet,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            {
+              label: 'ORDER BY(descending)',
+              insertText: `${ORDER} ${BY} $1 DESC`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.MediumLow,
+              kind: CompletionItemKind.Snippet,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            
           ]),
       },
       {
@@ -257,6 +305,43 @@ export const initStandardSuggestions =
             }))
           ),
       },
+      {  
+        id: SuggestionKind.NotKeyword,
+        name: SuggestionKind.NotKeyword,
+        suggestions: () => 
+          Promise.resolve([{
+            label: 'NOT',
+            insertText: 'NOT',
+            command: TRIGGER_SUGGEST,
+            kind: CompletionItemKind.Keyword,
+            sortText: CompletionItemPriority.High,
+          }])
+    },
+      {  
+          id: SuggestionKind.BoolValues,
+          name: SuggestionKind.BoolValues,
+          suggestions: () => 
+            Promise.resolve(['TRUE', 'FALSE'].map(o => ({
+              label: o,
+              insertText: `${o}`,
+              command: TRIGGER_SUGGEST,
+              kind: CompletionItemKind.Keyword,
+              sortText: CompletionItemPriority.Medium,
+            })))
+      },
+      {  
+        id: SuggestionKind.NullValue,
+        name: SuggestionKind.NullValue,
+        suggestions: () => 
+          Promise.resolve(['NULL'].map(o => ({
+            label: o,
+            insertText: `${o}`,
+            command: TRIGGER_SUGGEST,
+            kind: CompletionItemKind.Keyword,
+            sortText: CompletionItemPriority.Low,
+          })))
+    }
+
     ];
 
 export const initFunctionsRegistry = (): FunctionsRegistryItem[] => [
@@ -276,6 +361,7 @@ export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
     type: OperatorType.Comparison,
   })),
   ...LOGICAL_OPERATORS.map((o) => ({ id: o, name: o, operator: o, type: OperatorType.Logical })),
+  
 ];
 
 function argsString(args?: ArgType[]): string {

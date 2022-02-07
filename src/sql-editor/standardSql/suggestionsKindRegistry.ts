@@ -40,6 +40,11 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
       kind: [SuggestionKind.Tables],
     },
     {
+      id: StatementPosition.SelectAlias,
+      name: StatementPosition.SelectAlias,
+      kind: [SuggestionKind.Columns, SuggestionKind.FunctionsWithArguments],
+    },
+    {
       id: StatementPosition.FromKeyword,
       name: StatementPosition.FromKeyword,
       kind: [SuggestionKind.FromKeyword],
@@ -121,6 +126,16 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
       id: StatementPosition.AfterOrderByDirection,
       name: StatementPosition.AfterOrderByDirection,
       kind: [SuggestionKind.LimitKeyword],
+    },
+    {
+      id: StatementPosition.AfterIsOperator,
+      name: StatementPosition.AfterOrderByDirection,
+      kind: [SuggestionKind.NotKeyword, SuggestionKind.NullValue, SuggestionKind.BoolValues],
+    },
+    {
+      id: StatementPosition.AfterIsNotOperator,
+      name: StatementPosition.AfterOrderByDirection,
+      kind: [SuggestionKind.NullValue, SuggestionKind.BoolValues],
     },
   ];
 };

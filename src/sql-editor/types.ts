@@ -151,6 +151,7 @@ export enum StatementPosition {
   AfterSelectKeyword = 'afterSelectKeyword',
   AfterSelectArguments = 'afterSelectArguments',
   AfterSelectFuncFirstArgument = 'afterSelectFuncFirstArgument',
+  SelectAlias = 'selectAlias',
   AfterFromKeyword = 'afterFromKeyword',
   AfterTable = 'afterTable',
   SchemaFuncFirstArgument = 'schemaFuncFirstArgument',
@@ -166,6 +167,8 @@ export enum StatementPosition {
   AfterOrderByKeywords = 'afterOrderByKeywords',
   AfterOrderByFunction = 'afterOrderByFunction',
   AfterOrderByDirection = 'afterOrderByDirection',
+  AfterIsOperator = 'afterIsOperator',
+  AfterIsNotOperator = 'afterIsNotOperator',
 }
 
 export enum SuggestionKind {
@@ -186,6 +189,9 @@ export enum SuggestionKind {
   ValueMacro = 'valueMacro',
   FilterMacro = 'filterMacro',
   GroupMacro = 'groupMacro',
+  BoolValues = 'boolValues',
+  NullValue = 'nullValue',
+  NotKeyword = 'notKeyword',
 }
 
 // TODO: export from grafana/ui

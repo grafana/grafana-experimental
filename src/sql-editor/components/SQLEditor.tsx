@@ -91,7 +91,8 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ onChange, query, language 
       onBlur={onChange}
       showMiniMap={false}
       showLineNumbers={true}
-      onBeforeEditorMount={(m: Monaco) => {
+      // Using onEditorDidMount instead of onBeforeEditorMount to support Grafana < 8.2.x
+      onEditorDidMount={(_, m: Monaco) => {
         registerLanguageAndSuggestions(m, language, id);
       }}
     />
@@ -126,6 +127,10 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
       const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
       const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
       const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
+      
+      sqlEditorLog('Statement position', false, statementPosition);
+      sqlEditorLog('Suggestion kinds', false, kind);
+
       const ctx: PositionContext = {
         position,
         currentToken,
