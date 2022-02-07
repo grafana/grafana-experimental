@@ -76,7 +76,7 @@ export const initStandardSuggestions =
                 label: m.name,
                 insertText: `${"\\" + m.text}${argsString(m.args)}`,
                 insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
-                kind: CompletionItemKind.Function,
+                kind: CompletionItemKind.Snippet,
                 documentation: m.description,
                 command: TRIGGER_SUGGEST,
               })),

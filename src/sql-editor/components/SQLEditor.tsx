@@ -99,7 +99,6 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ onChange, query, language 
 };
 
 export const registerLanguageAndSuggestions = async (monaco: Monaco, l: LanguageDefinition, lid: string) => {
-  console.log("registering");
   let languageLoader = getSQLLangConf;
 
   if(l.loadLanguage){
