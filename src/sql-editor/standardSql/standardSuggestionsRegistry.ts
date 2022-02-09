@@ -72,14 +72,29 @@ export const initStandardSuggestions =
             ...macros
               .list()
               .filter((m) => m.type === MacroType.Value)
-              .map((m) => ({
-                label: m.name,
-                insertText: `${"\\" + m.text}${argsString(m.args)}`,
-                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
-                kind: CompletionItemKind.Snippet,
-                documentation: m.description,
-                command: TRIGGER_SUGGEST,
-              })),
+              .map(createMacroSuggestionItem),
+          ]),
+      },
+      {
+        id: SuggestionKind.GroupMacro,
+        name: SuggestionKind.GroupMacro,
+        suggestions: (_, m) =>
+          Promise.resolve([
+            ...macros
+              .list()
+              .filter((m) => m.type === MacroType.Group)
+              .map(createMacroSuggestionItem),
+          ]),
+      },
+      {
+        id: SuggestionKind.FilterMacro,
+        name: SuggestionKind.FilterMacro,
+        suggestions: (_, m) =>
+          Promise.resolve([
+            ...macros
+              .list()
+              .filter((m) => m.type === MacroType.Filter)
+              .map(createMacroSuggestionItem),
           ]),
       },
       {
@@ -188,8 +203,8 @@ export const initStandardSuggestions =
         id: SuggestionKind.ComparisonOperators,
         name: SuggestionKind.ComparisonOperators,
         suggestions: (_, m) =>
-          Promise.resolve(
-            [...operators
+          Promise.resolve([
+            ...operators
               .list()
               .filter((o) => o.type === OperatorType.Comparison)
               .map((o) => ({
@@ -200,38 +215,37 @@ export const initStandardSuggestions =
                 sortText: CompletionItemPriority.High,
                 kind: CompletionItemKind.Operator,
               })),
-              {
-                label: 'IN (...)',
-                insertText: `IN ( $0 )`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.MediumHigh,
-                kind: CompletionItemKind.Operator,
-                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
-              },
-              {
-                label: 'NOT IN (...)',
-                insertText: `NOT IN ( $0 )`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.MediumHigh,
-                kind: CompletionItemKind.Operator,
-                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,  
-              },
-              {
-                label: 'IS',
-                insertText: `IS`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.MediumHigh,
-                kind: CompletionItemKind.Operator,
-              },
-              {
-                label: 'IS NOT',
-                insertText: `IS NOT`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.MediumHigh,
-                kind: CompletionItemKind.Operator,
-              },
-            ]
-          ),
+            {
+              label: "IN (...)",
+              insertText: `IN ( $0 )`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.MediumHigh,
+              kind: CompletionItemKind.Operator,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            {
+              label: "NOT IN (...)",
+              insertText: `NOT IN ( $0 )`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.MediumHigh,
+              kind: CompletionItemKind.Operator,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            {
+              label: "IS",
+              insertText: `IS`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.MediumHigh,
+              kind: CompletionItemKind.Operator,
+            },
+            {
+              label: "IS NOT",
+              insertText: `IS NOT`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.MediumHigh,
+              kind: CompletionItemKind.Operator,
+            },
+          ]),
       },
       {
         id: SuggestionKind.GroupByKeywords,
@@ -260,7 +274,7 @@ export const initStandardSuggestions =
               kind: CompletionItemKind.Keyword,
             },
             {
-              label: 'ORDER BY(ascending)',
+              label: "ORDER BY(ascending)",
               insertText: `${ORDER} ${BY} $1 ASC `,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.MediumLow,
@@ -268,14 +282,13 @@ export const initStandardSuggestions =
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
             },
             {
-              label: 'ORDER BY(descending)',
+              label: "ORDER BY(descending)",
               insertText: `${ORDER} ${BY} $1 DESC`,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.MediumLow,
               kind: CompletionItemKind.Snippet,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
             },
-            
           ]),
       },
       {
@@ -305,43 +318,48 @@ export const initStandardSuggestions =
             }))
           ),
       },
-      {  
+      {
         id: SuggestionKind.NotKeyword,
         name: SuggestionKind.NotKeyword,
-        suggestions: () => 
-          Promise.resolve([{
-            label: 'NOT',
-            insertText: 'NOT',
-            command: TRIGGER_SUGGEST,
-            kind: CompletionItemKind.Keyword,
-            sortText: CompletionItemPriority.High,
-          }])
-    },
-      {  
-          id: SuggestionKind.BoolValues,
-          name: SuggestionKind.BoolValues,
-          suggestions: () => 
-            Promise.resolve(['TRUE', 'FALSE'].map(o => ({
+        suggestions: () =>
+          Promise.resolve([
+            {
+              label: "NOT",
+              insertText: "NOT",
+              command: TRIGGER_SUGGEST,
+              kind: CompletionItemKind.Keyword,
+              sortText: CompletionItemPriority.High,
+            },
+          ]),
+      },
+      {
+        id: SuggestionKind.BoolValues,
+        name: SuggestionKind.BoolValues,
+        suggestions: () =>
+          Promise.resolve(
+            ["TRUE", "FALSE"].map((o) => ({
               label: o,
               insertText: `${o}`,
               command: TRIGGER_SUGGEST,
               kind: CompletionItemKind.Keyword,
               sortText: CompletionItemPriority.Medium,
-            })))
+            }))
+          ),
       },
-      {  
+      {
         id: SuggestionKind.NullValue,
         name: SuggestionKind.NullValue,
-        suggestions: () => 
-          Promise.resolve(['NULL'].map(o => ({
-            label: o,
-            insertText: `${o}`,
-            command: TRIGGER_SUGGEST,
-            kind: CompletionItemKind.Keyword,
-            sortText: CompletionItemPriority.Low,
-          })))
-    }
-
+        suggestions: () =>
+          Promise.resolve(
+            ["NULL"].map((o) => ({
+              label: o,
+              insertText: `${o}`,
+              command: TRIGGER_SUGGEST,
+              kind: CompletionItemKind.Keyword,
+              sortText: CompletionItemPriority.Low,
+            }))
+          ),
+      },
     ];
 
 export const initFunctionsRegistry = (): FunctionsRegistryItem[] => [
@@ -363,6 +381,17 @@ export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
   ...LOGICAL_OPERATORS.map((o) => ({ id: o, name: o, operator: o, type: OperatorType.Logical })),
   
 ];
+
+function createMacroSuggestionItem(m: MacrosRegistryItem) {
+  return {
+    label: m.name,
+    insertText: `${"\\" + m.text}${argsString(m.args)}`,
+    insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+    kind: CompletionItemKind.Snippet,
+    documentation: m.description,
+    command: TRIGGER_SUGGEST,
+  };
+}
 
 function argsString(args?: ArgType[]): string {
   if (!args) {

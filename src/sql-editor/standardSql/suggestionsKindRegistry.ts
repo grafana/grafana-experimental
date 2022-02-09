@@ -22,7 +22,11 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.AfterSelectKeyword,
       name: StatementPosition.AfterSelectKeyword,
-      kind: [SuggestionKind.FunctionsWithArguments, SuggestionKind.Columns, SuggestionKind.ValueMacro],
+      kind: [
+        SuggestionKind.FunctionsWithArguments,
+        SuggestionKind.Columns,
+        SuggestionKind.ValueMacro,
+      ],
     },
     {
       id: StatementPosition.AfterSelectFuncFirstArgument,
@@ -73,7 +77,11 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereKeyword,
       name: StatementPosition.WhereKeyword,
-      kind: [],
+      kind: [
+        SuggestionKind.Columns,
+        SuggestionKind.FilterMacro,
+        SuggestionKind.ValueMacro,
+      ],
     },
     {
       id: StatementPosition.WhereComparisonOperator,
@@ -102,7 +110,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.AfterGroupByKeywords,
       name: StatementPosition.AfterGroupByKeywords,
-      kind: [],
+      kind: [SuggestionKind.GroupMacro],
     },
     {
       id: StatementPosition.AfterGroupBy,
@@ -112,7 +120,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.AfterOrderByKeywords,
       name: StatementPosition.AfterOrderByKeywords,
-      kind: [SuggestionKind.Columns, SuggestionKind.GroupMacro],
+      kind: [SuggestionKind.Columns],
     },
     {
       id: StatementPosition.AfterOrderByFunction,
@@ -130,7 +138,11 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.AfterIsOperator,
       name: StatementPosition.AfterOrderByDirection,
-      kind: [SuggestionKind.NotKeyword, SuggestionKind.NullValue, SuggestionKind.BoolValues],
+      kind: [
+        SuggestionKind.NotKeyword,
+        SuggestionKind.NullValue,
+        SuggestionKind.BoolValues,
+      ],
     },
     {
       id: StatementPosition.AfterIsNotOperator,
