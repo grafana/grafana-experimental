@@ -48,7 +48,8 @@ export class LinkedToken {
 
   is(type: TokenType, value?: string | number | boolean): boolean {
     const isType = this.type === type;
-    return value !== undefined ? isType && this.value === value : isType;
+    
+    return value !== undefined ? isType && compareTokenWithValue(type, this, value)  : isType;
   }
 
   getPreviousNonWhiteSpaceToken(): LinkedToken | null {
@@ -66,7 +67,8 @@ export class LinkedToken {
     let curr = this.previous;
     while (curr != null) {
       const isType = curr.type === type;
-      if (value !== undefined ? isType && curr.value === value : isType) {
+      
+      if (value !== undefined ? isType && compareTokenWithValue(type, curr, value)  : isType) {
         return curr;
       }
       curr = curr.previous;
@@ -84,7 +86,8 @@ export class LinkedToken {
       }
 
       const isType = curr.type === type;
-      if (value !== undefined ? isType && curr.value === value : isType) {
+      
+      if (value !== undefined ? isType && compareTokenWithValue(type, curr, value) : isType) {
         return tokens;
       }
       if (!curr.isWhiteSpace()) {
@@ -106,7 +109,8 @@ export class LinkedToken {
       }
 
       const isType = curr.type === type;
-      if (value !== undefined ? isType && curr.value === value : isType) {
+
+      if (value !== undefined ? isType && compareTokenWithValue(type, curr, value) : isType) {
         return tokens;
       }
       if (!curr.isWhiteSpace()) {
@@ -144,11 +148,17 @@ export class LinkedToken {
     let curr = this.next;
     while (curr != null) {
       const isType = curr.type === type;
-      if (value !== undefined ? isType && curr.value === value : isType) {
+
+      if (value !== undefined ? isType && compareTokenWithValue(type, curr, value) : isType) {
         return curr;
       }
       curr = curr.next;
     }
     return null;
   }
+}
+
+
+function compareTokenWithValue(type: TokenType, token: LinkedToken, value: string | number | boolean) {
+  return (type === TokenType.Keyword || type === TokenType.Operator) ? token.value.toLowerCase() === value.toString().toLowerCase() : token.value === value;
 }
