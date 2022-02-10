@@ -215,8 +215,11 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
         // Allow extension to the built-in placement resolvers
         const origResolve = exists.resolve;
         exists.resolve = (...args) => {
-          const orig = origResolve(...args);
           const ext = placement.resolve(...args);
+          if(placement.overrideDefault){
+            return ext;
+          }
+          const orig = origResolve(...args);
           return orig || ext;
         };
       }
