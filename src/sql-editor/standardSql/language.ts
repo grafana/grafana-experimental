@@ -16,8 +16,8 @@ export const SCHEMA = 'schema';
 
 export const STD_STATS = ['AVG', 'COUNT', 'MAX', 'MIN', 'SUM'];
 
-export const AND = 'and';
-export const OR = 'or';
+export const AND = 'AND';
+export const OR = 'OR';
 export const LOGICAL_OPERATORS = [AND, OR];
 
 export const EQUALS = '=';
