@@ -46,7 +46,14 @@ interface LanguageDefinition extends monacoTypes.languages.ILanguageExtensionPoi
 
 interface SQLEditorProps {
   query: string;
-  onChange: (q: string) => void;
+  /**
+   * Use for executing the query.
+   */
+  onBlur?: (q: string) => void;
+  /**
+   * Use for inspecting the query as it changes. I.e. for validation.
+   */
+  onChange?: (q: string) => void;
   language?: LanguageDefinition;
 }
 
@@ -62,7 +69,7 @@ interface LanguageRegistries {
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
 const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistyItem>>();
 
-export const SQLEditor: React.FC<SQLEditorProps> = ({ onChange, query, language = { id: STANDARD_SQL_LANGUAGE } }) => {
+export const SQLEditor: React.FC<SQLEditorProps> = ({ onBlur, onChange, query, language = { id: STANDARD_SQL_LANGUAGE } }) => {
   const langUid = useRef<string>();
   // create unique language id for each SQLEditor instance
   const id = useMemo(() => {
@@ -85,11 +92,24 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ onChange, query, language 
       height={'240px'}
       language={id}
       value={query}
-      onBlur={onChange}
+      onBlur={onBlur}
       showMiniMap={false}
       showLineNumbers={true}
       // Using onEditorDidMount instead of onBeforeEditorMount to support Grafana < 8.2.x
-      onEditorDidMount={(_, m: Monaco) => {
+      onEditorDidMount={(editor, m) => {
+        editor.onDidChangeModelContent((e) => {
+          const text = editor.getValue();
+          if(onChange) {
+            onChange(text);
+          }
+
+        })
+        editor.addCommand(m.KeyMod.CtrlCmd | m.KeyCode.Enter, () => {
+          const text = editor.getValue();
+          if (onBlur) {
+            onBlur(text);
+          }
+        });
         registerLanguageAndSuggestions(m, language, id);
       }}
     />
