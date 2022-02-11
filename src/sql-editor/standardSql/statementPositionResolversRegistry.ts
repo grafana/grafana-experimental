@@ -141,7 +141,8 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
         return Boolean(
           previousKeyword?.value.toLowerCase() === WHERE &&
-            (previousNonWhiteSpace?.isString() ||
+            ( previousNonWhiteSpace.is(TokenType.Operator, 'and') || previousNonWhiteSpace.is(TokenType.Operator, 'or') ||
+              previousNonWhiteSpace?.isString() ||
               previousNonWhiteSpace?.isNumber() ||
               (previousNonWhiteSpace?.is(TokenType.IdentifierQuote) &&
                 previousNonWhiteSpace.getPreviousNonWhiteSpaceToken()?.is(TokenType.Identifier) &&

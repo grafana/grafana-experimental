@@ -73,7 +73,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereKeyword,
       name: StatementPosition.WhereKeyword,
-      kind: [],
+      kind: [SuggestionKind.Columns],
     },
     {
       id: StatementPosition.WhereComparisonOperator,
@@ -93,6 +93,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
         SuggestionKind.GroupByKeywords,
         SuggestionKind.OrderByKeywords,
         SuggestionKind.LimitKeyword,
+        SuggestionKind.Columns,
       ],
     },
     {
