@@ -1,5 +1,5 @@
 import { CodeEditor, Monaco, monacoTypes } from '@grafana/ui';
-import React, {  useEffect, useMemo, useRef } from 'react';
+import React, {  useCallback, useEffect, useMemo, useRef } from 'react';
 import { getStatementPosition } from '../standardSql/getStatementPosition';
 import { getStandardSuggestions } from '../standardSql/getStandardSuggestions';
 import { initSuggestionsKindRegistry, SuggestionKindRegistyItem } from '../standardSql/suggestionsKindRegistry';
@@ -42,19 +42,18 @@ interface LanguageDefinition extends monacoTypes.languages.ILanguageExtensionPoi
   }>;
   // Provides API for customizing the autocomplete
   completionProvider?: (m: Monaco) => SQLCompletionItemProvider;
+  // Function that returns a formatted query
+  formatter?: (q: string) => string;
 }
 
 interface SQLEditorProps {
   query: string;
   /**
-   * Use for executing the query.
-   */
-  onBlur?: (q: string) => void;
-  /**
    * Use for inspecting the query as it changes. I.e. for validation.
    */
-  onChange?: (q: string) => void;
+  onChange?: (q: string, processQuery: boolean) => void;
   language?: LanguageDefinition;
+  children? : (props: {formatQuery: () => void}) => React.ReactNode;
 }
 
 const defaultTableNameParser = (t: LinkedToken) => t.value;
@@ -69,7 +68,8 @@ interface LanguageRegistries {
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
 const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistyItem>>();
 
-export const SQLEditor: React.FC<SQLEditorProps> = ({ onBlur, onChange, query, language = { id: STANDARD_SQL_LANGUAGE } }) => {
+export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query, language = { id: STANDARD_SQL_LANGUAGE } }) => {
+  const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor>(null);
   const langUid = useRef<string>();
   // create unique language id for each SQLEditor instance
   const id = useMemo(() => {
@@ -85,34 +85,44 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ onBlur, onChange, query, l
       sqlEditorLog(`Removing instance cache ${langUid.current}`, false, INSTANCE_CACHE);
     }
   }, [])
+
+  const formatQuery = useCallback(() => {
+    if(monacoRef.current) {
+      monacoRef.current.getAction('editor.action.formatDocument').run();
+    }
+  },[]);
  
 
   return (
-    <CodeEditor
-      height={'240px'}
-      language={id}
-      value={query}
-      onBlur={onBlur}
-      showMiniMap={false}
-      showLineNumbers={true}
-      // Using onEditorDidMount instead of onBeforeEditorMount to support Grafana < 8.2.x
-      onEditorDidMount={(editor, m) => {
-        editor.onDidChangeModelContent((e) => {
-          const text = editor.getValue();
-          if(onChange) {
-            onChange(text);
-          }
+    <>
+      <CodeEditor
+        height={'240px'}
+        language={id}
+        value={query}
+        onBlur={(v) => onChange && onChange(v, false)}
+        showMiniMap={false}
+        showLineNumbers={true}
+        // Using onEditorDidMount instead of onBeforeEditorMount to support Grafana < 8.2.x
+        onEditorDidMount={(editor, m) => {
+          monacoRef.current = editor;
+          editor.onDidChangeModelContent((e) => {
+            const text = editor.getValue();
+            if(onChange) {
+              onChange(text, false);
+            }
+          })
 
-        })
-        editor.addCommand(m.KeyMod.CtrlCmd | m.KeyCode.Enter, () => {
-          const text = editor.getValue();
-          if (onBlur) {
-            onBlur(text);
-          }
-        });
-        registerLanguageAndSuggestions(m, language, id);
-      }}
-    />
+          editor.addCommand(m.KeyMod.CtrlCmd | m.KeyCode.Enter, () => {
+            const text = editor.getValue();
+            if (onChange) {
+              onChange(text, true);
+            }
+          });
+          registerLanguageAndSuggestions(m, language, id);
+        }}
+      />
+      {children && children({formatQuery})}
+    </>
   );
 };
 
@@ -128,6 +138,20 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
   monaco.languages.register({ id: lid });
   monaco.languages.setMonarchTokensProvider(lid, { ...language });
   monaco.languages.setLanguageConfiguration(lid, { ...conf });
+
+  if (l.formatter) {
+    monaco.languages.registerDocumentFormattingEditProvider(lid, {
+      provideDocumentFormattingEdits: (model) => {
+        var formatted = l.formatter(model.getValue());
+        return [
+          {
+            range: model.getFullModelRange(),
+            text: formatted
+          }
+        ];
+      }
+    });
+  }
   
   if (l.completionProvider) {
     const customProvider = l.completionProvider(monaco);
