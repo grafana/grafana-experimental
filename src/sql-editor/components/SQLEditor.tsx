@@ -200,6 +200,15 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
     }
   }
 
+  if (customProvider.supportedMacros) {
+    for (const macro of customProvider.supportedMacros()) {
+      const exists = languageRegistries.macros.getIfExists(macro.id);
+      if (!exists) {
+        languageRegistries.macros.register({ ...macro, name: macro.id });
+      }
+    }
+  }
+
   if (customProvider.customStatementPlacement) {
     for (const placement of customProvider.customStatementPlacement()) {
       const exists = languageRegistries.positionResolvers.getIfExists(placement.id);

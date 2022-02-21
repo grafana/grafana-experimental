@@ -44,7 +44,10 @@ export interface TableDefinition {
 }
 
 export interface SQLCompletionItemProvider
-  extends Omit<monacoTypes.languages.CompletionItemProvider, 'provideCompletionItems'> {
+  extends Omit<
+    monacoTypes.languages.CompletionItemProvider,
+    "provideCompletionItems"
+  > {
   /**
    * Allows dialect specific functions to be added to the completion list.
    * @alpha
@@ -63,6 +66,14 @@ export interface SQLCompletionItemProvider
     id: string;
     operator: string;
     type: OperatorType;
+    description?: string;
+  }>;
+
+  supportedMacros?: () => Array<{
+    id: string;
+    text: string;
+    type: MacroType;
+    args: Array<ArgType>;
     description?: string;
   }>;
 

@@ -9,6 +9,8 @@ export {
   SuggestionKindProvider,
   LanguageCompletionProvider,
   OperatorType,
+  MacroType,
+  ArgType,
   TokenType,
   StatementPosition,
   SuggestionKind,
