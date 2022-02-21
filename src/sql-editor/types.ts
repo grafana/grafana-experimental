@@ -26,6 +26,7 @@ export interface CustomStatementPlacement {
   id: string;
   name?: string;
   resolve: StatementPositionResolver;
+  overrideDefault?: boolean;
 }
 export type StatementPlacementProvider = () => CustomStatementPlacement[];
 export type SuggestionKindProvider = () => CustomSuggestionKind[];

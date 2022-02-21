@@ -1,5 +1,5 @@
 import { StatementPosition, TokenType } from '../types';
-import { AND, ASC, BY, DESC, EQUALS, FROM, GROUP, NOT_EQUALS, ORDER, SELECT, WHERE, WITH } from './language';
+import { AND, AS, ASC, BY, DESC, EQUALS, FROM, GROUP, NOT_EQUALS, ORDER, SELECT, WHERE, WITH } from './language';
 import { StatementPositionResolversRegistryItem } from './types';
 
 export function initStatementPositionResolvers(): StatementPositionResolversRegistryItem[] {
@@ -15,7 +15,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
             (currentToken.is(TokenType.Keyword, SELECT) && currentToken.previous === null) ||
             previousIsSlash ||
             (currentToken.isIdentifier() && (previousIsSlash || currentToken?.previous === null)) ||
-            (currentToken.isIdentifier() && SELECT.startsWith(currentToken.value))
+            (currentToken.isIdentifier() && SELECT.startsWith(currentToken.value.toLowerCase())) 
         ),
     },
     {
@@ -33,13 +33,13 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       id: StatementPosition.AfterSelectKeyword,
       name: StatementPosition.AfterSelectKeyword,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
-        Boolean(previousNonWhiteSpace?.value === SELECT),
+        Boolean(previousNonWhiteSpace?.value.toLowerCase() === SELECT),
     },
     {
       id: StatementPosition.AfterSelectArguments,
       name: StatementPosition.AfterSelectArguments,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
-        return Boolean(previousKeyword?.value === SELECT && previousNonWhiteSpace?.value === ',');
+        return Boolean(previousKeyword?.value.toLowerCase() === SELECT && previousNonWhiteSpace?.value === ',');
       },
     },
     {
@@ -47,7 +47,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       name: StatementPosition.AfterSelectFuncFirstArgument,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
         return Boolean(
-          (previousKeyword?.value.toLowerCase() === 'select' || previousKeyword?.value.toLowerCase() === 'as')  &&
+          (previousKeyword?.value.toLowerCase() === SELECT || previousKeyword?.value.toLowerCase() === AS)  &&
             (previousNonWhiteSpace?.is(TokenType.Parenthesis, '(') || currentToken?.is(TokenType.Parenthesis, '()'))
         );
       },
@@ -56,7 +56,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       id: StatementPosition.SelectAlias,
       name: StatementPosition.SelectAlias,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
-        if (previousNonWhiteSpace?.value === ',' && previousKeyword?.value.toLowerCase() === 'as') {
+        if (previousNonWhiteSpace?.value === ',' && previousKeyword?.value.toLowerCase() === AS) {
           return true
         }
   
@@ -70,9 +70,8 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
         // cloudwatch specific commented out
         // Boolean(previousKeyword?.value === SELECT && previousNonWhiteSpace?.isParenthesis()),
-
         return Boolean(
-          (previousKeyword?.value === SELECT && previousNonWhiteSpace?.value !== ',') ||
+          (previousKeyword?.value.toLowerCase() === SELECT && previousNonWhiteSpace?.value !== ',') ||
             ((currentToken?.isKeyword() || currentToken?.isIdentifier()) &&
               FROM.toLowerCase().startsWith(currentToken.value.toLowerCase()))
         );
@@ -82,16 +81,16 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       id: StatementPosition.AfterFromKeyword,
       name: StatementPosition.AfterFromKeyword,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
-        Boolean(previousNonWhiteSpace?.value === FROM),
+        Boolean(previousNonWhiteSpace?.value.toLowerCase() === FROM),
     },
     {
       id: StatementPosition.AfterFrom,
       name: StatementPosition.AfterFrom,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
         Boolean(
-          (previousKeyword?.value === FROM && previousNonWhiteSpace?.isDoubleQuotedString()) ||
-            (previousKeyword?.value === FROM && previousNonWhiteSpace?.isIdentifier()) ||
-            (previousKeyword?.value === FROM && previousNonWhiteSpace?.isVariable())
+          (previousKeyword?.value.toLowerCase() === FROM && previousNonWhiteSpace?.isDoubleQuotedString()) ||
+            (previousKeyword?.value.toLowerCase() === FROM && previousNonWhiteSpace?.isIdentifier()) ||
+            (previousKeyword?.value.toLowerCase() === FROM && previousNonWhiteSpace?.isVariable())
             //  cloudwatch specific
             // (previousKeyword?.value === SCHEMA && previousNonWhiteSpace?.is(TokenType.Parenthesis, ')'))
         ),
@@ -101,7 +100,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       name: StatementPosition.AfterTable,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
         return Boolean(
-          previousKeyword?.value === FROM &&
+          previousKeyword?.value.toLowerCase() === FROM &&
             (previousNonWhiteSpace?.isVariable() || previousNonWhiteSpace?.value !== '')
         );
       },
@@ -111,7 +110,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       name: StatementPosition.WhereKeyword,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
         Boolean(
-          previousKeyword?.value === WHERE &&
+          previousKeyword?.value.toLowerCase() === WHERE &&
             (previousNonWhiteSpace?.isKeyword() ||
               previousNonWhiteSpace?.is(TokenType.Parenthesis, '(') ||
               previousNonWhiteSpace?.is(TokenType.Operator, AND))
@@ -122,7 +121,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       name: StatementPosition.WhereComparisonOperator,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
         Boolean(
-          previousKeyword?.value === WHERE &&
+          previousKeyword?.value.toLowerCase() === WHERE &&
             (previousNonWhiteSpace?.isIdentifier() || previousNonWhiteSpace?.isDoubleQuotedString())
         ),
     },
@@ -131,7 +130,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       name: StatementPosition.WhereValue,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
         Boolean(
-          previousKeyword?.value === WHERE &&
+          previousKeyword?.value.toLowerCase() === WHERE &&
             (previousNonWhiteSpace?.is(TokenType.Operator, EQUALS) ||
               previousNonWhiteSpace?.is(TokenType.Operator, NOT_EQUALS))
         ),
@@ -141,8 +140,9 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       name: StatementPosition.AfterWhereValue,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
         return Boolean(
-          previousKeyword?.value === WHERE &&
-            (previousNonWhiteSpace?.isString() ||
+          previousKeyword?.value.toLowerCase() === WHERE &&
+            ( previousNonWhiteSpace.is(TokenType.Operator, 'and') || previousNonWhiteSpace.is(TokenType.Operator, 'or') ||
+              previousNonWhiteSpace?.isString() ||
               previousNonWhiteSpace?.isNumber() ||
               (previousNonWhiteSpace?.is(TokenType.IdentifierQuote) &&
                 previousNonWhiteSpace.getPreviousNonWhiteSpaceToken()?.is(TokenType.Identifier) &&

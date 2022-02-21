@@ -152,7 +152,7 @@ describe('getStandardSuggestions', () => {
       suggestionsRegistry
     );
 
-    expect(result).toHaveLength(1);
+    expect(result).toHaveLength(5);
     expect(result[0].label).toEqual(customComparisonOperator.operator);
   });
 
@@ -180,7 +180,7 @@ describe('getStandardSuggestions', () => {
       suggestionsRegistry
     );
 
-    expect(result).toHaveLength(0);
+    expect(result).toHaveLength(4);
   });
 
   it("suggests $__time(dateColumn) macro when in column position", async () => {
@@ -256,7 +256,7 @@ describe('getStandardSuggestions', () => {
           "insertText": "SELECT $2 FROM $1",
           "insertTextRules": 4,
           "kind": 27,
-          "label": "SELECT <column> FROM <table>>",
+          "label": "SELECT <column> FROM <table>",
           "range": Object {
             "endColumn": 7,
             "endLineNumber": 1,

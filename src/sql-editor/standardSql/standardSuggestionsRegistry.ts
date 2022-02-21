@@ -10,20 +10,11 @@ import {
   SuggestionKind,
 } from '../types';
 import {
-  AS,
   ASC,
-  BY,
   DESC,
-  FROM,
-  GROUP,
-  LIMIT,
   LOGICAL_OPERATORS,
-  ORDER,
-  SELECT,
   STD_OPERATORS,
   STD_STATS,
-  WHERE,
-  WITH,
 } from './language';
 import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
 import { VALUE_MACROS } from './macros';
@@ -47,16 +38,16 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: `${SELECT} <column>`,
-              insertText: `${SELECT} $0`,
+              label: `SELECT <column>`,
+              insertText: `SELECT $0`,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
               kind: CompletionItemKind.Snippet,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.Medium,
             },
             {
-              label: `${SELECT} <column> ${FROM} <table>>`,
-              insertText: `${SELECT} $2 ${FROM} $1`,
+              label: `SELECT <column> FROM <table>`,
+              insertText: `SELECT $2 FROM $1`,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
               kind: CompletionItemKind.Snippet,
               command: TRIGGER_SUGGEST,
@@ -103,8 +94,8 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: `${WITH} <alias> ${AS} ( ... )`,
-              insertText: `${WITH} $1  ${AS} ( $2 )`,
+              label: `WITH <alias> AS ( ... )`,
+              insertText: `WITH $1  AS ( $2 )`,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
               kind: CompletionItemKind.Snippet,
               command: TRIGGER_SUGGEST,
@@ -150,8 +141,9 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: FROM,
-              insertText: `${FROM} $0`,
+              label: 'FROM', 
+              insertText: `FROM $0`,
+              command: TRIGGER_SUGGEST,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
               kind: CompletionItemKind.Keyword,
             },
@@ -180,7 +172,7 @@ export const initStandardSuggestions =
                 insertText: `${o.operator} `,
                 documentation: o.description,
                 command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.High,
+                sortText: CompletionItemPriority.MediumHigh,
                 kind: CompletionItemKind.Operator,
               }))
           ),
@@ -191,8 +183,8 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: WHERE,
-              insertText: `${WHERE} `,
+              label: 'WHERE',
+              insertText: `WHERE `,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.MediumHigh,
               kind: CompletionItemKind.Keyword,
@@ -212,40 +204,41 @@ export const initStandardSuggestions =
                 insertText: `${o.operator} `,
                 documentation: o.description,
                 command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.High,
+                sortText: CompletionItemPriority.MediumHigh,
                 kind: CompletionItemKind.Operator,
               })),
-            {
-              label: "IN (...)",
-              insertText: `IN ( $0 )`,
-              command: TRIGGER_SUGGEST,
-              sortText: CompletionItemPriority.MediumHigh,
-              kind: CompletionItemKind.Operator,
-              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
-            },
-            {
-              label: "NOT IN (...)",
-              insertText: `NOT IN ( $0 )`,
-              command: TRIGGER_SUGGEST,
-              sortText: CompletionItemPriority.MediumHigh,
-              kind: CompletionItemKind.Operator,
-              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
-            },
-            {
-              label: "IS",
-              insertText: `IS`,
-              command: TRIGGER_SUGGEST,
-              sortText: CompletionItemPriority.MediumHigh,
-              kind: CompletionItemKind.Operator,
-            },
-            {
-              label: "IS NOT",
-              insertText: `IS NOT`,
-              command: TRIGGER_SUGGEST,
-              sortText: CompletionItemPriority.MediumHigh,
-              kind: CompletionItemKind.Operator,
-            },
-          ]),
+              {
+                label: 'IN (...)',
+                insertText: `IN ( $0 )`,
+                command: TRIGGER_SUGGEST,
+                sortText: CompletionItemPriority.Medium,
+                kind: CompletionItemKind.Operator,
+                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+              },
+              {
+                label: 'NOT IN (...)',
+                insertText: `NOT IN ( $0 )`,
+                command: TRIGGER_SUGGEST,
+                sortText: CompletionItemPriority.Medium,
+                kind: CompletionItemKind.Operator,
+                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,  
+              },
+              {
+                label: 'IS',
+                insertText: `IS`,
+                command: TRIGGER_SUGGEST,
+                sortText: CompletionItemPriority.Medium,
+                kind: CompletionItemKind.Operator,
+              },
+              {
+                label: 'IS NOT',
+                insertText: `IS NOT`,
+                command: TRIGGER_SUGGEST,
+                sortText: CompletionItemPriority.Medium,
+                kind: CompletionItemKind.Operator,
+              },
+            ]
+          ),
       },
       {
         id: SuggestionKind.GroupByKeywords,
@@ -253,8 +246,8 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: "GROUP BY",
-              insertText: `${GROUP} ${BY} `,
+              label: 'GROUP BY',
+              insertText: `GROUP BY `,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.MediumHigh,
               kind: CompletionItemKind.Keyword,
@@ -267,23 +260,23 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: "ORDER BY",
-              insertText: `${ORDER} ${BY} `,
+              label: 'ORDER BY',
+              insertText: `ORDER BY `,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.Medium,
               kind: CompletionItemKind.Keyword,
             },
             {
-              label: "ORDER BY(ascending)",
-              insertText: `${ORDER} ${BY} $1 ASC `,
+              label: 'ORDER BY(ascending)',
+              insertText: `ORDER BY $1 ASC `,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.MediumLow,
               kind: CompletionItemKind.Snippet,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
             },
             {
-              label: "ORDER BY(descending)",
-              insertText: `${ORDER} ${BY} $1 DESC`,
+              label: 'ORDER BY(descending)',
+              insertText: `ORDER BY $1 DESC`,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.MediumLow,
               kind: CompletionItemKind.Snippet,
@@ -297,8 +290,8 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: "LIMIT",
-              insertText: `${LIMIT} `,
+              label: 'LIMIT',
+              insertText: `LIMIT `,
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.MediumLow,
               kind: CompletionItemKind.Keyword,
@@ -378,7 +371,7 @@ export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
     operator: o,
     type: OperatorType.Comparison,
   })),
-  ...LOGICAL_OPERATORS.map((o) => ({ id: o, name: o, operator: o, type: OperatorType.Logical })),
+  ...LOGICAL_OPERATORS.map((o) => ({ id: o, name: o.toUpperCase(), operator: o, type: OperatorType.Logical })),
   
 ];
 

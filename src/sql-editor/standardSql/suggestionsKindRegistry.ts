@@ -61,7 +61,6 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
         SuggestionKind.GroupByKeywords,
         SuggestionKind.OrderByKeywords,
         SuggestionKind.LimitKeyword,
-        SuggestionKind.Tables,
       ],
     },
     {
@@ -105,6 +104,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
         SuggestionKind.GroupByKeywords,
         SuggestionKind.OrderByKeywords,
         SuggestionKind.LimitKeyword,
+        SuggestionKind.Columns,
       ],
     },
     {
