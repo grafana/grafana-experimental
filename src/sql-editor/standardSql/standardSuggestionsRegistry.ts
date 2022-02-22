@@ -1,7 +1,6 @@
 import { Registry } from '@grafana/data';
 import { TRIGGER_SUGGEST } from '../utils/commands';
 import {
-  ArgType,
   CompletionItemInsertTextRule,
   CompletionItemKind,
   CompletionItemPriority,
@@ -386,12 +385,12 @@ function createMacroSuggestionItem(m: MacrosRegistryItem) {
   };
 }
 
-function argsString(args?: ArgType[]): string {
+function argsString(args?: string[]): string {
   if (!args) {
     return "()";
   }
   return "("
-    .concat(args.map((t, i) => `\${${i}:${t.toString()}}`).join(", "))
+    .concat(args.map((t, i) => `\${${i}:${t}}`).join(", "))
     .concat(")");
 }
 

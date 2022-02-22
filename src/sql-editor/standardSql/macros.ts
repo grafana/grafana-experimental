@@ -1,12 +1,14 @@
-import { ArgType, MacroType } from "sql-editor/types";
+import { MacroType } from "sql-editor/types";
 import { MacrosRegistryItem } from "./types";
+
+const COLUMN = 'column', RELATIVE_TIME_STRING = '\'5m\'', FILL_TYPE = 'fill';
 
 export const VALUE_MACROS: MacrosRegistryItem[] = [
   {
     id: "$__time(dateColumn)",
     name: "$__time(dateColumn)",
     text: "$__time",
-    args: [ArgType.Column],
+    args: [COLUMN],
     type: MacroType.Value,
     description:
       "Will be replaced by an expression to convert to a UNIX timestamp and rename the column to time_sec. For example, UNIX_TIMESTAMP(dateColumn) as time_sec",
@@ -15,7 +17,7 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     id: "$__timeEpoch(dateColumn, )",
     name: "$__timeEpoch(dateColumn)",
     text: "$__timeEpoch",
-    args: [ArgType.Column],
+    args: [COLUMN],
     type: MacroType.Value,
     description:
       "Will be replaced by an expression to convert to a UNIX timestamp and rename the column to time_sec. For example, UNIX_TIMESTAMP(dateColumn) as time_sec",
@@ -24,7 +26,7 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     id: "$__timeFilter(dateColumn)",
     name: "$__timeFilter(dateColumn)",
     text: "$___timeFilter",
-    args: [ArgType.Column],
+    args: [COLUMN],
     type: MacroType.Filter,
     description:
       "Will be replaced by a time range filter using the specified column name. For example, dateColumn BETWEEN FROM_UNIXTIME(1494410783) AND FROM_UNIXTIME(1494410983)",
@@ -51,7 +53,7 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     id: "$__timeGroup(dateColumn, '5m')",
     name: "$__timeGroup(dateColumn, '5m')",
     text: "$__timeGroup",
-    args: [ArgType.Column, ArgType.RelativeTimeString],
+    args: [COLUMN, RELATIVE_TIME_STRING],
     type: MacroType.Group,
     description:
       "Will be replaced by an expression usable in GROUP BY clause. For example, *cast(cast(UNIX_TIMESTAMP(dateColumn)/(300) as signed)*300 as signed),*",
@@ -60,16 +62,16 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     id: "$__timeGroup(dateColumn, '5m', fill)",
     name: "$__timeGroup(dateColumn, '5m', fill)",
     text: "$__timeGroup",
-    args: [ArgType.Column, ArgType.RelativeTimeString, ArgType.Fill],
+    args: [COLUMN, RELATIVE_TIME_STRING, FILL_TYPE],
     type: MacroType.Group,
     description:
       "Will be replaced by an expression usable in GROUP BY clause. For example, *cast(cast(UNIX_TIMESTAMP(dateColumn)/(300) as signed)*300 as signed),* missing values can be filled with 0, NULL or previous",
   },
   {
-    id: "$__timeGroupAlias(dateColumn, '5m')",
-    name: "$__timeGroupAlias(dateColumn, '5m')",
+    id: "$__timeGroupAlias(dateColumn, '5m', fill)",
+    name: "$__timeGroupAlias(dateColumn, '5m', fill)",
     text: "$__timeGroup",
-    args: [ArgType.Column, ArgType.RelativeTimeString, ArgType.Fill],
+    args: [COLUMN, RELATIVE_TIME_STRING , FILL_TYPE],
     type: MacroType.Group,
     description:
       "Will be replaced by an expression usable in GROUP BY clause. For example, *cast(cast(UNIX_TIMESTAMP(dateColumn)/(300) as signed)*300 as signed),* with an added column alias",
@@ -78,7 +80,7 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     id: "$__unixEpochFilter(dateColumn)",
     name: "$__unixEpochFilter(dateColumn)",
     text: "$__unixEpochFilter",
-    args: [ArgType.Column],
+    args: [COLUMN],
     type: MacroType.Filter,
     description:
       "Will be replaced by a time range filter using the specified column name with times represented as Unix timestamp. For example, dateColumn > 1494410783 AND dateColumn < 1494497183",
@@ -105,7 +107,7 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     id: "$__unixEpochNanoFilter(dateColumn)",
     name: "$__unixEpochNanoFilter(dateColumn)",
     text: "$__unixEpochNanoFilter",
-    args: [ArgType.Column],
+    args: [COLUMN],
     type: MacroType.Filter,
     description:
       "Will be replaced by a time range filter using the specified column name with times represented as nanosecond timestamp. For example, dateColumn > 1494410783152415214 AND dateColumn < 1494497183142514872",
@@ -132,7 +134,7 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     id: "$__unixEpochGroup(dateColumn, '5m')",
     name: "$__unixEpochGroup(dateColumn, '5m')",
     text: "$__unixEpochGroup",
-    args: [ArgType.Column, ArgType.RelativeTimeString],
+    args: [COLUMN, RELATIVE_TIME_STRING],
     type: MacroType.Group,
     description:
       "Will be replaced by an expression usable in GROUP BY clause. For values stored as unix timestamp.",
@@ -141,7 +143,7 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     id: "$__unixEpochGroup(dateColumn, '5m', fill)",
     name: "$__unixEpochGroup(dateColumn, '5m', fill)",
     text: "$__unixEpochGroup",
-    args: [ArgType.Column, ArgType.RelativeTimeString, ArgType.Fill],
+    args: [COLUMN, RELATIVE_TIME_STRING, FILL_TYPE],
     type: MacroType.Group,
     description:
       "Will be replaced by an expression usable in GROUP BY clause. For values stored as unix timestamp. Missing values can be filled with 0, NULL or previous",

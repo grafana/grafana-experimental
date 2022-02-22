@@ -10,7 +10,6 @@ export {
   LanguageCompletionProvider,
   OperatorType,
   MacroType,
-  ArgType,
   TokenType,
   StatementPosition,
   SuggestionKind,

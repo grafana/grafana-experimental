@@ -74,7 +74,7 @@ export interface SQLCompletionItemProvider
     id: string;
     text: string;
     type: MacroType;
-    args: Array<ArgType>;
+    args: Array<string>;
     description?: string;
   }>;
 
@@ -133,12 +133,6 @@ export enum MacroType {
   Value,
   Filter,
   Group,
-}
-
-export enum ArgType {
-  Column = 'column',
-  RelativeTimeString = '5m',
-  Fill = 'previous',
 }
 
 export enum TokenType {
