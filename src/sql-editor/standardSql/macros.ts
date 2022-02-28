@@ -25,7 +25,7 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
   {
     id: "$__timeFilter(dateColumn)",
     name: "$__timeFilter(dateColumn)",
-    text: "$___timeFilter",
+    text: "$__timeFilter",
     args: [COLUMN],
     type: MacroType.Filter,
     description:
