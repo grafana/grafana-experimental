@@ -377,7 +377,7 @@ export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
 function createMacroSuggestionItem(m: MacrosRegistryItem) {
   return {
     label: m.name,
-    insertText: `${"\\" + m.text}${argsString(m.args)}`,
+    insertText: `${"\\" + m.text}${argsString(m.args)} `,
     insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
     kind: CompletionItemKind.Snippet,
     documentation: m.description,

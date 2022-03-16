@@ -34,6 +34,16 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
       kind: [SuggestionKind.Columns],
     },
     {
+      id: StatementPosition.AfterGroupByFunctionArgument,
+      name: StatementPosition.AfterGroupByFunctionArgument,
+      kind: [SuggestionKind.Columns],
+    },
+    {
+      id: StatementPosition.AfterWhereFunctionArgument,
+      name: StatementPosition.AfterWhereFunctionArgument,
+      kind: [SuggestionKind.Columns],
+    },
+    {
       id: StatementPosition.AfterSelectArguments,
       name: StatementPosition.AfterSelectArguments,
       kind: [SuggestionKind.Columns],

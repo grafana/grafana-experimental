@@ -169,6 +169,8 @@ export enum StatementPosition {
   WhereKeyword = 'whereKeyword',
   WhereComparisonOperator = 'whereComparisonOperator',
   WhereValue = 'whereValue',
+  AfterWhereFunctionArgument = 'afterWhereFunctionArgument',
+  AfterGroupByFunctionArgument = 'afterGroupByFunctionArgument',
   AfterWhereValue = 'afterWhereValue',
   AfterGroupByKeywords = 'afterGroupByKeywords',
   AfterGroupBy = 'afterGroupBy',
