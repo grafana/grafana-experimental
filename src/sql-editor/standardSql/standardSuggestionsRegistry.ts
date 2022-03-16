@@ -16,7 +16,7 @@ import {
   STD_STATS,
 } from './language';
 import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
-import { VALUE_MACROS } from './macros';
+import { MACROS } from './macros';
 
 /**
  * This registry glues particular SuggestionKind with an async function that provides completion items for it.
@@ -361,7 +361,7 @@ export const initFunctionsRegistry = (): FunctionsRegistryItem[] => [
   })),
 ];
 
-export const initMacrosRegistry = (): MacrosRegistryItem[] => [...VALUE_MACROS];
+export const initMacrosRegistry = (): MacrosRegistryItem[] => [...MACROS];
 
 export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
   ...STD_OPERATORS.map((o) => ({

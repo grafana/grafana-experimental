@@ -133,6 +133,8 @@ export enum MacroType {
   Value,
   Filter,
   Group,
+  Column,
+  Table,
 }
 
 export enum TokenType {

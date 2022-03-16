@@ -3,20 +3,11 @@ import { MacrosRegistryItem } from "./types";
 
 const COLUMN = 'column', RELATIVE_TIME_STRING = '\'5m\'', FILL_TYPE = 'fill';
 
-export const VALUE_MACROS: MacrosRegistryItem[] = [
+export const MACROS: MacrosRegistryItem[] = [
   {
     id: "$__time(dateColumn)",
     name: "$__time(dateColumn)",
     text: "$__time",
-    args: [COLUMN],
-    type: MacroType.Value,
-    description:
-      "Will be replaced by an expression to convert to a UNIX timestamp and rename the column to time_sec. For example, UNIX_TIMESTAMP(dateColumn) as time_sec",
-  },
-  {
-    id: "$__timeEpoch(dateColumn, )",
-    name: "$__timeEpoch(dateColumn)",
-    text: "$__timeEpoch",
     args: [COLUMN],
     type: MacroType.Value,
     description:
@@ -67,6 +58,25 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     description:
       "Will be replaced by an expression usable in GROUP BY clause. For example, *cast(cast(UNIX_TIMESTAMP(dateColumn)/(300) as signed)*300 as signed),* missing values can be filled with 0, NULL or previous",
   },
+  {
+    id: "$__table",
+    name: "$__table",
+    text: "$__table",
+    args: [],
+    type: MacroType.Table,
+    description: "Will be replaced by the query table.",
+  },
+  {
+    id: "$__column",
+    name: "$__column",
+    text: "$__column",
+    args: [],
+    type: MacroType.Column,
+    description: "Will be replaced by the query column.",
+  },
+];
+
+/*
   {
     id: "$__timeGroupAlias(dateColumn, '5m', fill)",
     name: "$__timeGroupAlias(dateColumn, '5m', fill)",
@@ -148,4 +158,13 @@ export const VALUE_MACROS: MacrosRegistryItem[] = [
     description:
       "Will be replaced by an expression usable in GROUP BY clause. For values stored as unix timestamp. Missing values can be filled with 0, NULL or previous",
   },
-];
+  {
+    id: "$__timeEpoch(dateColumn, )",
+    name: "$__timeEpoch(dateColumn)",
+    text: "$__timeEpoch",
+    args: [COLUMN],
+    type: MacroType.Value,
+    description:
+      "Will be replaced by an expression to convert to a UNIX timestamp and rename the column to time_sec. For example, UNIX_TIMESTAMP(dateColumn) as time_sec",
+  },
+  */
