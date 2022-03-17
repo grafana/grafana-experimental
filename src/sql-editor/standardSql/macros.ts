@@ -1,18 +1,9 @@
 import { MacroType } from "sql-editor/types";
 import { MacrosRegistryItem } from "./types";
 
-const COLUMN = 'column', RELATIVE_TIME_STRING = '\'5m\'', FILL_TYPE = 'fill';
+const COLUMN = 'column', RELATIVE_TIME_STRING = '\'5m\'';
 
 export const MACROS: MacrosRegistryItem[] = [
-  {
-    id: "$__time(dateColumn)",
-    name: "$__time(dateColumn)",
-    text: "$__time",
-    args: [COLUMN],
-    type: MacroType.Value,
-    description:
-      "Will be replaced by an expression to convert to a UNIX timestamp and rename the column to time_sec. For example, UNIX_TIMESTAMP(dateColumn) as time_sec",
-  },
   {
     id: "$__timeFilter(dateColumn)",
     name: "$__timeFilter(dateColumn)",
@@ -27,7 +18,7 @@ export const MACROS: MacrosRegistryItem[] = [
     name: "$__timeFrom()",
     text: "$__timeFrom",
     args: [],
-    type: MacroType.Value,
+    type: MacroType.Filter,
     description:
       "Will be replaced by the start of the currently active time selection. For example, FROM_UNIXTIME(1494410783)",
   },
@@ -36,7 +27,7 @@ export const MACROS: MacrosRegistryItem[] = [
     name: "$__timeTo()",
     text: "$__timeTo",
     args: [],
-    type: MacroType.Value,
+    type: MacroType.Filter,
     description:
       "Will be replaced by the end of the currently active time selection. For example, FROM_UNIXTIME(1494410983)",
   },
@@ -45,18 +36,9 @@ export const MACROS: MacrosRegistryItem[] = [
     name: "$__timeGroup(dateColumn, '5m')",
     text: "$__timeGroup",
     args: [COLUMN, RELATIVE_TIME_STRING],
-    type: MacroType.Group,
+    type: MacroType.Value,
     description:
       "Will be replaced by an expression usable in GROUP BY clause. For example, *cast(cast(UNIX_TIMESTAMP(dateColumn)/(300) as signed)*300 as signed),*",
-  },
-  {
-    id: "$__timeGroup(dateColumn, '5m', fill)",
-    name: "$__timeGroup(dateColumn, '5m', fill)",
-    text: "$__timeGroup",
-    args: [COLUMN, RELATIVE_TIME_STRING, FILL_TYPE],
-    type: MacroType.Group,
-    description:
-      "Will be replaced by an expression usable in GROUP BY clause. For example, *cast(cast(UNIX_TIMESTAMP(dateColumn)/(300) as signed)*300 as signed),* missing values can be filled with 0, NULL or previous",
   },
   {
     id: "$__table",
@@ -166,5 +148,23 @@ export const MACROS: MacrosRegistryItem[] = [
     type: MacroType.Value,
     description:
       "Will be replaced by an expression to convert to a UNIX timestamp and rename the column to time_sec. For example, UNIX_TIMESTAMP(dateColumn) as time_sec",
+  },
+  {
+    id: "$__time(dateColumn)",
+    name: "$__time(dateColumn)",
+    text: "$__time",
+    args: [COLUMN],
+    type: MacroType.Value,
+    description:
+      "Will be replaced by an expression to convert to a UNIX timestamp and rename the column to time_sec. For example, UNIX_TIMESTAMP(dateColumn) as time_sec",
+  },
+  {
+    id: "$__timeGroup(dateColumn, '5m', fill)",
+    name: "$__timeGroup(dateColumn, '5m', fill)",
+    text: "$__timeGroup",
+    args: [COLUMN, RELATIVE_TIME_STRING, FILL_TYPE],
+    type: MacroType.Value,
+    description:
+      "Will be replaced by an expression usable in GROUP BY clause. For example, *cast(cast(UNIX_TIMESTAMP(dateColumn)/(300) as signed)*300 as signed),* missing values can be filled with 0, NULL or previous",
   },
   */

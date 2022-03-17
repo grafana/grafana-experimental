@@ -202,7 +202,7 @@ describe('getStandardSuggestions', () => {
     const result = await getStandardSuggestions(
       MonacoMock,
       token,
-      [SuggestionKind.ValueMacro],
+      [SuggestionKind.SelectMacro],
       posContextMock as PositionContext,
       suggestionsRegistry
     );

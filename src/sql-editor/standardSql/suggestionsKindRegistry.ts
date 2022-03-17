@@ -25,7 +25,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
       kind: [
         SuggestionKind.FunctionsWithArguments,
         SuggestionKind.Columns,
-        SuggestionKind.ValueMacro,
+        SuggestionKind.SelectMacro,
       ],
     },
     {
@@ -89,7 +89,6 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
       kind: [
         SuggestionKind.Columns,
         SuggestionKind.FilterMacro,
-        SuggestionKind.ValueMacro,
       ],
     },
     {
@@ -103,7 +102,6 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
       kind: [
         SuggestionKind.Columns,
         SuggestionKind.FilterMacro,
-        SuggestionKind.ValueMacro,
       ],
     },
     {

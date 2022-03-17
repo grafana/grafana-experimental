@@ -55,8 +55,8 @@ export const initStandardSuggestions =
           ]),
       },
       {
-        id: SuggestionKind.ValueMacro,
-        name: SuggestionKind.ValueMacro,
+        id: SuggestionKind.SelectMacro,
+        name: SuggestionKind.SelectMacro,
         suggestions: (_, m) =>
           Promise.resolve([
             ...macros

@@ -196,7 +196,7 @@ export enum SuggestionKind {
   SortOrderDirectionKeyword = 'sortOrderDirectionKeyword',
   ComparisonOperators = 'comparisonOperators',
   LogicalOperators = 'logicalOperators',
-  ValueMacro = 'valueMacro',
+  SelectMacro = 'SelectMacro',
   FilterMacro = 'filterMacro',
   GroupMacro = 'groupMacro',
   BoolValues = 'boolValues',
