@@ -51,7 +51,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.AfterFromKeyword,
       name: StatementPosition.AfterFromKeyword,
-      kind: [SuggestionKind.Tables],
+      kind: [SuggestionKind.Tables, SuggestionKind.TableMacro],
     },
     {
       id: StatementPosition.SelectAlias,
@@ -86,10 +86,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereKeyword,
       name: StatementPosition.WhereKeyword,
-      kind: [
-        SuggestionKind.Columns,
-        SuggestionKind.FilterMacro,
-      ],
+      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro],
     },
     {
       id: StatementPosition.WhereComparisonOperator,
@@ -99,10 +96,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereValue,
       name: StatementPosition.WhereValue,
-      kind: [
-        SuggestionKind.Columns,
-        SuggestionKind.FilterMacro,
-      ],
+      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro],
     },
     {
       id: StatementPosition.AfterWhereValue,

@@ -61,7 +61,18 @@ export const initStandardSuggestions =
           Promise.resolve([
             ...macros
               .list()
-              .filter((m) => m.type === MacroType.Value)
+              .filter((m) => m.type === MacroType.Value || m.type === MacroType.Column)
+              .map(createMacroSuggestionItem),
+          ]),
+      },
+      {
+        id: SuggestionKind.TableMacro,
+        name: SuggestionKind.TableMacro,
+        suggestions: (_, m) =>
+          Promise.resolve([
+            ...macros
+              .list()
+              .filter((m) => m.type === MacroType.Table)
               .map(createMacroSuggestionItem),
           ]),
       },
@@ -140,7 +151,7 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: 'FROM', 
+              label: 'FROM',
               insertText: `FROM $0`,
               command: TRIGGER_SUGGEST,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
@@ -206,38 +217,37 @@ export const initStandardSuggestions =
                 sortText: CompletionItemPriority.MediumHigh,
                 kind: CompletionItemKind.Operator,
               })),
-              {
-                label: 'IN (...)',
-                insertText: `IN ( $0 )`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.Medium,
-                kind: CompletionItemKind.Operator,
-                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
-              },
-              {
-                label: 'NOT IN (...)',
-                insertText: `NOT IN ( $0 )`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.Medium,
-                kind: CompletionItemKind.Operator,
-                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,  
-              },
-              {
-                label: 'IS',
-                insertText: `IS`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.Medium,
-                kind: CompletionItemKind.Operator,
-              },
-              {
-                label: 'IS NOT',
-                insertText: `IS NOT`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.Medium,
-                kind: CompletionItemKind.Operator,
-              },
-            ]
-          ),
+            {
+              label: 'IN (...)',
+              insertText: `IN ( $0 )`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.Medium,
+              kind: CompletionItemKind.Operator,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            {
+              label: 'NOT IN (...)',
+              insertText: `NOT IN ( $0 )`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.Medium,
+              kind: CompletionItemKind.Operator,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            {
+              label: 'IS',
+              insertText: `IS`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.Medium,
+              kind: CompletionItemKind.Operator,
+            },
+            {
+              label: 'IS NOT',
+              insertText: `IS NOT`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.Medium,
+              kind: CompletionItemKind.Operator,
+            },
+          ]),
       },
       {
         id: SuggestionKind.GroupByKeywords,
@@ -316,8 +326,8 @@ export const initStandardSuggestions =
         suggestions: () =>
           Promise.resolve([
             {
-              label: "NOT",
-              insertText: "NOT",
+              label: 'NOT',
+              insertText: 'NOT',
               command: TRIGGER_SUGGEST,
               kind: CompletionItemKind.Keyword,
               sortText: CompletionItemPriority.High,
@@ -329,7 +339,7 @@ export const initStandardSuggestions =
         name: SuggestionKind.BoolValues,
         suggestions: () =>
           Promise.resolve(
-            ["TRUE", "FALSE"].map((o) => ({
+            ['TRUE', 'FALSE'].map((o) => ({
               label: o,
               insertText: `${o}`,
               command: TRIGGER_SUGGEST,
@@ -343,7 +353,7 @@ export const initStandardSuggestions =
         name: SuggestionKind.NullValue,
         suggestions: () =>
           Promise.resolve(
-            ["NULL"].map((o) => ({
+            ['NULL'].map((o) => ({
               label: o,
               insertText: `${o}`,
               command: TRIGGER_SUGGEST,
