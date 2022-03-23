@@ -4,6 +4,7 @@ import {
   CompletionItemInsertTextRule,
   CompletionItemKind,
   CompletionItemPriority,
+  MacroType,
   OperatorType,
   SuggestionKind,
 } from '../types';
@@ -14,7 +15,8 @@ import {
   STD_OPERATORS,
   STD_STATS,
 } from './language';
-import { FunctionsRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
+import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
+import { MACROS } from './macros';
 
 /**
  * This registry glues particular SuggestionKind with an async function that provides completion items for it.
@@ -22,7 +24,11 @@ import { FunctionsRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } 
  */
 
 export const initStandardSuggestions =
-  (functions: Registry<FunctionsRegistryItem>, operators: Registry<OperatorsRegistryItem>) =>
+  (
+    functions: Registry<FunctionsRegistryItem>,
+    operators: Registry<OperatorsRegistryItem>,
+    macros: Registry<MacrosRegistryItem>
+  ) =>
   (): SuggestionsRegistyItem[] =>
     [
       {
@@ -46,6 +52,50 @@ export const initStandardSuggestions =
               command: TRIGGER_SUGGEST,
               sortText: CompletionItemPriority.Medium,
             },
+          ]),
+      },
+      {
+        id: SuggestionKind.SelectMacro,
+        name: SuggestionKind.SelectMacro,
+        suggestions: (_, m) =>
+          Promise.resolve([
+            ...macros
+              .list()
+              .filter((m) => m.type === MacroType.Value || m.type === MacroType.Column)
+              .map(createMacroSuggestionItem),
+          ]),
+      },
+      {
+        id: SuggestionKind.TableMacro,
+        name: SuggestionKind.TableMacro,
+        suggestions: (_, m) =>
+          Promise.resolve([
+            ...macros
+              .list()
+              .filter((m) => m.type === MacroType.Table)
+              .map(createMacroSuggestionItem),
+          ]),
+      },
+      {
+        id: SuggestionKind.GroupMacro,
+        name: SuggestionKind.GroupMacro,
+        suggestions: (_, m) =>
+          Promise.resolve([
+            ...macros
+              .list()
+              .filter((m) => m.type === MacroType.Group)
+              .map(createMacroSuggestionItem),
+          ]),
+      },
+      {
+        id: SuggestionKind.FilterMacro,
+        name: SuggestionKind.FilterMacro,
+        suggestions: (_, m) =>
+          Promise.resolve([
+            ...macros
+              .list()
+              .filter((m) => m.type === MacroType.Filter)
+              .map(createMacroSuggestionItem),
           ]),
       },
       {
@@ -101,7 +151,7 @@ export const initStandardSuggestions =
         suggestions: (_, m) =>
           Promise.resolve([
             {
-              label: 'FROM', 
+              label: 'FROM',
               insertText: `FROM $0`,
               command: TRIGGER_SUGGEST,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
@@ -155,8 +205,8 @@ export const initStandardSuggestions =
         id: SuggestionKind.ComparisonOperators,
         name: SuggestionKind.ComparisonOperators,
         suggestions: (_, m) =>
-          Promise.resolve(
-            [...operators
+          Promise.resolve([
+            ...operators
               .list()
               .filter((o) => o.type === OperatorType.Comparison)
               .map((o) => ({
@@ -167,38 +217,37 @@ export const initStandardSuggestions =
                 sortText: CompletionItemPriority.MediumHigh,
                 kind: CompletionItemKind.Operator,
               })),
-              {
-                label: 'IN (...)',
-                insertText: `IN ( $0 )`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.Medium,
-                kind: CompletionItemKind.Operator,
-                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
-              },
-              {
-                label: 'NOT IN (...)',
-                insertText: `NOT IN ( $0 )`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.Medium,
-                kind: CompletionItemKind.Operator,
-                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,  
-              },
-              {
-                label: 'IS',
-                insertText: `IS`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.Medium,
-                kind: CompletionItemKind.Operator,
-              },
-              {
-                label: 'IS NOT',
-                insertText: `IS NOT`,
-                command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.Medium,
-                kind: CompletionItemKind.Operator,
-              },
-            ]
-          ),
+            {
+              label: 'IN (...)',
+              insertText: `IN ( $0 )`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.Medium,
+              kind: CompletionItemKind.Operator,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            {
+              label: 'NOT IN (...)',
+              insertText: `NOT IN ( $0 )`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.Medium,
+              kind: CompletionItemKind.Operator,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+            },
+            {
+              label: 'IS',
+              insertText: `IS`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.Medium,
+              kind: CompletionItemKind.Operator,
+            },
+            {
+              label: 'IS NOT',
+              insertText: `IS NOT`,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.Medium,
+              kind: CompletionItemKind.Operator,
+            },
+          ]),
       },
       {
         id: SuggestionKind.GroupByKeywords,
@@ -242,7 +291,6 @@ export const initStandardSuggestions =
               kind: CompletionItemKind.Snippet,
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
             },
-            
           ]),
       },
       {
@@ -272,43 +320,48 @@ export const initStandardSuggestions =
             }))
           ),
       },
-      {  
+      {
         id: SuggestionKind.NotKeyword,
         name: SuggestionKind.NotKeyword,
-        suggestions: () => 
-          Promise.resolve([{
-            label: 'NOT',
-            insertText: 'NOT',
-            command: TRIGGER_SUGGEST,
-            kind: CompletionItemKind.Keyword,
-            sortText: CompletionItemPriority.High,
-          }])
-    },
-      {  
-          id: SuggestionKind.BoolValues,
-          name: SuggestionKind.BoolValues,
-          suggestions: () => 
-            Promise.resolve(['TRUE', 'FALSE'].map(o => ({
+        suggestions: () =>
+          Promise.resolve([
+            {
+              label: 'NOT',
+              insertText: 'NOT',
+              command: TRIGGER_SUGGEST,
+              kind: CompletionItemKind.Keyword,
+              sortText: CompletionItemPriority.High,
+            },
+          ]),
+      },
+      {
+        id: SuggestionKind.BoolValues,
+        name: SuggestionKind.BoolValues,
+        suggestions: () =>
+          Promise.resolve(
+            ['TRUE', 'FALSE'].map((o) => ({
               label: o,
               insertText: `${o}`,
               command: TRIGGER_SUGGEST,
               kind: CompletionItemKind.Keyword,
               sortText: CompletionItemPriority.Medium,
-            })))
+            }))
+          ),
       },
-      {  
+      {
         id: SuggestionKind.NullValue,
         name: SuggestionKind.NullValue,
-        suggestions: () => 
-          Promise.resolve(['NULL'].map(o => ({
-            label: o,
-            insertText: `${o}`,
-            command: TRIGGER_SUGGEST,
-            kind: CompletionItemKind.Keyword,
-            sortText: CompletionItemPriority.Low,
-          })))
-    }
-
+        suggestions: () =>
+          Promise.resolve(
+            ['NULL'].map((o) => ({
+              label: o,
+              insertText: `${o}`,
+              command: TRIGGER_SUGGEST,
+              kind: CompletionItemKind.Keyword,
+              sortText: CompletionItemPriority.Low,
+            }))
+          ),
+      },
     ];
 
 export const initFunctionsRegistry = (): FunctionsRegistryItem[] => [
@@ -317,6 +370,8 @@ export const initFunctionsRegistry = (): FunctionsRegistryItem[] => [
     name: s,
   })),
 ];
+
+export const initMacrosRegistry = (): MacrosRegistryItem[] => [...MACROS];
 
 export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
   ...STD_OPERATORS.map((o) => ({
@@ -328,3 +383,24 @@ export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
   ...LOGICAL_OPERATORS.map((o) => ({ id: o, name: o.toUpperCase(), operator: o, type: OperatorType.Logical })),
   
 ];
+
+function createMacroSuggestionItem(m: MacrosRegistryItem) {
+  return {
+    label: m.name,
+    insertText: `${"\\" + m.text}${argsString(m.args)} `,
+    insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+    kind: CompletionItemKind.Snippet,
+    documentation: m.description,
+    command: TRIGGER_SUGGEST,
+  };
+}
+
+function argsString(args?: string[]): string {
+  if (!args) {
+    return "()";
+  }
+  return "("
+    .concat(args.map((t, i) => `\${${i}:${t}}`).join(", "))
+    .concat(")");
+}
+

@@ -21,12 +21,14 @@ import { v4 } from 'uuid';
 import { Registry } from '@grafana/data';
 import {
   FunctionsRegistryItem,
+  MacrosRegistryItem,
   OperatorsRegistryItem,
   StatementPositionResolversRegistryItem,
   SuggestionsRegistyItem,
 } from '../standardSql/types';
 import { 
   initFunctionsRegistry,
+  initMacrosRegistry,
   initOperatorsRegistry,
   initStandardSuggestions,
 } from '../standardSql/standardSuggestionsRegistry';
@@ -63,6 +65,7 @@ interface LanguageRegistries {
   operators: Registry<OperatorsRegistryItem>;
   suggestionKinds: Registry<SuggestionKindRegistyItem>;
   positionResolvers: Registry<StatementPositionResolversRegistryItem>;
+  macros: Registry<MacrosRegistryItem>;
 }
 
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
@@ -217,7 +220,7 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
   if (!INSTANCE_CACHE.has(lid)) {
     INSTANCE_CACHE.set(
       lid,
-      new Registry(initStandardSuggestions(languageRegistries.functions, languageRegistries.operators))
+      new Registry(initStandardSuggestions(languageRegistries.functions, languageRegistries.operators, languageRegistries.macros))
     );
   }
 
@@ -237,6 +240,15 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
       const exists = languageRegistries.operators.getIfExists(op.id);
       if (!exists) {
         languageRegistries.operators.register({ ...op, name: op.id });
+      }
+    }
+  }
+
+  if (customProvider.supportedMacros) {
+    for (const macro of customProvider.supportedMacros()) {
+      const exists = languageRegistries.macros.getIfExists(macro.id);
+      if (!exists) {
+        languageRegistries.macros.register({ ...macro, name: macro.id });
       }
     }
   }
@@ -348,6 +360,7 @@ function initializeLanguageRegistries(id: string) {
       operators: new Registry(initOperatorsRegistry),
       suggestionKinds: new Registry(initSuggestionsKindRegistry),
       positionResolvers: new Registry(initStatementPositionResolvers),
+      macros: new Registry(initMacrosRegistry),
     });
   }
 

@@ -45,7 +45,10 @@ export interface TableDefinition {
 }
 
 export interface SQLCompletionItemProvider
-  extends Omit<monacoTypes.languages.CompletionItemProvider, 'provideCompletionItems'> {
+  extends Omit<
+    monacoTypes.languages.CompletionItemProvider,
+    "provideCompletionItems"
+  > {
   /**
    * Allows dialect specific functions to be added to the completion list.
    * @alpha
@@ -64,6 +67,14 @@ export interface SQLCompletionItemProvider
     id: string;
     operator: string;
     type: OperatorType;
+    description?: string;
+  }>;
+
+  supportedMacros?: () => Array<{
+    id: string;
+    text: string;
+    type: MacroType;
+    args: Array<string>;
     description?: string;
   }>;
 
@@ -118,6 +129,14 @@ export enum OperatorType {
   Logical,
 }
 
+export enum MacroType {
+  Value,
+  Filter,
+  Group,
+  Column,
+  Table,
+}
+
 export enum TokenType {
   Parenthesis = 'delimiter.parenthesis.sql',
   Whitespace = 'white.sql',
@@ -150,6 +169,8 @@ export enum StatementPosition {
   WhereKeyword = 'whereKeyword',
   WhereComparisonOperator = 'whereComparisonOperator',
   WhereValue = 'whereValue',
+  AfterWhereFunctionArgument = 'afterWhereFunctionArgument',
+  AfterGroupByFunctionArgument = 'afterGroupByFunctionArgument',
   AfterWhereValue = 'afterWhereValue',
   AfterGroupByKeywords = 'afterGroupByKeywords',
   AfterGroupBy = 'afterGroupBy',
@@ -175,6 +196,10 @@ export enum SuggestionKind {
   SortOrderDirectionKeyword = 'sortOrderDirectionKeyword',
   ComparisonOperators = 'comparisonOperators',
   LogicalOperators = 'logicalOperators',
+  SelectMacro = 'selectMacro',
+  TableMacro = 'tableMacro',
+  FilterMacro = 'filterMacro',
+  GroupMacro = 'groupMacro',
   BoolValues = 'boolValues',
   NullValue = 'nullValue',
   NotKeyword = 'notKeyword',

@@ -45,6 +45,10 @@ export class LinkedToken {
   isFunction(): boolean {
     return this.type === TokenType.Function;
   }
+  
+  isOperator(): boolean {
+    return this.type === TokenType.Operator;
+  }
 
   is(type: TokenType, value?: string | number | boolean): boolean {
     const isType = this.type === type;

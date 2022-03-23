@@ -90,6 +90,18 @@ export interface SQLCompletionItemProvider
     type: OperatorType;
   }>;
 
+
+  /**
+   * Allows adding macros that are available in the dialect datasource.
+   * @alpha
+   */
+  supportedMacros?: () => Array<{
+    id: string;
+    name: string;
+    type: MacroType;
+    args: Array<string>;
+  }>
+
   /**
    * Allows custom suggestion kinds to be defined and correlate them with <Custom>StatementPosition.
    * @alpha
