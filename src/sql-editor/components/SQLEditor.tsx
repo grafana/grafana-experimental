@@ -56,6 +56,8 @@ interface SQLEditorProps {
   onChange?: (q: string, processQuery: boolean) => void;
   language?: LanguageDefinition;
   children? : (props: {formatQuery: () => void}) => React.ReactNode;
+  width?: number;
+  height?: number;
 }
 
 const defaultTableNameParser = (t: LinkedToken) => t.value;
@@ -71,7 +73,7 @@ interface LanguageRegistries {
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
 const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistyItem>>();
 
-export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query, language = { id: STANDARD_SQL_LANGUAGE } }) => {
+export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query, language = { id: STANDARD_SQL_LANGUAGE }, width,height }) => {
   const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor>(null);
   const langUid = useRef<string>();
   // create unique language id for each SQLEditor instance
@@ -97,9 +99,11 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query,
  
 
   return (
-    <>
+    <div style={{width}}>
       <CodeEditor
-        height={'240px'}
+        height={height || '240px'}
+        // -2px to compensate for borders width
+        width={width ? `${width-2}px` : undefined}
         language={id}
         value={query}
         onBlur={(v) => onChange && onChange(v, false)}
@@ -125,7 +129,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query,
         }}
       />
       {children && children({formatQuery})}
-    </>
+    </div>
   );
 };
 
