@@ -102,6 +102,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query,
     <div style={{width}}>
       <CodeEditor
         height={height || '240px'}
+        // -2px to compensate for borders witdth
         width={width ? `${width-2}px` : undefined}
         language={id}
         value={query}
