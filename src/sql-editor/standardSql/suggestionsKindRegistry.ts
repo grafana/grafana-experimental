@@ -1,4 +1,5 @@
 import { RegistryItem } from '@grafana/data';
+
 import { StatementPosition, SuggestionKind } from '../types';
 
 export interface SuggestionKindRegistyItem extends RegistryItem {
@@ -96,7 +97,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereValue,
       name: StatementPosition.WhereValue,
-      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro],
+      kind: [SuggestionKind.FilterMacro],
     },
     {
       id: StatementPosition.AfterWhereValue,

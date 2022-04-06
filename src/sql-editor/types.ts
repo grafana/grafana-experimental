@@ -1,6 +1,27 @@
 import { Monaco, monacoTypes } from '@grafana/ui';
+
 import { StatementPositionResolver, SuggestionsResolver } from './standardSql/types';
 import { LinkedToken } from './utils/LinkedToken';
+
+export interface SQLMonarchLanguage extends monacoTypes.languages.IMonarchLanguage { 
+  keywords?: string[];
+  operators?: string[];
+  builtinFunctions?: string[];
+}
+
+export interface SQLLanguage {
+  conf: monacoTypes.languages.LanguageConfiguration;
+  language: SQLMonarchLanguage
+}
+
+export interface SQLLanguageDefinition extends monacoTypes.languages.ILanguageExtensionPoint {
+  loader?: (module: any) => Promise<SQLLanguage>;
+  // Provides API for customizing the autocomplete
+  completionProvider?: (m: Monaco) => SQLCompletionItemProvider;
+  // Function that returns a formatted query
+  formatter?: (q: string) => string;
+}
+
 
 /**
  * Provides a context for suggestions resolver
@@ -14,7 +35,7 @@ export interface PositionContext {
   range: monacoTypes.IRange;
 }
 
-export type CustomSuggestion = Partial<monacoTypes.languages.CompletionItem> & { label: string };
+export type CustomSuggestion = Partial<monacoTypes.languages.CompletionItem   > & { label: string };
 
 export interface CustomSuggestionKind {
   id: string;
@@ -44,6 +65,12 @@ export interface TableDefinition {
   completion?: string;
 }
 
+export type SQLFunction = {
+  id: string;
+  name: string;
+  description?: string;
+}
+
 export interface SQLCompletionItemProvider
   extends Omit<
     monacoTypes.languages.CompletionItemProvider,
@@ -53,11 +80,7 @@ export interface SQLCompletionItemProvider
    * Allows dialect specific functions to be added to the completion list.
    * @alpha
    */
-  supportedFunctions?: () => Array<{
-    id: string;
-    name: string;
-    description?: string;
-  }>;
+  supportedFunctions?: () => Array<SQLFunction>;
 
   /**
    * Allows dialect specific operators to be added to the completion list.

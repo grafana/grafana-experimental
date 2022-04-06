@@ -1,7 +1,15 @@
 import { RegistryItem } from '@grafana/data';
 import { monacoTypes } from '@grafana/ui';
+
 import { CustomSuggestion, MacroType, OperatorType, PositionContext, StatementPosition, SuggestionKind } from '../types';
 import { LinkedToken } from '../utils/LinkedToken';
+
+
+export type MonacoLanguage = {
+  language: monacoTypes.languages.IMonarchLanguage; 
+  conf: monacoTypes.languages.LanguageConfiguration;
+}
+
 
 export interface SuggestionsRegistyItem extends RegistryItem {
   id: SuggestionKind;

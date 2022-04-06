@@ -1,22 +1,18 @@
 import { Registry } from '@grafana/data';
-import { TRIGGER_SUGGEST } from '../utils/commands';
+
 import {
   CompletionItemInsertTextRule,
   CompletionItemKind,
   CompletionItemPriority,
   MacroType,
   OperatorType,
+  SQLMonarchLanguage,
   SuggestionKind,
 } from '../types';
-import {
-  ASC,
-  DESC,
-  LOGICAL_OPERATORS,
-  STD_OPERATORS,
-  STD_STATS,
-} from './language';
-import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
+import { TRIGGER_SUGGEST } from '../utils/commands';
+import { ASC, DESC, LOGICAL_OPERATORS, STD_OPERATORS } from './language';
 import { MACROS } from './macros';
+import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
 
 /**
  * This registry glues particular SuggestionKind with an async function that provides completion items for it.
@@ -364,8 +360,8 @@ export const initStandardSuggestions =
       },
     ];
 
-export const initFunctionsRegistry = (): FunctionsRegistryItem[] => [
-  ...STD_STATS.map((s) => ({
+export const initFunctionsRegistry = (lang: SQLMonarchLanguage): FunctionsRegistryItem[] => [
+  ...lang.builtinFunctions.map((s) => ({
     id: s,
     name: s,
   })),
