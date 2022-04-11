@@ -181,9 +181,6 @@ export enum StatementPosition {
   AfterIsNotOperator = 'afterIsNotOperator',
 }
 
-
-
-
 export enum SuggestionKind {
   Tables = 'tables',
   Columns = 'columns',

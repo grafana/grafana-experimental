@@ -75,6 +75,7 @@ export const initStandardSuggestions =
                 documentation: `(Template Variable) ${val}`,
                 insertText: `\\$${variable.name}`,
                 insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+                command: TRIGGER_SUGGEST,
               };
             })
           );
