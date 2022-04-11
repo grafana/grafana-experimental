@@ -181,6 +181,9 @@ export enum StatementPosition {
   AfterIsNotOperator = 'afterIsNotOperator',
 }
 
+
+
+
 export enum SuggestionKind {
   Tables = 'tables',
   Columns = 'columns',
@@ -203,6 +206,7 @@ export enum SuggestionKind {
   BoolValues = 'boolValues',
   NullValue = 'nullValue',
   NotKeyword = 'notKeyword',
+  TemplateVariables = "templateVariables",
 }
 
 // TODO: export from grafana/ui

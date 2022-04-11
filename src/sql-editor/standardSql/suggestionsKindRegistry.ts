@@ -96,7 +96,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereValue,
       name: StatementPosition.WhereValue,
-      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro],
+      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro, SuggestionKind.TemplateVariables],
     },
     {
       id: StatementPosition.AfterWhereValue,
