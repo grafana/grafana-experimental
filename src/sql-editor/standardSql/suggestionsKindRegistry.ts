@@ -86,7 +86,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereKeyword,
       name: StatementPosition.WhereKeyword,
-      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro],
+      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro, SuggestionKind.TemplateVariables],
     },
     {
       id: StatementPosition.WhereComparisonOperator,
@@ -107,6 +107,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
         SuggestionKind.OrderByKeywords,
         SuggestionKind.LimitKeyword,
         SuggestionKind.Columns,
+        SuggestionKind.TemplateVariables,
       ],
     },
     {

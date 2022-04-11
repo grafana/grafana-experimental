@@ -73,7 +73,7 @@ export const initStandardSuggestions =
                 detail: `(Template Variable) ${val}`,
                 kind: CompletionItemKind.Snippet,
                 documentation: `(Template Variable) ${val}`,
-                insertText: `\\$${variable.name}`,
+                insertText: `\\$${variable.name} `,
                 insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
                 command: TRIGGER_SUGGEST,
               };
