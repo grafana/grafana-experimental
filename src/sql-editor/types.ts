@@ -203,6 +203,7 @@ export enum SuggestionKind {
   BoolValues = 'boolValues',
   NullValue = 'nullValue',
   NotKeyword = 'notKeyword',
+  TemplateVariables = "templateVariables",
 }
 
 // TODO: export from grafana/ui
