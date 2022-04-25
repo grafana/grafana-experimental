@@ -24,7 +24,7 @@ import {
   MacrosRegistryItem,
   OperatorsRegistryItem,
   StatementPositionResolversRegistryItem,
-  SuggestionsRegistyItem,
+  SuggestionsRegistryItem,
 } from '../standardSql/types';
 import { 
   initFunctionsRegistry,
@@ -71,7 +71,7 @@ interface LanguageRegistries {
 }
 
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
-const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistyItem>>();
+const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistryItem>>();
 
 export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query, language = { id: STANDARD_SQL_LANGUAGE }, width,height }) => {
   const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor>(null);
