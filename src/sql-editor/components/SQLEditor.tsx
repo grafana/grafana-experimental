@@ -2,7 +2,7 @@ import { CodeEditor, Monaco, monacoTypes } from '@grafana/ui';
 import React, {  useCallback, useEffect, useMemo, useRef } from 'react';
 import { getStatementPosition } from '../standardSql/getStatementPosition';
 import { getStandardSuggestions } from '../standardSql/getStandardSuggestions';
-import { initSuggestionsKindRegistry, SuggestionKindRegistyItem } from '../standardSql/suggestionsKindRegistry';
+import { initSuggestionsKindRegistry, SuggestionKindRegistryItem } from '../standardSql/suggestionsKindRegistry';
 import {
   CompletionItemKind,
   CompletionItemPriority,
@@ -65,7 +65,7 @@ const defaultTableNameParser = (t: LinkedToken) => t.value;
 interface LanguageRegistries {
   functions: Registry<FunctionsRegistryItem>;
   operators: Registry<OperatorsRegistryItem>;
-  suggestionKinds: Registry<SuggestionKindRegistyItem>;
+  suggestionKinds: Registry<SuggestionKindRegistryItem>;
   positionResolvers: Registry<StatementPositionResolversRegistryItem>;
   macros: Registry<MacrosRegistryItem>;
 }
