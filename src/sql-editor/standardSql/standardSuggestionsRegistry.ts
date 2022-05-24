@@ -16,7 +16,7 @@ import {
   STD_OPERATORS,
   STD_STATS,
 } from './language';
-import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
+import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistryItem } from './types';
 import { MACROS } from './macros';
 
 /**
@@ -30,7 +30,7 @@ export const initStandardSuggestions =
     operators: Registry<OperatorsRegistryItem>,
     macros: Registry<MacrosRegistryItem>
   ) =>
-  (): SuggestionsRegistyItem[] =>
+  (): SuggestionsRegistryItem[] =>
     [
       {
         id: SuggestionKind.SelectKeyword,

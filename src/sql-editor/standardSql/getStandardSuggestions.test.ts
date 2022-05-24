@@ -5,7 +5,7 @@ import { linkedTokenBuilder } from '../utils/linkedTokenBuilder';
 import { TextModel } from '../mocks/TextModel';
 import { Registry } from '@grafana/data';
 import { initStandardSuggestions } from './standardSuggestionsRegistry';
-import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
+import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistryItem } from './types';
 import { OperatorType, SuggestionKind, CustomSuggestion, PositionContext, MacroType } from '../types';
 import { getStandardSuggestions } from './getStandardSuggestions';
 
@@ -24,7 +24,7 @@ describe('getStandardSuggestions', () => {
     const suggestionMock: CustomSuggestion = { label: 'customSuggest' };
     const resolveFunctionSpy = jest.fn().mockReturnValue([suggestionMock]);
     const kind = 'customSuggestionItemKind' as SuggestionKind;
-    const suggestionsRegistry = new Registry<SuggestionsRegistyItem>(() => {
+    const suggestionsRegistry = new Registry<SuggestionsRegistryItem>(() => {
       return [
         {
           id: kind,

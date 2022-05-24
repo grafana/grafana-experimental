@@ -1,13 +1,13 @@
 import { RegistryItem } from '@grafana/data';
 import { StatementPosition, SuggestionKind } from '../types';
 
-export interface SuggestionKindRegistyItem extends RegistryItem {
+export interface SuggestionKindRegistryItem extends RegistryItem {
   id: StatementPosition;
   kind: SuggestionKind[];
 }
 
 // Registry of possible suggestions for the given statement position
-export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
+export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
   return [
     {
       id: StatementPosition.SelectKeyword,

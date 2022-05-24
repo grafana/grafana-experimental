@@ -2,7 +2,7 @@ import { CodeEditor, Monaco, monacoTypes } from '@grafana/ui';
 import React, {  useCallback, useEffect, useMemo, useRef } from 'react';
 import { getStatementPosition } from '../standardSql/getStatementPosition';
 import { getStandardSuggestions } from '../standardSql/getStandardSuggestions';
-import { initSuggestionsKindRegistry, SuggestionKindRegistyItem } from '../standardSql/suggestionsKindRegistry';
+import { initSuggestionsKindRegistry, SuggestionKindRegistryItem } from '../standardSql/suggestionsKindRegistry';
 import {
   CompletionItemKind,
   CompletionItemPriority,
@@ -24,7 +24,7 @@ import {
   MacrosRegistryItem,
   OperatorsRegistryItem,
   StatementPositionResolversRegistryItem,
-  SuggestionsRegistyItem,
+  SuggestionsRegistryItem,
 } from '../standardSql/types';
 import { 
   initFunctionsRegistry,
@@ -65,13 +65,13 @@ const defaultTableNameParser = (t: LinkedToken) => t.value;
 interface LanguageRegistries {
   functions: Registry<FunctionsRegistryItem>;
   operators: Registry<OperatorsRegistryItem>;
-  suggestionKinds: Registry<SuggestionKindRegistyItem>;
+  suggestionKinds: Registry<SuggestionKindRegistryItem>;
   positionResolvers: Registry<StatementPositionResolversRegistryItem>;
   macros: Registry<MacrosRegistryItem>;
 }
 
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
-const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistyItem>>();
+const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistryItem>>();
 
 export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query, language = { id: STANDARD_SQL_LANGUAGE }, width,height }) => {
   const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor>(null);

@@ -3,7 +3,7 @@ import { Monaco, monacoTypes } from '@grafana/ui';
 import { PositionContext, SuggestionKind } from '../types';
 import { LinkedToken } from '../utils/LinkedToken';
 import { toCompletionItem } from '../utils/toCompletionItem';
-import { SuggestionsRegistyItem } from './types';
+import { SuggestionsRegistryItem } from './types';
 
 // Given standard and custom registered suggestions and kinds of suggestion expected, return a list of completion items
 export const getStandardSuggestions = async (
@@ -11,7 +11,7 @@ export const getStandardSuggestions = async (
   currentToken: LinkedToken | null,
   suggestionKinds: SuggestionKind[],
   positionContext: PositionContext,
-  suggestionsRegistry: Registry<SuggestionsRegistyItem>
+  suggestionsRegistry: Registry<SuggestionsRegistryItem>
 ): Promise<monacoTypes.languages.CompletionItem[]> => {
   let suggestions: monacoTypes.languages.CompletionItem[] = [];
   const invalidRangeToken = currentToken?.isWhiteSpace() || currentToken?.isParenthesis();
