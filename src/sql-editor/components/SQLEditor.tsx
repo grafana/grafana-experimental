@@ -161,7 +161,6 @@ const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinit
 
 export const registerLanguageAndSuggestions = async (monaco: Monaco, l: LanguageDefinition, lid: string) => {
   const languageDefinition = resolveLanguage(monaco, l);
-  console.log('languageDefinition', languageDefinition);
   const { language, conf } = await languageDefinition.loader(monaco);
   monaco.languages.register({ id: lid });
   monaco.languages.setMonarchTokensProvider(lid, { ...language });
