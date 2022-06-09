@@ -84,7 +84,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
   // create unique language id for each SQLEditor instance
   const id = useMemo(() => {
     const uid = v4();
-    const id = language.id === STANDARD_SQL_LANGUAGE ? standardSQLLanguageDefinition.id : `${language.id}-${uid}`;
+    const id = `${language.id}-${uid}`;
     langUid.current = id;
     return id;
   }, [language.id]);
