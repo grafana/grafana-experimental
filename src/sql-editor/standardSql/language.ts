@@ -457,7 +457,6 @@ export const language: SQLMonarchLanguage = {
     'MATCHED',
   ],
   logicalOperators: ['ALL', 'AND', 'ANY', 'BETWEEN', 'EXISTS', 'IN', 'LIKE', 'NOT', 'OR', 'SOME'],
-  macros: ['$__timeFilter'],
   comparisonOperators: ['<>', '>', '<', '>=', '<=', '=', '!=', '&', '~', '^', '%'],
 
   builtinFunctions: [
