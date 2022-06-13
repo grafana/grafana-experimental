@@ -3,7 +3,7 @@ import { monacoTypes } from '@grafana/ui';
 import { CustomSuggestion, MacroType, OperatorType, PositionContext, StatementPosition, SuggestionKind } from '../types';
 import { LinkedToken } from '../utils/LinkedToken';
 
-export interface SuggestionsRegistyItem extends RegistryItem {
+export interface SuggestionsRegistryItem extends RegistryItem {
   id: SuggestionKind;
   suggestions: (position: PositionContext, m: typeof monacoTypes) => Promise<CustomSuggestion[]>;
 }

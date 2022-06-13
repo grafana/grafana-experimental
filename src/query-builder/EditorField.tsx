@@ -1,11 +1,11 @@
 import { css } from '@emotion/css';
 import { GrafanaTheme2 } from '@grafana/data';
 import { Field, Icon, PopoverContent, stylesFactory, Tooltip, useTheme2, ReactUtils } from '@grafana/ui';
-import React from 'react';
+import React, { ComponentProps } from 'react';
 
 import { Space } from './Space';
 
-interface EditorFieldProps {
+interface EditorFieldProps extends ComponentProps<typeof Field> {
   label: string;
   children: React.ReactElement;
   width?: number | string;
@@ -14,11 +14,13 @@ interface EditorFieldProps {
 }
 
 export const EditorField: React.FC<EditorFieldProps> = (props) => {
-  const { label, optional, tooltip, children } = props;
+  const { label, optional, tooltip, children, width, ...fieldProps } = props;
 
   const theme = useTheme2();
-  const styles = getStyles(theme, props);
-  const childInputId = ReactUtils.getChildId(children);
+  const styles = getStyles(theme, width);
+
+  // Null check for backward compatibility
+  const childInputId = fieldProps?.htmlFor || ReactUtils?.getChildId(children);
 
   const labelEl = (
     <>
@@ -37,17 +39,17 @@ export const EditorField: React.FC<EditorFieldProps> = (props) => {
 
   return (
     <div className={styles.root}>
-      <Field className={styles.field} label={labelEl}>
-        <div className={styles.child}>{children}</div>
+      <Field className={styles.field} label={labelEl} {...fieldProps}>
+        {children}
       </Field>
     </div>
   );
 };
 
-const getStyles = stylesFactory((theme: GrafanaTheme2, props: EditorFieldProps) => {
+const getStyles = stylesFactory((theme: GrafanaTheme2, width?: number | string) => {
   return {
     root: css({
-      minWidth: theme.spacing(props.width ?? 0),
+      minWidth: theme.spacing(width ?? 0),
     }),
     label: css({
       fontSize: 12,
@@ -59,14 +61,6 @@ const getStyles = stylesFactory((theme: GrafanaTheme2, props: EditorFieldProps) 
     }),
     field: css({
       marginBottom: 0, // GrafanaUI/Field has a bottom margin which we must remove
-    }),
-
-    // TODO: really poor hack to align the switch
-    // Find a better solution to this
-    child: css({
-      display: 'flex',
-      alignItems: 'center',
-      minHeight: 30,
     }),
     icon: css({
       color: theme.colors.text.secondary,

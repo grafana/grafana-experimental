@@ -1,13 +1,13 @@
 import { RegistryItem } from '@grafana/data';
 import { StatementPosition, SuggestionKind } from '../types';
 
-export interface SuggestionKindRegistyItem extends RegistryItem {
+export interface SuggestionKindRegistryItem extends RegistryItem {
   id: StatementPosition;
   kind: SuggestionKind[];
 }
 
 // Registry of possible suggestions for the given statement position
-export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
+export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
   return [
     {
       id: StatementPosition.SelectKeyword,
@@ -86,7 +86,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereKeyword,
       name: StatementPosition.WhereKeyword,
-      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro],
+      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro, SuggestionKind.TemplateVariables],
     },
     {
       id: StatementPosition.WhereComparisonOperator,
@@ -96,7 +96,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
     {
       id: StatementPosition.WhereValue,
       name: StatementPosition.WhereValue,
-      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro],
+      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro, SuggestionKind.TemplateVariables],
     },
     {
       id: StatementPosition.AfterWhereValue,
@@ -107,6 +107,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistyItem[] => {
         SuggestionKind.OrderByKeywords,
         SuggestionKind.LimitKeyword,
         SuggestionKind.Columns,
+        SuggestionKind.TemplateVariables,
       ],
     },
     {

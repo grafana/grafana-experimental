@@ -1,3 +1,4 @@
+import { getTemplateSrv } from '@grafana/runtime';
 import { monacoTypes } from '@grafana/ui';
 import { TokenType } from '../types';
 
@@ -45,15 +46,20 @@ export class LinkedToken {
   isFunction(): boolean {
     return this.type === TokenType.Function;
   }
-  
+
   isOperator(): boolean {
     return this.type === TokenType.Operator;
   }
 
+  isTemplateVariable(): boolean {
+    const variables = getTemplateSrv()?.getVariables();
+    return variables.find((v) => '$' + v.name == this.value) !== undefined;
+  }
+
   is(type: TokenType, value?: string | number | boolean): boolean {
     const isType = this.type === type;
-    
-    return value !== undefined ? isType && compareTokenWithValue(type, this, value)  : isType;
+
+    return value !== undefined ? isType && compareTokenWithValue(type, this, value) : isType;
   }
 
   getPreviousNonWhiteSpaceToken(): LinkedToken | null {
@@ -71,8 +77,8 @@ export class LinkedToken {
     let curr = this.previous;
     while (curr != null) {
       const isType = curr.type === type;
-      
-      if (value !== undefined ? isType && compareTokenWithValue(type, curr, value)  : isType) {
+
+      if (value !== undefined ? isType && compareTokenWithValue(type, curr, value) : isType) {
         return curr;
       }
       curr = curr.previous;
@@ -90,7 +96,7 @@ export class LinkedToken {
       }
 
       const isType = curr.type === type;
-      
+
       if (value !== undefined ? isType && compareTokenWithValue(type, curr, value) : isType) {
         return tokens;
       }

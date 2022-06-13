@@ -1,4 +1,5 @@
 import { Registry } from '@grafana/data';
+import { getTemplateSrv } from '@grafana/runtime';
 import { TRIGGER_SUGGEST } from '../utils/commands';
 import {
   CompletionItemInsertTextRule,
@@ -15,7 +16,7 @@ import {
   STD_OPERATORS,
   STD_STATS,
 } from './language';
-import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistyItem } from './types';
+import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistryItem } from './types';
 import { MACROS } from './macros';
 
 /**
@@ -29,7 +30,7 @@ export const initStandardSuggestions =
     operators: Registry<OperatorsRegistryItem>,
     macros: Registry<MacrosRegistryItem>
   ) =>
-  (): SuggestionsRegistyItem[] =>
+  (): SuggestionsRegistryItem[] =>
     [
       {
         id: SuggestionKind.SelectKeyword,
@@ -53,6 +54,32 @@ export const initStandardSuggestions =
               sortText: CompletionItemPriority.Medium,
             },
           ]),
+      },
+      {
+        id: SuggestionKind.TemplateVariables,
+        name: SuggestionKind.TemplateVariables,
+        suggestions: (_, m) => {
+          const templateSrv = getTemplateSrv();
+          if (!templateSrv) {
+            return Promise.resolve([]);
+          }
+
+          return Promise.resolve(
+            templateSrv.getVariables().map((variable) => {
+              const label = `\$${variable.name}`;
+              const val = templateSrv.replace(label);
+              return {
+                label,
+                detail: `(Template Variable) ${val}`,
+                kind: CompletionItemKind.Snippet,
+                documentation: `(Template Variable) ${val}`,
+                insertText: `\\$${variable.name} `,
+                insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+                command: TRIGGER_SUGGEST,
+              };
+            })
+          );
+        },
       },
       {
         id: SuggestionKind.SelectMacro,

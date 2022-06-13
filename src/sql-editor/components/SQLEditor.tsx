@@ -2,7 +2,7 @@ import { CodeEditor, Monaco, monacoTypes } from '@grafana/ui';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { getStatementPosition } from '../standardSql/getStatementPosition';
 import { getStandardSuggestions } from '../standardSql/getStandardSuggestions';
-import { initSuggestionsKindRegistry, SuggestionKindRegistyItem } from '../standardSql/suggestionsKindRegistry';
+import { initSuggestionsKindRegistry, SuggestionKindRegistryItem } from '../standardSql/suggestionsKindRegistry';
 import {
   CompletionItemKind,
   CompletionItemPriority,
@@ -25,7 +25,7 @@ import {
   OperatorsRegistryItem,
   SQLMonarchLanguage,
   StatementPositionResolversRegistryItem,
-  SuggestionsRegistyItem,
+  SuggestionsRegistryItem,
 } from '../standardSql/types';
 import {
   initFunctionsRegistry,
@@ -58,6 +58,8 @@ interface SQLEditorProps {
   onChange?: (q: string, processQuery: boolean) => void;
   language?: LanguageDefinition;
   children?: (props: { formatQuery: () => void }) => React.ReactNode;
+  width?: number;
+  height?: number;
 }
 
 const defaultTableNameParser = (t: LinkedToken) => t.value;
@@ -65,19 +67,21 @@ const defaultTableNameParser = (t: LinkedToken) => t.value;
 interface LanguageRegistries {
   functions: Registry<FunctionsRegistryItem>;
   operators: Registry<OperatorsRegistryItem>;
-  suggestionKinds: Registry<SuggestionKindRegistyItem>;
+  suggestionKinds: Registry<SuggestionKindRegistryItem>;
   positionResolvers: Registry<StatementPositionResolversRegistryItem>;
   macros: Registry<MacrosRegistryItem>;
 }
 
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
-const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistyItem>>();
+const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistryItem>>();
 
 export const SQLEditor: React.FC<SQLEditorProps> = ({
   children,
   onChange,
   query,
   language = { id: STANDARD_SQL_LANGUAGE },
+  width,
+  height,
 }) => {
   const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor>(null);
   const langUid = useRef<string>();
@@ -103,9 +107,11 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
   }, []);
 
   return (
-    <>
+    <div style={{ width }}>
       <CodeEditor
-        height={'240px'}
+        height={height || '240px'}
+        // -2px to compensate for borders width
+        width={width ? `${width - 2}px` : undefined}
         language={id}
         value={query}
         onBlur={(v) => onChange && onChange(v, false)}
@@ -131,7 +137,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
         }}
       />
       {children && children({ formatQuery })}
-    </>
+    </div>
   );
 };
 
