@@ -1,5 +1,5 @@
 import { CodeEditor, Monaco, monacoTypes } from '@grafana/ui';
-import React, {  useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { getStatementPosition } from '../standardSql/getStatementPosition';
 import { getStandardSuggestions } from '../standardSql/getStandardSuggestions';
 import { initSuggestionsKindRegistry, SuggestionKindRegistryItem } from '../standardSql/suggestionsKindRegistry';
@@ -23,10 +23,11 @@ import {
   FunctionsRegistryItem,
   MacrosRegistryItem,
   OperatorsRegistryItem,
+  SQLMonarchLanguage,
   StatementPositionResolversRegistryItem,
   SuggestionsRegistryItem,
 } from '../standardSql/types';
-import { 
+import {
   initFunctionsRegistry,
   initMacrosRegistry,
   initOperatorsRegistry,
@@ -34,12 +35,13 @@ import {
 } from '../standardSql/standardSuggestionsRegistry';
 import { initStatementPositionResolvers } from '../standardSql/statementPositionResolversRegistry';
 import { sqlEditorLog } from '../utils/debugger';
+import standardSQLLanguageDefinition from 'sql-editor/standardSql/definition';
 
 const STANDARD_SQL_LANGUAGE = 'sql';
 
-interface LanguageDefinition extends monacoTypes.languages.ILanguageExtensionPoint {
-  loadLanguage?: (module: any) => Promise<{
-    language: monacoTypes.languages.IMonarchLanguage; 
+export interface LanguageDefinition extends monacoTypes.languages.ILanguageExtensionPoint {
+  loader?: (module: any) => Promise<{
+    language: SQLMonarchLanguage;
     conf: monacoTypes.languages.LanguageConfiguration;
   }>;
   // Provides API for customizing the autocomplete
@@ -55,7 +57,7 @@ interface SQLEditorProps {
    */
   onChange?: (q: string, processQuery: boolean) => void;
   language?: LanguageDefinition;
-  children? : (props: {formatQuery: () => void}) => React.ReactNode;
+  children?: (props: { formatQuery: () => void }) => React.ReactNode;
   width?: number;
   height?: number;
 }
@@ -73,13 +75,20 @@ interface LanguageRegistries {
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
 const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistryItem>>();
 
-export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query, language = { id: STANDARD_SQL_LANGUAGE }, width,height }) => {
+export const SQLEditor: React.FC<SQLEditorProps> = ({
+  children,
+  onChange,
+  query,
+  language = { id: STANDARD_SQL_LANGUAGE },
+  width,
+  height,
+}) => {
   const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor>(null);
   const langUid = useRef<string>();
   // create unique language id for each SQLEditor instance
   const id = useMemo(() => {
     const uid = v4();
-    const id =  `${language.id}-${uid}`;
+    const id = `${language.id}-${uid}`;
     langUid.current = id;
     return id;
   }, [language.id]);
@@ -88,22 +97,21 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query,
     return () => {
       INSTANCE_CACHE.delete(langUid.current);
       sqlEditorLog(`Removing instance cache ${langUid.current}`, false, INSTANCE_CACHE);
-    }
-  }, [])
+    };
+  }, []);
 
   const formatQuery = useCallback(() => {
-    if(monacoRef.current) {
+    if (monacoRef.current) {
       monacoRef.current.getAction('editor.action.formatDocument').run();
     }
-  },[]);
- 
+  }, []);
 
   return (
-    <div style={{width}}>
+    <div style={{ width }}>
       <CodeEditor
         height={height || '240px'}
         // -2px to compensate for borders width
-        width={width ? `${width-2}px` : undefined}
+        width={width ? `${width - 2}px` : undefined}
         language={id}
         value={query}
         onBlur={(v) => onChange && onChange(v, false)}
@@ -114,10 +122,10 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query,
           monacoRef.current = editor;
           editor.onDidChangeModelContent((e) => {
             const text = editor.getValue();
-            if(onChange) {
+            if (onChange) {
               onChange(text, false);
             }
-          })
+          });
 
           editor.addCommand(m.KeyMod.CtrlCmd | m.KeyCode.Enter, () => {
             const text = editor.getValue();
@@ -128,39 +136,57 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({ children, onChange, query,
           registerLanguageAndSuggestions(m, language, id);
         }}
       />
-      {children && children({formatQuery})}
+      {children && children({ formatQuery })}
     </div>
   );
 };
 
-export const registerLanguageAndSuggestions = async (monaco: Monaco, l: LanguageDefinition, lid: string) => {
-  let languageLoader = getSQLLangConf;
-
-  if(l.loadLanguage){
-    sqlEditorLog(`Loading custom SQL dialect ${l.id}/${lid}`, false);
-    languageLoader =  l.loadLanguage;
+// There's three ways to define Monaco language:
+// 1. Leave language.id empty or set it to 'sql'. This will load a standard sql language definition, including syntax highlighting and tokenization for
+// common Grafana entities such as macros and template variables
+// 2. Provide a custom language and load it via the async LanguageDefinition.loader callback
+// 3. Specify a language.id that exists in the Monaco language registry. See available languages here: https://github.com/microsoft/monaco-editor/tree/main/src/basic-languages
+// If a custom language is specified, its LanguageDefinition will be merged with the LanguageDefinition for standard SQL. This allows the consumer to only
+// override parts of the LanguageDefinition, such as for example the completion item provider.
+const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinition): LanguageDefinition => {
+  if (languageDefinitionProp?.id !== STANDARD_SQL_LANGUAGE && !languageDefinitionProp.loader) {
+    sqlEditorLog(`Loading language '${languageDefinitionProp?.id}' from Monaco registry`, false);
+    const allLangs = monaco.languages.getLanguages();
+    const custom = allLangs.find(({ id }) => id === languageDefinitionProp?.id);
+    if (!custom) {
+      throw Error(`Unknown Monaco language ${languageDefinitionProp?.id}`);
+    }
+    return custom;
   }
-    
-  const { language, conf } = await languageLoader(monaco);
+
+  return {
+    ...standardSQLLanguageDefinition,
+    ...languageDefinitionProp,
+  };
+};
+
+export const registerLanguageAndSuggestions = async (monaco: Monaco, l: LanguageDefinition, lid: string) => {
+  const languageDefinition = resolveLanguage(monaco, l);
+  const { language, conf } = await languageDefinition.loader(monaco);
   monaco.languages.register({ id: lid });
   monaco.languages.setMonarchTokensProvider(lid, { ...language });
   monaco.languages.setLanguageConfiguration(lid, { ...conf });
 
-  if (l.formatter) {
+  if (languageDefinition.formatter) {
     monaco.languages.registerDocumentFormattingEditProvider(lid, {
       provideDocumentFormattingEdits: (model) => {
         var formatted = l.formatter(model.getValue());
         return [
           {
             range: model.getFullModelRange(),
-            text: formatted
-          }
+            text: formatted,
+          },
         ];
-      }
+      },
     });
   }
-  
-  if (l.completionProvider) {
+
+  if (languageDefinition.completionProvider) {
     const customProvider = l.completionProvider(monaco);
     extendStandardRegistries(l.id, lid, customProvider);
     const languageSuggestionsRegistries = LANGUAGES_CACHE.get(l.id)!;
@@ -175,7 +201,7 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
       const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
       const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
       const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
-      
+
       sqlEditorLog('Statement position', false, statementPosition);
       sqlEditorLog('Suggestion kinds', false, kind);
 
@@ -193,13 +219,7 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
       //   ci = customProvider.provideCompletionItems(model, position, context, token, ctx);
       // }
 
-      const stdSuggestions = await getStandardSuggestions(
-        monaco,
-        currentToken,
-        kind,
-        ctx,
-        instanceSuggestionsRegistry
-      );
+      const stdSuggestions = await getStandardSuggestions(monaco, currentToken, kind, ctx, instanceSuggestionsRegistry);
 
       return {
         // ...ci,
@@ -224,7 +244,9 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
   if (!INSTANCE_CACHE.has(lid)) {
     INSTANCE_CACHE.set(
       lid,
-      new Registry(initStandardSuggestions(languageRegistries.functions, languageRegistries.operators, languageRegistries.macros))
+      new Registry(
+        initStandardSuggestions(languageRegistries.functions, languageRegistries.operators, languageRegistries.macros)
+      )
     );
   }
 
@@ -276,7 +298,7 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
         const origResolve = exists.resolve;
         exists.resolve = (...args) => {
           const ext = placement.resolve(...args);
-          if(placement.overrideDefault){
+          if (placement.overrideDefault) {
             return ext;
           }
           const orig = origResolve(...args);
@@ -345,7 +367,7 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
               kind: CompletionItemKind.Field,
               sortText: CompletionItemPriority.High,
               detail: x.type,
-              documentation: x.description
+              documentation: x.description,
             }))
           : [];
       }
@@ -369,16 +391,4 @@ function initializeLanguageRegistries(id: string) {
   }
 
   return LANGUAGES_CACHE.get(id)!;
-}
-
-async function getSQLLangConf(monaco: Monaco) {
-  const allLangs = monaco.languages.getLanguages();
-  const langObj = allLangs.find(({ id }) => id === 'sql');
-
-  if (langObj) {
-    // @ts-ignore : Ain't public API :/ https://github.com/microsoft/monaco-editor/issues/2123#issuecomment-694197340
-    return await langObj.loader();
-  }
-
-  return Promise.resolve({ conf: null, language: null });
 }

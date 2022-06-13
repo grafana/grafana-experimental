@@ -35,3 +35,10 @@ export interface StatementPositionResolversRegistryItem extends RegistryItem {
 export type SuggestionsResolver = <T extends PositionContext = PositionContext>(
   positionContext: T
 ) => Promise<CustomSuggestion[]>;
+
+export interface SQLMonarchLanguage extends monacoTypes.languages.IMonarchLanguage {
+  keywords?: string[];
+  builtinFunctions?: string[];
+  logicalOperators?: string[];
+  comparisonOperators?: string[];
+}
