@@ -215,7 +215,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
         previousKeyword,
         previousNonWhiteSpace,
         previousIsSlash
-      ) =>
+      ) => 
         Boolean(
           previousKeyword?.value.toLowerCase() === WHERE &&
             (previousNonWhiteSpace?.isKeyword() ||
@@ -235,6 +235,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
         Boolean(
           previousKeyword?.value.toLowerCase() === WHERE &&
           !previousNonWhiteSpace?.getPreviousNonWhiteSpaceToken().isOperator() &&
+          !currentToken.is(TokenType.Delimiter, '.') &&
             !currentToken.isParenthesis() &&
             (previousNonWhiteSpace?.isIdentifier() ||
               previousNonWhiteSpace?.isDoubleQuotedString())

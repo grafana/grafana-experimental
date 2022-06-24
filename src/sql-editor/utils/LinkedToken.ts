@@ -53,7 +53,7 @@ export class LinkedToken {
 
   isTemplateVariable(): boolean {
     const variables = getTemplateSrv()?.getVariables();
-    return variables.find((v) => '$' + v.name == this.value) !== undefined;
+    return variables?.find((v) => '$' + v.name == this.value) !== undefined;
   }
 
   is(type: TokenType, value?: string | number | boolean): boolean {

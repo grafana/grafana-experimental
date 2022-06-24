@@ -1,4 +1,4 @@
-import { TestQueryModel } from "sql-editor/test-utils/types";
+import { TestQueryModel } from "../../test-utils/types";
 
 export const multiLineFullQuery: TestQueryModel = {
   query: `SELECT column1,  

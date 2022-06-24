@@ -35,7 +35,7 @@ import {
 } from '../standardSql/standardSuggestionsRegistry';
 import { initStatementPositionResolvers } from '../standardSql/statementPositionResolversRegistry';
 import { sqlEditorLog } from '../utils/debugger';
-import standardSQLLanguageDefinition from 'sql-editor/standardSql/definition';
+import standardSQLLanguageDefinition from '../standardSql/definition';
 
 const STANDARD_SQL_LANGUAGE = 'sql';
 
@@ -50,7 +50,7 @@ export interface LanguageDefinition extends monacoTypes.languages.ILanguageExten
   formatter?: (q: string) => string;
 }
 
-interface SQLEditorProps {
+export interface SQLEditorProps {
   query: string;
   /**
    * Use for inspecting the query as it changes. I.e. for validation.
