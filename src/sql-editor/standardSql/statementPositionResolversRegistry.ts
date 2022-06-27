@@ -235,9 +235,10 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
         Boolean(
           previousKeyword?.value.toLowerCase() === WHERE &&
           !previousNonWhiteSpace?.getPreviousNonWhiteSpaceToken().isOperator() &&
-            !currentToken.isParenthesis() &&
-            (previousNonWhiteSpace?.isIdentifier() ||
-              previousNonWhiteSpace?.isDoubleQuotedString())
+            !currentToken.is(TokenType.Delimiter, '.') &&
+              !currentToken.isParenthesis() &&
+              (previousNonWhiteSpace?.isIdentifier() ||
+                previousNonWhiteSpace?.isDoubleQuotedString())
         ),
     },
     {
