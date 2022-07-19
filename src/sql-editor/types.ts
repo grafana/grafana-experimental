@@ -20,6 +20,7 @@ export interface CustomSuggestionKind {
   id: string;
   suggestionsResolver: SuggestionsResolver;
   applyTo?: Array<StatementPosition | string>;
+  overrideDefault?: boolean;
 }
 
 export interface CustomStatementPlacement {
