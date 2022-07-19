@@ -136,6 +136,21 @@ export const initStandardSuggestions =
           ]),
       },
       {
+        id: SuggestionKind.StarWildCard,
+        name: SuggestionKind.StarWildCard,
+        suggestions: (_, m) =>
+          Promise.resolve([
+            {
+              label: '*',
+              insertText: `* $0`,
+              insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
+              kind: CompletionItemKind.Field,
+              command: TRIGGER_SUGGEST,
+              sortText: CompletionItemPriority.High,
+            },
+          ]),
+      },
+      {
         id: SuggestionKind.FunctionsWithArguments,
         name: SuggestionKind.FunctionsWithArguments,
         suggestions: (_, m) =>
