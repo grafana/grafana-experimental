@@ -324,8 +324,8 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
         const stbBehaviour = instanceSuggestionsRegistry.get(kind.id);
         if (stbBehaviour !== undefined) {
           stbBehaviour.suggestions = kind.suggestionsResolver;
+          continue;
         }
-        continue;
       }
 
       instanceSuggestionsRegistry.register({
