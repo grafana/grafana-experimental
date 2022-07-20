@@ -69,7 +69,6 @@ export const initStandardSuggestions =
                 insertText: `\\$${variable.name} `,
                 insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
                 command: TRIGGER_SUGGEST,
-                sortText: CompletionItemPriority.Low,
               };
             })
           );
@@ -161,7 +160,6 @@ export const initStandardSuggestions =
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
               kind: CompletionItemKind.Function,
               command: TRIGGER_SUGGEST,
-              sortText: CompletionItemPriority.MediumLow,
             })),
           ]),
       },
