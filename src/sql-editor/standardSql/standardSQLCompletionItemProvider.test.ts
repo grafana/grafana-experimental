@@ -1,0 +1,23 @@
+import { Monaco } from '@grafana/ui';
+import { getStandardSQLCompletionProvider } from './standardSQLCompletionItemProvider';
+import { SQLMonarchLanguage } from './types';
+
+describe('standardSQLCompletionItemProvider', () => {
+  describe('should include completion items based on the provided language', () => {
+    const language: SQLMonarchLanguage = {
+      tokenizer: {},
+      builtinFunctions: ['SUM', 'AVG'],
+      logicalOperators: ['AND', 'OR'],
+      comparisonOperators: ['=', '!='],
+    };
+    const completionProvider = getStandardSQLCompletionProvider({} as Monaco, language);
+    it('should use functions from language', () => {
+      expect(completionProvider.supportedFunctions().map((f) => f.name)).toEqual(language.builtinFunctions);
+    });
+    it('should combine ', () => {
+      expect(completionProvider.supportedOperators().map((o) => o.operator)).toEqual(
+        language.comparisonOperators.concat(language.logicalOperators)
+      );
+    });
+  });
+});
