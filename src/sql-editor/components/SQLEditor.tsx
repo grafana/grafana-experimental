@@ -27,12 +27,7 @@ import {
   StatementPositionResolversRegistryItem,
   SuggestionsRegistryItem,
 } from '../standardSql/types';
-import {
-  initFunctionsRegistry,
-  initMacrosRegistry,
-  initOperatorsRegistry,
-  initStandardSuggestions,
-} from '../standardSql/standardSuggestionsRegistry';
+import { initStandardSuggestions } from '../standardSql/standardSuggestionsRegistry';
 import { initStatementPositionResolvers } from '../standardSql/statementPositionResolversRegistry';
 import { sqlEditorLog } from '../utils/debugger';
 import standardSQLLanguageDefinition from 'sql-editor/standardSql/definition';
@@ -383,11 +378,11 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
 function initializeLanguageRegistries(id: string) {
   if (!LANGUAGES_CACHE.has(id)) {
     LANGUAGES_CACHE.set(id, {
-      functions: new Registry(initFunctionsRegistry),
-      operators: new Registry(initOperatorsRegistry),
+      functions: new Registry(),
+      operators: new Registry(),
       suggestionKinds: new Registry(initSuggestionsKindRegistry),
       positionResolvers: new Registry(initStatementPositionResolvers),
-      macros: new Registry(initMacrosRegistry),
+      macros: new Registry(),
     });
   }
 
