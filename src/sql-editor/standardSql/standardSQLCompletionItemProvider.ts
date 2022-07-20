@@ -1,5 +1,6 @@
 import { Monaco } from '@grafana/ui';
 import { Operator, OperatorType, SQLCompletionItemProvider } from 'sql-editor/types';
+import { MACROS } from './macros';
 import { SQLMonarchLanguage } from './types';
 
 export function getStandardSQLCompletionProvider(
@@ -29,6 +30,8 @@ export function getStandardSQLCompletionProvider(
   }
 
   provider.supportedOperators = () => operators;
+
+  provider.supportedMacros = () => MACROS;
 
   return provider;
 }

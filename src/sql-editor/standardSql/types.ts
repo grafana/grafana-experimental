@@ -18,7 +18,7 @@ export interface SuggestionsRegistryItem extends RegistryItem {
 export interface MacrosRegistryItem extends RegistryItem {
   type: MacroType;
   text: string;
-  args?: string[];
+  args: string[];
 }
 
 export interface FunctionsRegistryItem extends RegistryItem {}
