@@ -202,7 +202,7 @@ export enum SuggestionKind {
   NullValue = 'nullValue',
   NotKeyword = 'notKeyword',
   TemplateVariables = 'templateVariables',
-  StarWildCard = 'StarWildCard',
+  StarWildCard = 'starWildCard',
 }
 
 // TODO: export from grafana/ui
