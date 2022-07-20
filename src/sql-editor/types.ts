@@ -1,5 +1,5 @@
 import { Monaco, monacoTypes } from '@grafana/ui';
-import { StatementPositionResolver, SuggestionsResolver } from './standardSql/types';
+import { SQLMonarchLanguage, StatementPositionResolver, SuggestionsResolver } from './standardSql/types';
 import { LinkedToken } from './utils/LinkedToken';
 
 /**
@@ -43,6 +43,13 @@ export interface TableDefinition {
   name: string;
   // Text used for automplete. If not provided name is used.
   completion?: string;
+}
+
+export interface Operator {
+  id: string;
+  operator: string;
+  type: OperatorType;
+  description?: string;
 }
 
 export interface SQLCompletionItemProvider
@@ -120,7 +127,7 @@ export interface SQLCompletionItemProvider
   ) => monacoTypes.languages.CompletionList;
 }
 
-export type LanguageCompletionProvider = (m: Monaco) => SQLCompletionItemProvider;
+export type LanguageCompletionProvider = (m: Monaco, l?: SQLMonarchLanguage) => SQLCompletionItemProvider;
 
 export enum OperatorType {
   Comparison,
