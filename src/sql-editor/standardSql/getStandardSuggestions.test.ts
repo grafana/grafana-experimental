@@ -9,6 +9,12 @@ import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, Sugge
 import { OperatorType, SuggestionKind, CustomSuggestion, PositionContext, MacroType } from '../types';
 import { getStandardSuggestions } from './getStandardSuggestions';
 
+jest.mock('@grafana/runtime', () => ({
+  getTemplateSrv: () => {
+    getVariables: jest.fn();
+  },
+}));
+
 describe('getStandardSuggestions', () => {
   const mockQueries = new Map<string, Array<Array<Pick<monacoTypes.Token, 'language' | 'offset' | 'type'>>>>();
   const cases = [{ query: singleLineFullQuery, position: { line: 1, column: 0 } }];
@@ -183,13 +189,13 @@ describe('getStandardSuggestions', () => {
     expect(result).toHaveLength(4);
   });
 
-  it("suggests $__time(dateColumn) macro when in column position", async () => {
+  it('suggests $__time(dateColumn) macro when in column position', async () => {
     const customMacro: MacrosRegistryItem = {
       name: '$__time',
       id: '$__time',
       text: '$__time',
       type: MacroType.Value,
-    }
+    };
 
     const suggestionsRegistry = new Registry(
       initStandardSuggestions(
@@ -206,9 +212,9 @@ describe('getStandardSuggestions', () => {
       posContextMock as PositionContext,
       suggestionsRegistry
     );
-      
+
     expect(result).toHaveLength(1);
-    expect(result[0].label).toEqual("$__time");
+    expect(result[0].label).toEqual('$__time');
   });
 
   it('suggests SELECT and SELECT FROM from the standard registry', async () => {

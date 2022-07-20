@@ -13,6 +13,12 @@ import { testStatementPosition } from '../test-utils/statementPosition';
 import { StatementPosition } from '../types';
 import { initStatementPositionResolvers } from './statementPositionResolversRegistry';
 
+jest.mock('@grafana/runtime', () => ({
+  getTemplateSrv: () => {
+    getVariables: jest.fn();
+  },
+}));
+
 describe('statementPosition', () => {
   testStatementPosition(
     StatementPosition.SelectKeyword,
@@ -78,6 +84,16 @@ describe('statementPosition', () => {
 
   testStatementPosition(
     StatementPosition.AfterFrom,
+    [
+      { query: singleLineFullQuery, position: { line: 1, column: 28 } },
+      { query: singleLineTwoQueries, position: { line: 1, column: 130 } },
+      { query: multiLineFullQuery, position: { line: 2, column: 12 } },
+    ],
+    initStatementPositionResolvers
+  );
+
+  testStatementPosition(
+    StatementPosition.AfterTable,
     [
       { query: singleLineFullQuery, position: { line: 1, column: 28 } },
       { query: singleLineTwoQueries, position: { line: 1, column: 130 } },
