@@ -22,7 +22,12 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
     {
       id: StatementPosition.AfterSelectKeyword,
       name: StatementPosition.AfterSelectKeyword,
-      kind: [SuggestionKind.FunctionsWithArguments, SuggestionKind.Columns, SuggestionKind.SelectMacro],
+      kind: [
+        SuggestionKind.StarWildCard,
+        SuggestionKind.FunctionsWithArguments,
+        SuggestionKind.Columns,
+        SuggestionKind.SelectMacro,
+      ],
     },
     {
       id: StatementPosition.AfterSelectFuncFirstArgument,

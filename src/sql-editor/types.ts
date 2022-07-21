@@ -46,10 +46,7 @@ export interface TableDefinition {
 }
 
 export interface SQLCompletionItemProvider
-  extends Omit<
-    monacoTypes.languages.CompletionItemProvider,
-    "provideCompletionItems"
-  > {
+  extends Omit<monacoTypes.languages.CompletionItemProvider, 'provideCompletionItems'> {
   /**
    * Allows dialect specific functions to be added to the completion list.
    * @alpha
@@ -205,6 +202,7 @@ export enum SuggestionKind {
   NullValue = 'nullValue',
   NotKeyword = 'notKeyword',
   TemplateVariables = 'templateVariables',
+  StarWildCard = 'starWildCard',
 }
 
 // TODO: export from grafana/ui
