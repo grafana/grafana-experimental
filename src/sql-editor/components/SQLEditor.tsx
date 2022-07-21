@@ -196,7 +196,6 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
       token
     ) => {
       const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
-
       const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
       const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
 
