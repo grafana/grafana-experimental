@@ -31,6 +31,7 @@ import { initStandardSuggestions } from '../standardSql/standardSuggestionsRegis
 import { initStatementPositionResolvers } from '../standardSql/statementPositionResolversRegistry';
 import { sqlEditorLog } from '../utils/debugger';
 import standardSQLLanguageDefinition from 'sql-editor/standardSql/definition';
+import { getStandardSQLCompletionProvider } from 'sql-editor/standardSql/standardSQLCompletionItemProvider';
 
 const STANDARD_SQL_LANGUAGE = 'sql';
 
@@ -140,7 +141,8 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
 // 1. Leave language.id empty or set it to 'sql'. This will load a standard sql language definition, including syntax highlighting and tokenization for
 // common Grafana entities such as macros and template variables
 // 2. Provide a custom language and load it via the async LanguageDefinition.loader callback
-// 3. Specify a language.id that exists in the Monaco language registry. See available languages here: https://github.com/microsoft/monaco-editor/tree/main/src/basic-languages
+// 3. Specify a language.id that exists in the Monaco language registry. A custom completion item provider can still be provided.
+// If not, the standard SQL completion item provider will be used. See available languages here: https://github.com/microsoft/monaco-editor/tree/main/src/basic-languages
 // If a custom language is specified, its LanguageDefinition will be merged with the LanguageDefinition for standard SQL. This allows the consumer to only
 // override parts of the LanguageDefinition, such as for example the completion item provider.
 const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinition): LanguageDefinition => {
@@ -151,7 +153,7 @@ const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinit
     if (!custom) {
       throw Error(`Unknown Monaco language ${languageDefinitionProp?.id}`);
     }
-    return custom;
+    return { completionProvider: getStandardSQLCompletionProvider, ...custom, ...languageDefinitionProp };
   }
 
   return {
@@ -181,45 +183,46 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
     });
   }
 
-  const customProvider = languageDefinition.completionProvider(monaco, language);
-  extendStandardRegistries(l.id, lid, customProvider);
-  const languageSuggestionsRegistries = LANGUAGES_CACHE.get(l.id)!;
-  const instanceSuggestionsRegistry = INSTANCE_CACHE.get(lid)!;
+  if (languageDefinition.completionProvider) {
+    const customProvider = languageDefinition.completionProvider(monaco, language);
+    extendStandardRegistries(l.id, lid, customProvider);
+    const languageSuggestionsRegistries = LANGUAGES_CACHE.get(l.id)!;
+    const instanceSuggestionsRegistry = INSTANCE_CACHE.get(lid)!;
 
-  const completionProvider: monacoTypes.languages.CompletionItemProvider['provideCompletionItems'] = async (
-    model,
-    position,
-    context,
-    token
-  ) => {
-    const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
-
-    const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
-    const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
-
-    sqlEditorLog('Statement position', false, statementPosition);
-    sqlEditorLog('Suggestion kinds', false, kind);
-
-    const ctx: PositionContext = {
+    const completionProvider: monacoTypes.languages.CompletionItemProvider['provideCompletionItems'] = async (
+      model,
       position,
-      currentToken,
-      statementPosition,
-      kind,
-      range: monaco.Range.fromPositions(position),
+      context,
+      token
+    ) => {
+      const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
+
+      const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
+      const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
+
+      sqlEditorLog('Statement position', false, statementPosition);
+      sqlEditorLog('Suggestion kinds', false, kind);
+
+      const ctx: PositionContext = {
+        position,
+        currentToken,
+        statementPosition,
+        kind,
+        range: monaco.Range.fromPositions(position),
+      };
+
+      const stdSuggestions = await getStandardSuggestions(monaco, currentToken, kind, ctx, instanceSuggestionsRegistry);
+
+      return {
+        suggestions: stdSuggestions,
+      };
     };
 
-    const stdSuggestions = await getStandardSuggestions(monaco, currentToken, kind, ctx, instanceSuggestionsRegistry);
-
-    return {
-      // ...ci,
-      suggestions: stdSuggestions,
-    };
-  };
-
-  monaco.languages.registerCompletionItemProvider(lid, {
-    ...customProvider,
-    provideCompletionItems: completionProvider,
-  });
+    monaco.languages.registerCompletionItemProvider(lid, {
+      ...customProvider,
+      provideCompletionItems: completionProvider,
+    });
+  }
 };
 
 function extendStandardRegistries(id: string, lid: string, customProvider: SQLCompletionItemProvider) {

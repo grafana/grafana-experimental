@@ -13,7 +13,7 @@ export function getStandardSQLCompletionProvider(
   }
 
   const operators: Array<Operator> = [];
-  if (language?.comparisonOperators.length) {
+  if (language?.comparisonOperators?.length) {
     operators.push(
       ...language.comparisonOperators.map((f) => ({
         id: f.toLocaleLowerCase(),
@@ -23,7 +23,9 @@ export function getStandardSQLCompletionProvider(
     );
   }
 
-  if (language?.logicalOperators.length) {
+  // some languages in the monaco language registry doesn't specify logical operators, only operators. if so, suggest them instead
+  language.logicalOperators = language.logicalOperators ?? language.operators;
+  if (language?.logicalOperators?.length) {
     operators.push(
       ...language.logicalOperators.map((f) => ({ id: f.toLocaleLowerCase(), operator: f, type: OperatorType.Logical }))
     );

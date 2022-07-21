@@ -48,4 +48,7 @@ export interface SQLMonarchLanguage extends monacoTypes.languages.IMonarchLangua
   builtinFunctions?: string[];
   logicalOperators?: string[];
   comparisonOperators?: string[];
+
+  //used by basic languages in the monaco registry
+  operators?: string[];
 }
