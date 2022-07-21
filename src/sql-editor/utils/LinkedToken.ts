@@ -1,4 +1,3 @@
-import { getTemplateSrv } from '@grafana/runtime';
 import { monacoTypes } from '@grafana/ui';
 import { TokenType } from '../types';
 
@@ -52,8 +51,7 @@ export class LinkedToken {
   }
 
   isTemplateVariable(): boolean {
-    const variables = getTemplateSrv()?.getVariables();
-    return variables.find((v) => '$' + v.name === this.value) !== undefined;
+    return this.type === TokenType.Variable;
   }
 
   is(type: TokenType, value?: string | number | boolean): boolean {
