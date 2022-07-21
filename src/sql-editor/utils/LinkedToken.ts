@@ -1,4 +1,3 @@
-import { getTemplateSrv } from '@grafana/runtime';
 import { monacoTypes } from '@grafana/ui';
 import { TokenType } from '../types';
 
