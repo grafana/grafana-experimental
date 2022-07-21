@@ -9,13 +9,7 @@ import {
   OperatorType,
   SuggestionKind,
 } from '../types';
-import {
-  ASC,
-  DESC,
-  LOGICAL_OPERATORS,
-  STD_OPERATORS,
-  STD_STATS,
-} from './language';
+import { ASC, DESC, LOGICAL_OPERATORS, STD_OPERATORS, STD_STATS } from './language';
 import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistryItem } from './types';
 import { MACROS } from './macros';
 
@@ -76,6 +70,7 @@ export const initStandardSuggestions =
                 insertText: `\\$${variable.name} `,
                 insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
                 command: TRIGGER_SUGGEST,
+                sortText: CompletionItemPriority.Low,
               };
             })
           );
@@ -152,7 +147,7 @@ export const initStandardSuggestions =
               insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
               kind: CompletionItemKind.Function,
               command: TRIGGER_SUGGEST,
-              sortText: CompletionItemPriority.MediumHigh,
+              sortText: CompletionItemPriority.MediumLow,
             })),
           ]),
       },
@@ -408,13 +403,12 @@ export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
     type: OperatorType.Comparison,
   })),
   ...LOGICAL_OPERATORS.map((o) => ({ id: o, name: o.toUpperCase(), operator: o, type: OperatorType.Logical })),
-  
 ];
 
 function createMacroSuggestionItem(m: MacrosRegistryItem) {
   return {
     label: m.name,
-    insertText: `${"\\" + m.text}${argsString(m.args)} `,
+    insertText: `${'\\' + m.text}${argsString(m.args)} `,
     insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
     kind: CompletionItemKind.Snippet,
     documentation: m.description,
@@ -424,10 +418,7 @@ function createMacroSuggestionItem(m: MacrosRegistryItem) {
 
 function argsString(args?: string[]): string {
   if (!args) {
-    return "()";
+    return '()';
   }
-  return "("
-    .concat(args.map((t, i) => `\${${i}:${t}}`).join(", "))
-    .concat(")");
+  return '('.concat(args.map((t, i) => `\${${i}:${t}}`).join(', ')).concat(')');
 }
-

@@ -22,11 +22,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
     {
       id: StatementPosition.AfterSelectKeyword,
       name: StatementPosition.AfterSelectKeyword,
-      kind: [
-        SuggestionKind.FunctionsWithArguments,
-        SuggestionKind.Columns,
-        SuggestionKind.SelectMacro,
-      ],
+      kind: [SuggestionKind.FunctionsWithArguments, SuggestionKind.Columns, SuggestionKind.SelectMacro],
     },
     {
       id: StatementPosition.AfterSelectFuncFirstArgument,
@@ -96,7 +92,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
     {
       id: StatementPosition.WhereValue,
       name: StatementPosition.WhereValue,
-      kind: [SuggestionKind.Columns, SuggestionKind.FilterMacro, SuggestionKind.TemplateVariables],
+      kind: [SuggestionKind.FilterMacro, SuggestionKind.TemplateVariables],
     },
     {
       id: StatementPosition.AfterWhereValue,
@@ -113,7 +109,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
     {
       id: StatementPosition.AfterGroupByKeywords,
       name: StatementPosition.AfterGroupByKeywords,
-      kind: [SuggestionKind.GroupMacro],
+      kind: [SuggestionKind.GroupMacro, SuggestionKind.Columns],
     },
     {
       id: StatementPosition.AfterGroupBy,
@@ -128,10 +124,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
     {
       id: StatementPosition.AfterOrderByFunction,
       name: StatementPosition.AfterOrderByFunction,
-      kind: [
-        SuggestionKind.SortOrderDirectionKeyword,
-        SuggestionKind.LimitKeyword,
-      ],
+      kind: [SuggestionKind.SortOrderDirectionKeyword, SuggestionKind.LimitKeyword],
     },
     {
       id: StatementPosition.AfterOrderByDirection,
@@ -141,11 +134,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
     {
       id: StatementPosition.AfterIsOperator,
       name: StatementPosition.AfterOrderByDirection,
-      kind: [
-        SuggestionKind.NotKeyword,
-        SuggestionKind.NullValue,
-        SuggestionKind.BoolValues,
-      ],
+      kind: [SuggestionKind.NotKeyword, SuggestionKind.NullValue, SuggestionKind.BoolValues],
     },
     {
       id: StatementPosition.AfterIsNotOperator,
