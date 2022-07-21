@@ -1,16 +1,5 @@
-import { monacoTypes } from '@grafana/ui';
-import { SQLMonarchLanguage } from './types';
-
-export type LanguageDefinition = {
-  id: string;
-  extensions: string[];
-  aliases: string[];
-  mimetypes: string[];
-  loader: (monaco: any) => Promise<{
-    language: SQLMonarchLanguage;
-    conf: monacoTypes.languages.LanguageConfiguration;
-  }>;
-};
+import { LanguageDefinition } from 'sql-editor/components/SQLEditor';
+import { getStandardSQLCompletionProvider } from './standardSQLCompletionItemProvider';
 
 const standardSQLLanguageDefinition: LanguageDefinition = {
   id: 'standardSql',
@@ -18,6 +7,7 @@ const standardSQLLanguageDefinition: LanguageDefinition = {
   aliases: ['sql'],
   mimetypes: [],
   loader: () => import('./language'),
+  completionProvider: getStandardSQLCompletionProvider,
 };
 
 export default standardSQLLanguageDefinition;

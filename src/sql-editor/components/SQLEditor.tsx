@@ -27,15 +27,11 @@ import {
   StatementPositionResolversRegistryItem,
   SuggestionsRegistryItem,
 } from '../standardSql/types';
-import {
-  initFunctionsRegistry,
-  initMacrosRegistry,
-  initOperatorsRegistry,
-  initStandardSuggestions,
-} from '../standardSql/standardSuggestionsRegistry';
+import { initStandardSuggestions } from '../standardSql/standardSuggestionsRegistry';
 import { initStatementPositionResolvers } from '../standardSql/statementPositionResolversRegistry';
 import { sqlEditorLog } from '../utils/debugger';
 import standardSQLLanguageDefinition from 'sql-editor/standardSql/definition';
+import { getStandardSQLCompletionProvider } from 'sql-editor/standardSql/standardSQLCompletionItemProvider';
 
 const STANDARD_SQL_LANGUAGE = 'sql';
 
@@ -45,7 +41,7 @@ export interface LanguageDefinition extends monacoTypes.languages.ILanguageExten
     conf: monacoTypes.languages.LanguageConfiguration;
   }>;
   // Provides API for customizing the autocomplete
-  completionProvider?: (m: Monaco) => SQLCompletionItemProvider;
+  completionProvider?: (m: Monaco, language?: SQLMonarchLanguage) => SQLCompletionItemProvider;
   // Function that returns a formatted query
   formatter?: (q: string) => string;
 }
@@ -145,7 +141,8 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
 // 1. Leave language.id empty or set it to 'sql'. This will load a standard sql language definition, including syntax highlighting and tokenization for
 // common Grafana entities such as macros and template variables
 // 2. Provide a custom language and load it via the async LanguageDefinition.loader callback
-// 3. Specify a language.id that exists in the Monaco language registry. See available languages here: https://github.com/microsoft/monaco-editor/tree/main/src/basic-languages
+// 3. Specify a language.id that exists in the Monaco language registry. A custom completion item provider can still be provided.
+// If not, the standard SQL completion item provider will be used. See available languages here: https://github.com/microsoft/monaco-editor/tree/main/src/basic-languages
 // If a custom language is specified, its LanguageDefinition will be merged with the LanguageDefinition for standard SQL. This allows the consumer to only
 // override parts of the LanguageDefinition, such as for example the completion item provider.
 const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinition): LanguageDefinition => {
@@ -156,7 +153,7 @@ const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinit
     if (!custom) {
       throw Error(`Unknown Monaco language ${languageDefinitionProp?.id}`);
     }
-    return custom;
+    return { completionProvider: getStandardSQLCompletionProvider, ...custom, ...languageDefinitionProp };
   }
 
   return {
@@ -187,7 +184,7 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
   }
 
   if (languageDefinition.completionProvider) {
-    const customProvider = l.completionProvider(monaco);
+    const customProvider = languageDefinition.completionProvider(monaco, language);
     extendStandardRegistries(l.id, lid, customProvider);
     const languageSuggestionsRegistries = LANGUAGES_CACHE.get(l.id)!;
     const instanceSuggestionsRegistry = INSTANCE_CACHE.get(lid)!;
@@ -213,16 +210,9 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
         range: monaco.Range.fromPositions(position),
       };
 
-      // // Completely custom suggestions - hope this won't we needed
-      // let ci;
-      // if (customProvider.provideCompletionItems) {
-      //   ci = customProvider.provideCompletionItems(model, position, context, token, ctx);
-      // }
-
       const stdSuggestions = await getStandardSuggestions(monaco, currentToken, kind, ctx, instanceSuggestionsRegistry);
 
       return {
-        // ...ci,
         suggestions: stdSuggestions,
       };
     };
@@ -390,11 +380,11 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
 function initializeLanguageRegistries(id: string) {
   if (!LANGUAGES_CACHE.has(id)) {
     LANGUAGES_CACHE.set(id, {
-      functions: new Registry(initFunctionsRegistry),
-      operators: new Registry(initOperatorsRegistry),
+      functions: new Registry(),
+      operators: new Registry(),
       suggestionKinds: new Registry(initSuggestionsKindRegistry),
       positionResolvers: new Registry(initStatementPositionResolvers),
-      macros: new Registry(initMacrosRegistry),
+      macros: new Registry(),
     });
   }
 
