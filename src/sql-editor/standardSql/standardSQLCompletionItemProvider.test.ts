@@ -3,7 +3,7 @@ import { getStandardSQLCompletionProvider } from './standardSQLCompletionItemPro
 import { SQLMonarchLanguage } from './types';
 
 describe('standardSQLCompletionItemProvider', () => {
-  describe('should include completion items based on the provided language', () => {
+  describe('should include completion items based on the provided custom language', () => {
     const language: SQLMonarchLanguage = {
       tokenizer: {},
       builtinFunctions: ['SUM', 'AVG'],
@@ -18,6 +18,21 @@ describe('standardSQLCompletionItemProvider', () => {
       expect(completionProvider.supportedOperators().map((o) => o.operator)).toEqual(
         language.comparisonOperators.concat(language.logicalOperators)
       );
+    });
+  });
+
+  describe('should include completion items based on the provided monaco registry language', () => {
+    const language: SQLMonarchLanguage = {
+      tokenizer: {},
+      builtinFunctions: ['SUM', 'AVG'],
+      operators: ['AND', 'OR'],
+    };
+    const completionProvider = getStandardSQLCompletionProvider({} as Monaco, language);
+    it('should use functions from language', () => {
+      expect(completionProvider.supportedFunctions().map((f) => f.name)).toEqual(language.builtinFunctions);
+    });
+    it('should combine ', () => {
+      expect(completionProvider.supportedOperators().map((o) => o.operator)).toEqual(language.operators);
     });
   });
 });
