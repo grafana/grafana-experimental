@@ -55,6 +55,11 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
       kind: [SuggestionKind.Tables, SuggestionKind.TableMacro],
     },
     {
+      id: StatementPosition.AfterSchema,
+      name: StatementPosition.AfterSchema,
+      kind: [SuggestionKind.Tables, SuggestionKind.TableMacro],
+    },
+    {
       id: StatementPosition.SelectAlias,
       name: StatementPosition.SelectAlias,
       kind: [SuggestionKind.Columns, SuggestionKind.FunctionsWithArguments],

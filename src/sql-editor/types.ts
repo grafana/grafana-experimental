@@ -45,6 +45,11 @@ export interface TableDefinition {
   completion?: string;
 }
 
+export interface TableIdentifier {
+  table?: string;
+  schema?: string;
+}
+
 export interface SQLCompletionItemProvider
   extends Omit<monacoTypes.languages.CompletionItemProvider, 'provideCompletionItems'> {
   /**
@@ -94,9 +99,9 @@ export interface SQLCompletionItemProvider
    * @alpha
    */
   tables?: {
-    resolve: () => Promise<TableDefinition[]>;
+    resolve: (TableIdentifier: TableIdentifier) => Promise<TableDefinition[]>;
     // Allows providing a custom function for calculating the table name from the query. If not specified a default implemnentation is used.
-    parseName?: (t: LinkedToken) => string;
+    parseName?: (token: LinkedToken) => TableIdentifier;
   };
   /**
    * Allows providing a custom function for resolving table.
@@ -104,7 +109,7 @@ export interface SQLCompletionItemProvider
    * @alpha
    */
   columns?: {
-    resolve: (table: string) => Promise<ColumnDefinition[]>;
+    resolve: (identifier?: TableIdentifier) => Promise<ColumnDefinition[]>;
   };
 
   /**
@@ -177,6 +182,7 @@ export enum StatementPosition {
   AfterOrderByDirection = 'afterOrderByDirection',
   AfterIsOperator = 'afterIsOperator',
   AfterIsNotOperator = 'afterIsNotOperator',
+  AfterSchema = 'afterSchema',
 }
 
 export enum SuggestionKind {
