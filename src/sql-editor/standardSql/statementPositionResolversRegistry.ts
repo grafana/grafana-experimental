@@ -107,6 +107,22 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
         Boolean(previousNonWhiteSpace?.value.toLowerCase() === FROM),
     },
     {
+      id: StatementPosition.AfterSchema,
+      name: StatementPosition.AfterSchema,
+      resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
+        // depending on weather the schema was the last token in the query or not, current token might be whitespace or dot. if whitespace, just use the previous token
+        if (currentToken?.isWhiteSpace() && currentToken?.next) {
+          currentToken = currentToken?.previous;
+          previousNonWhiteSpace = currentToken?.getPreviousNonWhiteSpaceToken();
+        }
+        return Boolean(
+          currentToken?.isIdentifier() &&
+            currentToken?.value.endsWith('.') &&
+            previousNonWhiteSpace?.value.toLowerCase() === FROM
+        );
+      },
+    },
+    {
       id: StatementPosition.AfterFrom,
       name: StatementPosition.AfterFrom,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
