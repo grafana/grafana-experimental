@@ -129,6 +129,13 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
               onChange(text, true);
             }
           });
+
+          editor.onKeyUp((e) => {
+            // keyCode 84 is . (DOT)
+            if (e.keyCode === 84) {
+              editor.trigger(TRIGGER_SUGGEST.id, TRIGGER_SUGGEST.id, {});
+            }
+          });
           registerLanguageAndSuggestions(m, language, id);
         }}
       />
@@ -195,7 +202,7 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
       context,
       token
     ) => {
-      const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
+      const currentToken = linkedTokenBuilder(monaco, model, position, lid);
       const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
       const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
 
