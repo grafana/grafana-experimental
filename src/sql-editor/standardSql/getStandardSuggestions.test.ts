@@ -10,9 +10,9 @@ import { OperatorType, SuggestionKind, CustomSuggestion, PositionContext, MacroT
 import { getStandardSuggestions } from './getStandardSuggestions';
 
 jest.mock('@grafana/runtime', () => ({
-  getTemplateSrv: () => {
-    getVariables: jest.fn();
-  },
+  getTemplateSrv: () => ({
+    getVariables: jest.fn(),
+  }),
 }));
 
 describe('getStandardSuggestions', () => {
