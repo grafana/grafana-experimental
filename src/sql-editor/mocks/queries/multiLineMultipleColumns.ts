@@ -1,4 +1,4 @@
-import { TestQueryModel } from "sql-editor/test-utils/types";
+import { TestQueryModel } from 'sql-editor/test-utils/types';
 
 export const multiLineMultipleColumns: TestQueryModel = {
   query: `SELECT count(column1), column2 

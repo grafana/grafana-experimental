@@ -14,9 +14,11 @@ import { StatementPosition } from '../types';
 import { initStatementPositionResolvers } from './statementPositionResolversRegistry';
 
 jest.mock('@grafana/runtime', () => ({
-  getTemplateSrv: () => {
-    getVariables: jest.fn();
-  },
+  getTemplateSrv: () => ({
+    getVariables: function (): any[] {
+      return [];
+    },
+  }),
 }));
 
 describe('statementPosition', () => {

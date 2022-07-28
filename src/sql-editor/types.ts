@@ -72,7 +72,7 @@ export interface SQLCompletionItemProvider
     id: string;
     text: string;
     type: MacroType;
-    args: Array<string>;
+    args: string[];
     description?: string;
   }>;
 

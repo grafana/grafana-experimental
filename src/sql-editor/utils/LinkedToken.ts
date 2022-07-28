@@ -53,7 +53,7 @@ export class LinkedToken {
 
   isTemplateVariable(): boolean {
     const variables = getTemplateSrv()?.getVariables();
-    return variables.find((v) => '$' + v.name == this.value) !== undefined;
+    return variables.find((v) => '$' + v.name === this.value) !== undefined;
   }
 
   is(type: TokenType, value?: string | number | boolean): boolean {
@@ -168,7 +168,8 @@ export class LinkedToken {
   }
 }
 
-
 function compareTokenWithValue(type: TokenType, token: LinkedToken, value: string | number | boolean) {
-  return (type === TokenType.Keyword || type === TokenType.Operator) ? token.value.toLowerCase() === value.toString().toLowerCase() : token.value === value;
+  return type === TokenType.Keyword || type === TokenType.Operator
+    ? token.value.toLowerCase() === value.toString().toLowerCase()
+    : token.value === value;
 }

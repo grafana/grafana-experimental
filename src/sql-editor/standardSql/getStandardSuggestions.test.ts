@@ -1,19 +1,13 @@
-import { getMonacoMock } from '../mocks/Monaco';
-import { monacoTypes } from '@grafana/ui';
-import { singleLineFullQuery } from '../mocks/testData';
-import { linkedTokenBuilder } from '../utils/linkedTokenBuilder';
-import { TextModel } from '../mocks/TextModel';
 import { Registry } from '@grafana/data';
+import { monacoTypes } from '@grafana/ui';
+import { getMonacoMock } from '../mocks/Monaco';
+import { singleLineFullQuery } from '../mocks/testData';
+import { TextModel } from '../mocks/TextModel';
+import { CustomSuggestion, MacroType, OperatorType, PositionContext, SuggestionKind } from '../types';
+import { linkedTokenBuilder } from '../utils/linkedTokenBuilder';
+import { getStandardSuggestions } from './getStandardSuggestions';
 import { initStandardSuggestions } from './standardSuggestionsRegistry';
 import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistryItem } from './types';
-import { OperatorType, SuggestionKind, CustomSuggestion, PositionContext, MacroType } from '../types';
-import { getStandardSuggestions } from './getStandardSuggestions';
-
-jest.mock('@grafana/runtime', () => ({
-  getTemplateSrv: () => {
-    getVariables: jest.fn();
-  },
-}));
 
 describe('getStandardSuggestions', () => {
   const mockQueries = new Map<string, Array<Array<Pick<monacoTypes.Token, 'language' | 'offset' | 'type'>>>>();
