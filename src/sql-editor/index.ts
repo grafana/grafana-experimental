@@ -18,4 +18,5 @@ export {
   CompletionItemKind,
   CompletionItemPriority,
   CompletionItemInsertTextRule,
+  PositionContext,
 } from './types';
