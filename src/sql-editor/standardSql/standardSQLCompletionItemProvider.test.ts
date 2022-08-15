@@ -5,6 +5,7 @@ import { SQLMonarchLanguage } from './types';
 describe('standardSQLCompletionItemProvider', () => {
   describe('should include completion items based on the provided custom language', () => {
     const language: SQLMonarchLanguage = {
+      id: 'custom-grafana-sql-language',
       tokenizer: {},
       builtinFunctions: ['SUM', 'AVG'],
       logicalOperators: ['AND', 'OR'],
@@ -14,7 +15,7 @@ describe('standardSQLCompletionItemProvider', () => {
     it('should use functions from language', () => {
       expect(completionProvider.supportedFunctions().map((f) => f.name)).toEqual(language.builtinFunctions);
     });
-    it('should combine ', () => {
+    it('should combine operators', () => {
       expect(completionProvider.supportedOperators().map((o) => o.operator)).toEqual(
         language.comparisonOperators.concat(language.logicalOperators)
       );
@@ -23,6 +24,7 @@ describe('standardSQLCompletionItemProvider', () => {
 
   describe('should include completion items based on the provided monaco registry language', () => {
     const language: SQLMonarchLanguage = {
+      id: 'postgres',
       tokenizer: {},
       builtinFunctions: ['SUM', 'AVG'],
       operators: ['AND', 'OR'],
@@ -31,7 +33,7 @@ describe('standardSQLCompletionItemProvider', () => {
     it('should use functions from language', () => {
       expect(completionProvider.supportedFunctions().map((f) => f.name)).toEqual(language.builtinFunctions);
     });
-    it('should combine ', () => {
+    it('should combine operators', () => {
       expect(completionProvider.supportedOperators().map((o) => o.operator)).toEqual(language.operators);
     });
   });

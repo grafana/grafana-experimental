@@ -46,9 +46,12 @@ export type SuggestionsResolver = <T extends PositionContext = PositionContext>(
 export interface SQLMonarchLanguage extends monacoTypes.languages.IMonarchLanguage {
   keywords?: string[];
   builtinFunctions?: string[];
+
+  /* Example: AND, OR, LIKE */
   logicalOperators?: string[];
+  /* Example: >, <>, = */
   comparisonOperators?: string[];
 
-  //used by basic languages in the monaco registry
+  /** Used by basic languages in the monaco registry **/
   operators?: string[];
 }
