@@ -12,7 +12,7 @@ export function getStandardSQLCompletionProvider(
     provider.supportedFunctions = () => language.builtinFunctions.map((f) => ({ id: f, name: f }));
   }
 
-  const operators: Array<Operator> = [];
+  const operators: Operator[] = [];
   if (language?.comparisonOperators?.length) {
     operators.push(
       ...language.comparisonOperators.map((f) => ({
