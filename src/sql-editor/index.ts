@@ -8,6 +8,7 @@ export { SQLMonarchLanguage } from './standardSql/types';
 export {
   TableDefinition,
   ColumnDefinition,
+  TableIdentifier,
   StatementPlacementProvider,
   SuggestionKindProvider,
   LanguageCompletionProvider,
