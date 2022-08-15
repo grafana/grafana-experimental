@@ -335,9 +335,9 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
     const s = stbBehaviour!.suggestions;
     stbBehaviour!.suggestions = async (ctx, m) => {
       const o = await s(ctx, m);
-      const tableTokens = getTableToken(ctx.currentToken);
+      const tableToken = getTableToken(ctx.currentToken);
       const tableNameParser = customProvider.tables?.parseName ?? defaultTableNameParser;
-      const tableIdentifier = tableNameParser(tableTokens);
+      const tableIdentifier = tableNameParser(tableToken);
       const oo = (await customProvider.tables!.resolve!(tableIdentifier)).map((x) => ({
         label: x.name,
         insertText: x.completion ?? x.name,
