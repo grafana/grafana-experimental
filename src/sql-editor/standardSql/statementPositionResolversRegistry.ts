@@ -104,7 +104,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       id: StatementPosition.AfterFromKeyword,
       name: StatementPosition.AfterFromKeyword,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
-        Boolean(previousNonWhiteSpace?.value.toLowerCase() === FROM),
+        Boolean(!currentToken?.value.includes('.') && previousNonWhiteSpace?.value.toLowerCase() === FROM),
     },
     {
       id: StatementPosition.AfterSchema,
