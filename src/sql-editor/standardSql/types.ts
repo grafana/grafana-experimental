@@ -18,7 +18,7 @@ export interface SuggestionsRegistryItem extends RegistryItem {
 export interface MacrosRegistryItem extends RegistryItem {
   type: MacroType;
   text: string;
-  args?: string[];
+  args: string[];
 }
 
 export interface FunctionsRegistryItem extends RegistryItem {}
@@ -46,6 +46,12 @@ export type SuggestionsResolver = <T extends PositionContext = PositionContext>(
 export interface SQLMonarchLanguage extends monacoTypes.languages.IMonarchLanguage {
   keywords?: string[];
   builtinFunctions?: string[];
+
+  /* Example: AND, OR, LIKE */
   logicalOperators?: string[];
+  /* Example: >, <>, = */
   comparisonOperators?: string[];
+
+  /** Used by basic languages in the monaco registry **/
+  operators?: string[];
 }

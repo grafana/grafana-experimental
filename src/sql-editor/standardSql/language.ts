@@ -15,8 +15,6 @@ export const WITH = 'with';
 export const AS = 'as';
 export const SCHEMA = 'schema';
 
-export const STD_STATS = ['AVG', 'COUNT', 'MAX', 'MIN', 'SUM'];
-
 export const AND = 'AND';
 export const OR = 'OR';
 export const LOGICAL_OPERATORS = [AND, OR];

@@ -189,6 +189,7 @@ describe('getStandardSuggestions', () => {
       id: '$__time',
       text: '$__time',
       type: MacroType.Value,
+      args: [],
     };
 
     const suggestionsRegistry = new Registry(

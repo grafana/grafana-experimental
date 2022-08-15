@@ -9,9 +9,8 @@ import {
   OperatorType,
   SuggestionKind,
 } from '../types';
-import { ASC, DESC, LOGICAL_OPERATORS, STD_OPERATORS, STD_STATS } from './language';
+import { ASC, DESC } from './language';
 import { FunctionsRegistryItem, MacrosRegistryItem, OperatorsRegistryItem, SuggestionsRegistryItem } from './types';
-import { MACROS } from './macros';
 
 /**
  * This registry glues particular SuggestionKind with an async function that provides completion items for it.
@@ -400,25 +399,6 @@ export const initStandardSuggestions =
           ),
       },
     ];
-
-export const initFunctionsRegistry = (): FunctionsRegistryItem[] => [
-  ...STD_STATS.map((s) => ({
-    id: s,
-    name: s,
-  })),
-];
-
-export const initMacrosRegistry = (): MacrosRegistryItem[] => [...MACROS];
-
-export const initOperatorsRegistry = (): OperatorsRegistryItem[] => [
-  ...STD_OPERATORS.map((o) => ({
-    id: o,
-    name: o,
-    operator: o,
-    type: OperatorType.Comparison,
-  })),
-  ...LOGICAL_OPERATORS.map((o) => ({ id: o, name: o.toUpperCase(), operator: o, type: OperatorType.Logical })),
-];
 
 function createMacroSuggestionItem(m: MacrosRegistryItem) {
   return {
