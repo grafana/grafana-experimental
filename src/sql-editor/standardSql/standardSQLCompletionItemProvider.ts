@@ -23,7 +23,7 @@ export function getStandardSQLCompletionProvider(
     );
   }
 
-  // some languages in the monaco language registry doesn't specify logical operators, only operators. if so, suggest them instead
+  // some languages in the monaco language registry don't specify logical operators, only operators. if so, suggest them instead
   language.logicalOperators = language.logicalOperators ?? language.operators;
   if (language?.logicalOperators?.length) {
     operators.push(
