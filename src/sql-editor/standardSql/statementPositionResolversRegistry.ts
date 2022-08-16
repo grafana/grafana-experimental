@@ -110,7 +110,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       id: StatementPosition.AfterSchema,
       name: StatementPosition.AfterSchema,
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
-        // depending on weather the schema was the last token in the query or not, current token might be whitespace or dot. if whitespace, just use the previous token
+        // depending on whether the schema was the last token in the query or not, current token might be whitespace or dot. if whitespace, just use the previous token
         if (currentToken?.isWhiteSpace() && currentToken?.next) {
           currentToken = currentToken?.previous;
           previousNonWhiteSpace = currentToken?.getPreviousNonWhiteSpaceToken();
