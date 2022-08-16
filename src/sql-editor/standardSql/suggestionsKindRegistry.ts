@@ -52,7 +52,7 @@ export const initSuggestionsKindRegistry = (): SuggestionKindRegistryItem[] => {
     {
       id: StatementPosition.AfterFromKeyword,
       name: StatementPosition.AfterFromKeyword,
-      kind: [SuggestionKind.Tables, SuggestionKind.TableMacro],
+      kind: [SuggestionKind.Schemas, SuggestionKind.Tables, SuggestionKind.TableMacro],
     },
     {
       id: StatementPosition.AfterSchema,
