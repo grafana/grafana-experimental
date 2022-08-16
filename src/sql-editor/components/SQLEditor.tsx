@@ -14,9 +14,8 @@ import {
 } from '../types';
 import { getSuggestionKinds } from '../utils/getSuggestionKind';
 import { linkedTokenBuilder } from '../utils/linkedTokenBuilder';
-import { getTableToken } from '../utils/tokenUtils';
+import { defaultTableNameParser, getTableToken } from '../utils/tokenUtils';
 import { TRIGGER_SUGGEST } from '../utils/commands';
-import { LinkedToken } from '../utils/LinkedToken';
 import { v4 } from 'uuid';
 import { Registry } from '@grafana/data';
 import {
@@ -57,8 +56,6 @@ interface SQLEditorProps {
   width?: number;
   height?: number;
 }
-
-const defaultTableNameParser = (t: LinkedToken) => t.value;
 
 interface LanguageRegistries {
   functions: Registry<FunctionsRegistryItem>;
@@ -129,6 +126,13 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
               onChange(text, true);
             }
           });
+
+          editor.onKeyUp((e) => {
+            // keyCode 84 is . (DOT)
+            if (e.keyCode === 84) {
+              editor.trigger(TRIGGER_SUGGEST.id, TRIGGER_SUGGEST.id, {});
+            }
+          });
           registerLanguageAndSuggestions(m, language, id);
         }}
       />
@@ -195,7 +199,7 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
       context,
       token
     ) => {
-      const currentToken = linkedTokenBuilder(monaco, model, position, 'sql');
+      const currentToken = linkedTokenBuilder(monaco, model, position, lid);
       const statementPosition = getStatementPosition(currentToken, languageSuggestionsRegistries.positionResolvers);
       const kind = getSuggestionKinds(statementPosition, languageSuggestionsRegistries.suggestionKinds);
 
@@ -331,7 +335,10 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
     const s = stbBehaviour!.suggestions;
     stbBehaviour!.suggestions = async (ctx, m) => {
       const o = await s(ctx, m);
-      const oo = (await customProvider.tables!.resolve!()).map((x) => ({
+      const tableToken = getTableToken(ctx.currentToken);
+      const tableNameParser = customProvider.tables?.parseName ?? defaultTableNameParser;
+      const tableIdentifier = tableNameParser(tableToken);
+      const oo = (await customProvider.tables!.resolve!(tableIdentifier)).map((x) => ({
         label: x.name,
         insertText: x.completion ?? x.name,
         command: TRIGGER_SUGGEST,
@@ -348,16 +355,16 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
     stbBehaviour!.suggestions = async (ctx, m) => {
       const o = await s(ctx, m);
       const tableToken = getTableToken(ctx.currentToken);
-      let table = '';
+      let tableIdentifier;
       const tableNameParser = customProvider.tables?.parseName ?? defaultTableNameParser;
 
       if (tableToken && tableToken.value) {
-        table = tableNameParser(tableToken).trim();
+        tableIdentifier = tableNameParser(tableToken);
       }
 
       let oo: CustomSuggestion[] = [];
-      if (table) {
-        const columns = await customProvider.columns?.resolve!(table);
+      if (tableIdentifier) {
+        const columns = await customProvider.columns?.resolve!(tableIdentifier);
         oo = columns
           ? columns.map<CustomSuggestion>((x) => ({
               label: x.name,

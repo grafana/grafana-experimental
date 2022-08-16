@@ -40,7 +40,6 @@ export const getNamespaceToken = (currentToken: LinkedToken | null) => {
   }
   return null;
 };
-
 export const getTableToken = (currentToken: LinkedToken | null) => {
   const fromToken = getFromKeywordToken(currentToken);
   const nextNonWhiteSpace = fromToken?.getNextNonWhiteSpaceToken();
@@ -52,5 +51,17 @@ export const getTableToken = (currentToken: LinkedToken | null) => {
   } else {
     return nextNonWhiteSpace;
   }
+  return null;
+};
+
+export const defaultTableNameParser = (token: LinkedToken) => {
+  const parts = token?.value.split('.');
+
+  if (parts?.length === 1) {
+    return { table: parts[0] };
+  } else if (parts?.length === 2) {
+    return { schema: parts[0], table: parts[1] };
+  }
+
   return null;
 };

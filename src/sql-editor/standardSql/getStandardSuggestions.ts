@@ -14,7 +14,10 @@ export const getStandardSuggestions = async (
   suggestionsRegistry: Registry<SuggestionsRegistryItem>
 ): Promise<monacoTypes.languages.CompletionItem[]> => {
   let suggestions: monacoTypes.languages.CompletionItem[] = [];
-  const invalidRangeToken = currentToken?.isWhiteSpace() || currentToken?.isParenthesis();
+  const invalidRangeToken =
+    currentToken?.isWhiteSpace() ||
+    currentToken?.isParenthesis() ||
+    (currentToken?.isIdentifier() && currentToken.value.endsWith('.'));
   const range =
     invalidRangeToken || !currentToken?.range
       ? monaco.Range.fromPositions(positionContext.position)

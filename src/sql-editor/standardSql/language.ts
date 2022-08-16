@@ -791,6 +791,7 @@ export const language: SQLMonarchLanguage = {
       { include: '@strings' },
       { include: '@complexIdentifiers' },
       { include: '@scopes' },
+      { include: '@schemaTable' },
       [/[;,.]/, 'delimiter'],
       [/[()]/, '@brackets'],
       [
@@ -810,6 +811,10 @@ export const language: SQLMonarchLanguage = {
     ],
     templateVariables: [[/\$[a-zA-Z0-9]+/, 'variable']],
     macros: [[/\$__[a-zA-Z0-9-_]+/, 'type']],
+    schemaTable: [
+      [/(\w+)\./, 'identifier'],
+      [/(\w+\.\w+)/, 'identifier'],
+    ],
     whitespace: [[/\s+/, 'white']],
     comments: [
       [/--+.*/, 'comment'],
