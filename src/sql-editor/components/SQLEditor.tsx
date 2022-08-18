@@ -51,6 +51,7 @@ interface SQLEditorProps {
    * Use for inspecting the query as it changes. I.e. for validation.
    */
   onChange?: (q: string, processQuery: boolean) => void;
+  onBlur?: () => void;
   language?: LanguageDefinition;
   children?: (props: { formatQuery: () => void }) => React.ReactNode;
   width?: number;
@@ -70,6 +71,7 @@ const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistryItem>>();
 
 export const SQLEditor: React.FC<SQLEditorProps> = ({
   children,
+  onBlur,
   onChange,
   query,
   language = { id: STANDARD_SQL_LANGUAGE },
@@ -107,7 +109,10 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
         width={width ? `${width - 2}px` : undefined}
         language={id}
         value={query}
-        onBlur={(v) => onChange && onChange(v, false)}
+        onBlur={(v) => {
+          onChange && onChange(v, false);
+          onBlur && onBlur();
+        }}
         showMiniMap={false}
         showLineNumbers={true}
         // Using onEditorDidMount instead of onBeforeEditorMount to support Grafana < 8.2.x
