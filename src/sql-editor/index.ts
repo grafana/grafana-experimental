@@ -6,6 +6,7 @@ export { getStandardSQLCompletionProvider } from './standardSql/standardSQLCompl
 export { SQLMonarchLanguage } from './standardSql/types';
 
 export {
+  SchemaDefinition,
   TableDefinition,
   ColumnDefinition,
   TableIdentifier,

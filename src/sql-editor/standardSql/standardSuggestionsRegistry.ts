@@ -196,6 +196,11 @@ export const initStandardSuggestions =
           ]),
       },
       {
+        id: SuggestionKind.Schemas,
+        name: SuggestionKind.Schemas,
+        suggestions: (_, m) => Promise.resolve([]),
+      },
+      {
         id: SuggestionKind.Tables,
         name: SuggestionKind.Tables,
         suggestions: (_, m) => Promise.resolve([]),

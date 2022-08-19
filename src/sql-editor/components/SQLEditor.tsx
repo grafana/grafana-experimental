@@ -4,6 +4,7 @@ import { getStatementPosition } from '../standardSql/getStatementPosition';
 import { getStandardSuggestions } from '../standardSql/getStandardSuggestions';
 import { initSuggestionsKindRegistry, SuggestionKindRegistryItem } from '../standardSql/suggestionsKindRegistry';
 import {
+  CompletionItemInsertTextRule,
   CompletionItemKind,
   CompletionItemPriority,
   CustomSuggestion,
@@ -335,6 +336,23 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
     }
   }
 
+  if (customProvider.schemas) {
+    const stbBehaviour = instanceSuggestionsRegistry.get(SuggestionKind.Schemas);
+    const s = stbBehaviour.suggestions;
+    stbBehaviour.suggestions = async (ctx, m) => {
+      const standardSchemas = await s(ctx, m);
+      const customSchemas = await customProvider.schemas.resolve();
+      const customSchemaCompletionItems = customSchemas.map((x) => ({
+        label: x.name,
+        insertText: `${x.completion ?? x.name}.`,
+        command: TRIGGER_SUGGEST,
+        kind: CompletionItemKind.Module, // it's nice to differentiate schemas from tables
+        sortText: CompletionItemPriority.High,
+      }));
+      return [...standardSchemas, ...customSchemaCompletionItems];
+    };
+  }
+
   if (customProvider.tables) {
     const stbBehaviour = instanceSuggestionsRegistry.get(SuggestionKind.Tables);
     const s = stbBehaviour!.suggestions;
@@ -345,10 +363,12 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
       const tableIdentifier = tableNameParser(tableToken);
       const oo = (await customProvider.tables!.resolve!(tableIdentifier)).map((x) => ({
         label: x.name,
-        insertText: x.completion ?? x.name,
+        // if no custom completion is provided it's safe to move cursor further in the statement
+        insertText: `${x.completion ?? x.name}${x.completion === x.name ? ' $0' : ''}`,
+        insertTextRules: CompletionItemInsertTextRule.InsertAsSnippet,
         command: TRIGGER_SUGGEST,
         kind: CompletionItemKind.Field,
-        sortText: CompletionItemPriority.High,
+        sortText: CompletionItemPriority.MediumHigh,
       }));
       return [...o, ...oo];
     };

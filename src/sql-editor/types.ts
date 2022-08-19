@@ -39,6 +39,13 @@ export interface ColumnDefinition {
   // Text used for automplete. If not provided name is used.
   completion?: string;
 }
+
+export interface SchemaDefinition {
+  name: string;
+  // Text used for autocomplete. If not provided name is used.
+  completion?: string;
+}
+
 export interface TableDefinition {
   name: string;
   // Text used for automplete. If not provided name is used.
@@ -99,6 +106,15 @@ export interface SQLCompletionItemProvider
    * @alpha
    */
   customStatementPlacement?: StatementPlacementProvider;
+
+  /**
+   * Allows providing a custom function for resolving schemas.
+   * It's up to the consumer to decide whether the schemas are resolved via API calls or preloaded in the query editor(i.e. full db schema is preloades loaded).
+   * @alpha
+   */
+  schemas?: {
+    resolve: () => Promise<SchemaDefinition[]>;
+  };
 
   /**
    * Allows providing a custom function for resolving db tables.
@@ -193,6 +209,7 @@ export enum StatementPosition {
 }
 
 export enum SuggestionKind {
+  Schemas = 'schemas',
   Tables = 'tables',
   Columns = 'columns',
   SelectKeyword = 'selectKeyword',
