@@ -42,7 +42,7 @@ export interface ColumnDefinition {
 
 export interface SchemaDefinition {
   name: string;
-  // Text used for automplete. If not provided name is used.
+  // Text used for autocomplete. If not provided name is used.
   completion?: string;
 }
 
