@@ -182,7 +182,7 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
   if (languageDefinition.formatter) {
     monaco.languages.registerDocumentFormattingEditProvider(lid, {
       provideDocumentFormattingEdits: (model) => {
-        var formatted = l.formatter(model.getValue());
+        const formatted = l.formatter(model.getValue());
         return [
           {
             range: model.getFullModelRange(),
