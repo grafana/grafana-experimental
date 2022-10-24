@@ -22,4 +22,5 @@ export {
   CompletionItemPriority,
   CompletionItemInsertTextRule,
   PositionContext,
+  EditorMode,
 } from './types';

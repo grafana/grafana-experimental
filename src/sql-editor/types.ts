@@ -279,3 +279,8 @@ export enum CompletionItemInsertTextRule {
   KeepWhitespace = 1,
   InsertAsSnippet = 4,
 }
+
+export enum EditorMode {
+  Builder = 'builder',
+  Code = 'code',
+}
