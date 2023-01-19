@@ -13,7 +13,10 @@ interface EditorListProps<T> {
   onChange: (items: Array<Partial<T>>) => void;
 }
 
-export function EditorList<T>({ items, renderItem, onChange }: EditorListProps<T>) {
+export const EditorList = React.forwardRef(function EditorList<T>(
+  { items, renderItem, onChange }: EditorListProps<T>,
+  ref: React.Ref<HTMLButtonElement>
+) {
   const onAddItem = () => {
     const newItems = [...items, {}];
 
@@ -42,7 +45,7 @@ export function EditorList<T>({ items, renderItem, onChange }: EditorListProps<T
           )}
         </div>
       ))}
-      <Button onClick={onAddItem} variant="secondary" size="md" icon="plus" aria-label="Add" type="button" />
+      <Button ref={ref} onClick={onAddItem} variant="secondary" size="md" icon="plus" aria-label="Add" type="button" />
     </Stack>
   );
-}
+});
