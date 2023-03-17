@@ -1,18 +1,18 @@
-export { SQLEditor, LanguageDefinition } from './components/SQLEditor';
-export { SQLEditorTestUtils, TestQueryModel } from './test-utils';
+export { SQLEditor, type LanguageDefinition } from './components/SQLEditor';
+export { SQLEditorTestUtils, type TestQueryModel } from './test-utils';
 export { LinkedToken } from './utils/LinkedToken';
 export { language as grafanaStandardSQLLanguage, conf as grafanaStandardSQLLanguageConf } from './standardSql/language';
 export { getStandardSQLCompletionProvider } from './standardSql/standardSQLCompletionItemProvider';
-export { SQLMonarchLanguage } from './standardSql/types';
+export type { SQLMonarchLanguage } from './standardSql/types';
 
 export {
-  SchemaDefinition,
-  TableDefinition,
-  ColumnDefinition,
-  TableIdentifier,
-  StatementPlacementProvider,
-  SuggestionKindProvider,
-  LanguageCompletionProvider,
+  type SchemaDefinition,
+  type TableDefinition,
+  type ColumnDefinition,
+  type TableIdentifier,
+  type StatementPlacementProvider,
+  type SuggestionKindProvider,
+  type LanguageCompletionProvider,
   OperatorType,
   MacroType,
   TokenType,
@@ -21,6 +21,6 @@ export {
   CompletionItemKind,
   CompletionItemPriority,
   CompletionItemInsertTextRule,
-  PositionContext,
+  type PositionContext,
   EditorMode,
 } from './types';
