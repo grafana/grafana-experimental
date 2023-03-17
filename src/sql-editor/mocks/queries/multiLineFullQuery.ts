@@ -1,11 +1,11 @@
-import { TestQueryModel } from 'sql-editor/test-utils/types';
+import { TestQueryModel } from '../../test-utils/types';
 
 export const multiLineFullQuery: TestQueryModel = {
-  query: `SELECT column1,  
-  FROM table1 
-  
-  WHERE column1 = "value1" 
-  GROUP BY column1 ORDER BY column1 DESC 
+  query: `SELECT column1,
+  FROM table1
+
+  WHERE column1 = "value1"
+  GROUP BY column1 ORDER BY column1 DESC
   LIMIT 10;`,
   tokens: [
     [
