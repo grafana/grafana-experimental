@@ -30,8 +30,8 @@ import {
 import { initStandardSuggestions } from '../standardSql/standardSuggestionsRegistry';
 import { initStatementPositionResolvers } from '../standardSql/statementPositionResolversRegistry';
 import { sqlEditorLog } from '../utils/debugger';
-import standardSQLLanguageDefinition from 'sql-editor/standardSql/definition';
-import { getStandardSQLCompletionProvider } from 'sql-editor/standardSql/standardSQLCompletionItemProvider';
+import standardSQLLanguageDefinition from '../standardSql/definition';
+import { getStandardSQLCompletionProvider } from '../standardSql/standardSQLCompletionItemProvider';
 
 const STANDARD_SQL_LANGUAGE = 'sql';
 
@@ -79,7 +79,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
   width,
   height,
 }) => {
-  const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor>(null);
+  const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor | null>(null);
   const langUid = useRef<string>();
   // create unique language id for each SQLEditor instance
   const id = useMemo(() => {
@@ -91,7 +91,9 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
 
   useEffect(() => {
     return () => {
-      INSTANCE_CACHE.delete(langUid.current);
+      if (langUid.current) {
+        INSTANCE_CACHE.delete(langUid.current);
+      }
       sqlEditorLog(`Removing instance cache ${langUid.current}`, false, INSTANCE_CACHE);
     };
   }, []);
@@ -163,6 +165,7 @@ const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinit
     if (!custom) {
       throw Error(`Unknown Monaco language ${languageDefinitionProp?.id}`);
     }
+    // @ts-ignore
     return { completionProvider: getStandardSQLCompletionProvider, ...custom, ...languageDefinitionProp };
   }
 
@@ -174,6 +177,7 @@ const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinit
 
 export const registerLanguageAndSuggestions = async (monaco: Monaco, l: LanguageDefinition, lid: string) => {
   const languageDefinition = resolveLanguage(monaco, l);
+  //@ts-ignore
   const { language, conf } = await languageDefinition.loader(monaco);
   monaco.languages.register({ id: lid });
   monaco.languages.setMonarchTokensProvider(lid, { ...language });
@@ -182,6 +186,7 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
   if (languageDefinition.formatter) {
     monaco.languages.registerDocumentFormattingEditProvider(lid, {
       provideDocumentFormattingEdits: (model) => {
+        //@ts-ignore
         const formatted = l.formatter(model.getValue());
         return [
           {
@@ -341,6 +346,7 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
     const s = stbBehaviour.suggestions;
     stbBehaviour.suggestions = async (ctx, m) => {
       const standardSchemas = await s(ctx, m);
+      //@ts-ignore
       const customSchemas = await customProvider.schemas.resolve();
       const customSchemaCompletionItems = customSchemas.map((x) => ({
         label: x.name,
@@ -360,7 +366,9 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
       const o = await s(ctx, m);
       const tableToken = getTableToken(ctx.currentToken);
       const tableNameParser = customProvider.tables?.parseName ?? defaultTableNameParser;
+      // @ts-ignore
       const tableIdentifier = tableNameParser(tableToken);
+      // @ts-ignore
       const oo = (await customProvider.tables!.resolve!(tableIdentifier)).map((x) => ({
         label: x.name,
         // if no custom completion is provided it's safe to move cursor further in the statement

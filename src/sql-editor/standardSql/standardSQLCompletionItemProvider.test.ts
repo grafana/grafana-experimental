@@ -13,10 +13,13 @@ describe('standardSQLCompletionItemProvider', () => {
     };
     const completionProvider = getStandardSQLCompletionProvider({} as Monaco, language);
     it('should use functions from language', () => {
+      // @ts-ignore
       expect(completionProvider.supportedFunctions().map((f) => f.name)).toEqual(language.builtinFunctions);
     });
     it('should combine operators', () => {
+      // @ts-ignore
       expect(completionProvider.supportedOperators().map((o) => o.operator)).toEqual(
+        // @ts-ignore
         language.comparisonOperators.concat(language.logicalOperators)
       );
     });
@@ -31,9 +34,11 @@ describe('standardSQLCompletionItemProvider', () => {
     };
     const completionProvider = getStandardSQLCompletionProvider({} as Monaco, language);
     it('should use functions from language', () => {
+      // @ts-ignore
       expect(completionProvider.supportedFunctions().map((f) => f.name)).toEqual(language.builtinFunctions);
     });
     it('should combine operators', () => {
+      // @ts-ignore
       expect(completionProvider.supportedOperators().map((o) => o.operator)).toEqual(language.operators);
     });
   });
