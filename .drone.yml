@@ -1,0 +1,20 @@
+---
+kind: pipeline
+type: docker
+name: grafana-experimental
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: "lint"
+    image: node:lts-stretch
+    commands:
+      - yarn --network-timeout 500000
+      - yarn lint
+    failure: ignore
+  # - name: "test"
+  #   image: node:lts-stretch
+  #   commands:
+  #     - yarn test
