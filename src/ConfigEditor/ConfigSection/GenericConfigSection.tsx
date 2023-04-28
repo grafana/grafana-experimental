@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { css } from '@emotion/css';
 import { useTheme2, IconButton, IconName } from '@grafana/ui';
 
@@ -9,9 +9,10 @@ export type Props = {
   isInitiallyOpen?: boolean;
   kind?: 'section' | 'sub-section';
   className?: string;
+  children: ReactNode;
 };
 
-export const GenericConfigSection: React.FC<Props> = ({
+export const GenericConfigSection = ({
   children,
   title,
   description,
@@ -19,7 +20,7 @@ export const GenericConfigSection: React.FC<Props> = ({
   isInitiallyOpen = true,
   kind = 'section',
   className,
-}) => {
+}: Props) => {
   const { colors, typography, spacing } = useTheme2();
   const [isOpen, setIsOpen] = useState(isCollapsible ? isInitiallyOpen : true);
   const iconName: IconName = isOpen ? 'angle-up' : 'angle-down';

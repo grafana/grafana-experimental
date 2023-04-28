@@ -8,7 +8,7 @@ type Props = {
   hasRequiredFields?: boolean;
 };
 
-export const DataSourceDescription: React.FC<Props> = ({ dataSourceName, docsLink, hasRequiredFields = true }) => {
+export const DataSourceDescription = ({ dataSourceName, docsLink, hasRequiredFields = true }: Props) => {
   const theme = useTheme2();
 
   const styles = {
