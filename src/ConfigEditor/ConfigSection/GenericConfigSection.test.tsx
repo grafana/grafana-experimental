@@ -72,7 +72,7 @@ describe('<GenericConfigSection />', () => {
     expect(() => screen.getByLabelText('Collapse section Test title')).toThrow();
   });
 
-  it('should be collapsible with content visible when `isCollapsible` is `true` and `isOpen` is not passed', async () => {
+  it('should be collapsible with content visible when `isCollapsible` is `true` and `isInitiallyOpen` is not passed', async () => {
     render(
       <GenericConfigSection title="Test title" isCollapsible>
         <div>Test content</div>
@@ -86,9 +86,9 @@ describe('<GenericConfigSection />', () => {
     expect(() => screen.getByText('Test content')).toThrow();
   });
 
-  it('should be collapsible with content visible when `isCollapsible` is `true` and `isOpen` is `true`', async () => {
+  it('should be collapsible with content visible when `isCollapsible` is `true` and `isInitiallyOpen` is `true`', async () => {
     render(
-      <GenericConfigSection title="Test title" isCollapsible isOpen={true}>
+      <GenericConfigSection title="Test title" isCollapsible isInitiallyOpen={true}>
         <div>Test content</div>
       </GenericConfigSection>
     );
@@ -100,9 +100,9 @@ describe('<GenericConfigSection />', () => {
     expect(() => screen.getByText('Test content')).toThrow();
   });
 
-  it('should be collapsible with content hidden when `isCollapsible` is `true` and `isOpen` is `false`', async () => {
+  it('should be collapsible with content hidden when `isCollapsible` is `true` and `isInitiallyOpen` is `false`', async () => {
     render(
-      <GenericConfigSection title="Test title" isCollapsible isOpen={false}>
+      <GenericConfigSection title="Test title" isCollapsible isInitiallyOpen={false}>
         <div>Test content</div>
       </GenericConfigSection>
     );

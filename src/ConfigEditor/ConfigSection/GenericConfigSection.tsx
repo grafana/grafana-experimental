@@ -6,7 +6,7 @@ export type Props = {
   title: string;
   description?: string;
   isCollapsible?: boolean;
-  isOpen?: boolean;
+  isInitiallyOpen?: boolean;
   kind?: 'section' | 'sub-section';
   className?: string;
 };
@@ -16,7 +16,7 @@ export const GenericConfigSection: React.FC<Props> = ({
   title,
   description,
   isCollapsible = false,
-  isOpen: isInitiallyOpen = true,
+  isInitiallyOpen = true,
   kind = 'section',
   className,
 }) => {
