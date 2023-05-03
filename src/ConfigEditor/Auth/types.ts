@@ -1,10 +1,10 @@
-import { ReactElement } from "react";
+import { ReactElement } from 'react';
 
 export enum AuthMethod {
-  NoAuth = "NoAuth",
-  BasicAuth = "BasicAuth",
-  OAuthForward = "OAuthForward",
-  CrossSiteCredentials = "CrossSiteCredentials",
+  NoAuth = 'NoAuth',
+  BasicAuth = 'BasicAuth',
+  OAuthForward = 'OAuthForward',
+  CrossSiteCredentials = 'CrossSiteCredentials',
 }
 
 export type CustomMethodId = `custom-${string}`;

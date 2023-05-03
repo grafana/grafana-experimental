@@ -1,43 +1,43 @@
-import React, { ReactElement, useMemo, useState } from "react";
-import { css } from "@emotion/css";
-import { useTheme2, Select } from "@grafana/ui";
-import { SelectableValue } from "@grafana/data";
-import { BasicAuth, Props as BasicAuthProps } from "./BasicAuth";
-import { ConfigSubSection } from "../../ConfigEditor";
-import { AuthMethod, CustomMethod, CustomMethodId } from "../types";
+import React, { ReactElement, useMemo, useState } from 'react';
+import { css } from '@emotion/css';
+import { useTheme2, Select } from '@grafana/ui';
+import { SelectableValue } from '@grafana/data';
+import { BasicAuth, Props as BasicAuthProps } from './BasicAuth';
+import { ConfigSubSection } from '../../ConfigSection';
+import { AuthMethod, CustomMethod, CustomMethodId } from '../types';
 
 const defaultOptions: Record<AuthMethod, SelectableValue<AuthMethod>> = {
   [AuthMethod.BasicAuth]: {
-    label: "Basic authentication",
+    label: 'Basic authentication',
     value: AuthMethod.BasicAuth,
-    description: "Authenticate with your data source username and password",
+    description: 'Authenticate with your data source username and password',
   },
   [AuthMethod.CrossSiteCredentials]: {
-    label: "Enable cross-site access control requests",
+    label: 'Enable cross-site access control requests',
     value: AuthMethod.CrossSiteCredentials,
     description:
-      "Allow cross-site Access-Control requests with your existing credentials and cookies. This enables the server to authenticate the user and perform authorized requests on their behalf on other domains.",
+      'Allow cross-site Access-Control requests with your existing credentials and cookies. This enables the server to authenticate the user and perform authorized requests on their behalf on other domains.',
   },
   [AuthMethod.OAuthForward]: {
-    label: "Forward OAuth Identity",
+    label: 'Forward OAuth Identity',
     value: AuthMethod.OAuthForward,
     description:
-      "Forward the OAuth access token (and if available: the OIDC ID token) of the user querying to the data source",
+      'Forward the OAuth access token (and if available: the OIDC ID token) of the user querying to the data source',
   },
   [AuthMethod.NoAuth]: {
-    label: "No Authentication",
+    label: 'No Authentication',
     value: AuthMethod.NoAuth,
-    description: "Data source is available without authentication",
+    description: 'Data source is available without authentication',
   },
 };
 
 export type Props = {
   selectedMethod: AuthMethod | CustomMethodId;
   mostCommonMethod?: AuthMethod | CustomMethodId;
-  visibleMethods?: (AuthMethod | CustomMethodId)[];
+  visibleMethods?: Array<AuthMethod | CustomMethodId>;
   customMethods?: CustomMethod[];
   onAuthMethodSelect: (authType: AuthMethod | CustomMethodId) => void;
-  basicAuth?: Omit<BasicAuthProps, "readOnly">;
+  basicAuth?: Omit<BasicAuthProps, 'readOnly'>;
   readOnly: boolean;
 };
 
@@ -52,34 +52,30 @@ export const AuthMethodSettings: React.FC<Props> = ({
 }) => {
   const [authMethodChanged, setAuthMethodChanged] = useState(false);
   const { colors, spacing } = useTheme2();
-  const visibleMethods: (
-    | AuthMethod
-    | CustomMethodId
-  )[] = visibleMethodsFromProps ?? [
-    AuthMethod.BasicAuth,
-    AuthMethod.OAuthForward,
-    AuthMethod.NoAuth,
-    ...(customMethods?.map((m) => m.id) ?? []),
-  ];
+  const visibleMethods: Array<AuthMethod | CustomMethodId> = useMemo(
+    () =>
+      visibleMethodsFromProps ?? [
+        AuthMethod.BasicAuth,
+        AuthMethod.OAuthForward,
+        AuthMethod.NoAuth,
+        ...(customMethods?.map((m) => m.id) ?? []),
+      ],
+    [customMethods, visibleMethodsFromProps]
+  );
   const hasSelect = visibleMethods.length > 1;
 
   const preparedOptions = useMemo(() => {
     const customOptions =
-      customMethods?.reduce<
-        Record<CustomMethodId, SelectableValue<CustomMethodId>>
-      >((acc, method) => {
+      customMethods?.reduce<Record<CustomMethodId, SelectableValue<CustomMethodId>>>((acc, method) => {
         acc[method.id] = {
           label: method.label,
           value: method.id,
           description: method.description,
         };
         return acc;
-      }, {}) ?? [];
+      }, {}) ?? {};
 
-    const allOptions: Record<
-      AuthMethod | CustomMethodId,
-      SelectableValue<AuthMethod | CustomMethodId>
-    > = {
+    const allOptions: Record<AuthMethod | CustomMethodId, SelectableValue<AuthMethod | CustomMethodId>> = {
       ...customOptions,
       ...defaultOptions,
     };
@@ -96,34 +92,27 @@ export const AuthMethodSettings: React.FC<Props> = ({
         }
         return option;
       });
-  }, [visibleMethods, customMethods, mostCommonMethod]);
+  }, [visibleMethods, customMethods, mostCommonMethod, hasSelect]);
 
   let selected = selectedMethod;
   if (!hasSelect) {
     selected = visibleMethods[0];
-  } else if (
-    selectedMethod === AuthMethod.NoAuth &&
-    mostCommonMethod &&
-    !authMethodChanged
-  ) {
+  } else if (selectedMethod === AuthMethod.NoAuth && mostCommonMethod && !authMethodChanged) {
     selected = mostCommonMethod;
   }
 
   let AuthFieldsComponent: ReactElement | null = null;
   if (selected === AuthMethod.BasicAuth && basicAuth) {
     AuthFieldsComponent = <BasicAuth {...basicAuth} readOnly={readOnly} />;
-  } else if (selected.startsWith("custom-")) {
-    AuthFieldsComponent =
-      customMethods?.find((m) => m.id === selected)?.component ?? null;
+  } else if (selected.startsWith('custom-')) {
+    AuthFieldsComponent = customMethods?.find((m) => m.id === selected)?.component ?? null;
   }
 
-  const title = hasSelect
-    ? "Authentication methods"
-    : preparedOptions[0].label ?? "";
+  const title = hasSelect ? 'Authentication methods' : preparedOptions[0].label ?? '';
 
   const description = hasSelect
-    ? "Choose an authentication method to access the data source"
-    : preparedOptions[0].description ?? "";
+    ? 'Choose an authentication method to access the data source'
+    : preparedOptions[0].description ?? '';
 
   const styles = {
     authMethods: css({
@@ -152,11 +141,7 @@ export const AuthMethodSettings: React.FC<Props> = ({
             disabled={readOnly}
           />
         )}
-        {AuthFieldsComponent && (
-          <div className={styles.selectedMethodFields}>
-            {AuthFieldsComponent}
-          </div>
-        )}
+        {AuthFieldsComponent && <div className={styles.selectedMethodFields}>{AuthFieldsComponent}</div>}
       </div>
     </ConfigSubSection>
   );

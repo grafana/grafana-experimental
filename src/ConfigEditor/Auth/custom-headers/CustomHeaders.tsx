@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { css } from "@emotion/css";
-import { Button, useTheme2 } from "@grafana/ui";
-import { CustomHeader } from "./CustomHeader";
-import { ConfigSubSection } from "../../ConfigEditor";
-import type { Header, HeaderWithValue, LocalHeader } from "../types";
+import React, { useState, useEffect } from 'react';
+import { css } from '@emotion/css';
+import { Button, useTheme2 } from '@grafana/ui';
+import { CustomHeader } from './CustomHeader';
+import { ConfigSubSection } from '../../ConfigSection';
+import type { Header, HeaderWithValue, LocalHeader } from '../types';
 
 export type Props = {
   headers: Header[];
@@ -11,30 +11,22 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const CustomHeaders: React.FC<Props> = ({
-  headers: headersFromProps,
-  onChange,
-  readOnly,
-}) => {
+export const CustomHeaders: React.FC<Props> = ({ headers: headersFromProps, onChange, readOnly }) => {
   const { spacing } = useTheme2();
 
   const [headers, setHeaders] = useState<LocalHeader[]>(
     headersFromProps.map((header) => ({
       ...header,
       id: uniqueId(),
-      value: "",
+      value: '',
     }))
   );
 
   useEffect(() => {
     let changed = false;
     const newHeaders = headers.map<LocalHeader>((header) => {
-      const configured = headersFromProps.find((h) => h.name === header.name)
-        ?.configured;
-      if (
-        typeof configured !== "undefined" &&
-        header.configured != configured
-      ) {
+      const configured = headersFromProps.find((h) => h.name === header.name)?.configured;
+      if (typeof configured !== 'undefined' && header.configured !== configured) {
         changed = true;
         return { ...header, configured };
       }
@@ -44,13 +36,10 @@ export const CustomHeaders: React.FC<Props> = ({
     if (changed) {
       setHeaders(newHeaders);
     }
-  }, [headersFromProps]);
+  }, [headers, headersFromProps]);
 
   const onHeaderAdd = () => {
-    setHeaders([
-      ...headers,
-      { id: uniqueId(), name: "", value: "", configured: false },
-    ]);
+    setHeaders([...headers, { id: uniqueId(), name: '', value: '', configured: false }]);
   };
 
   const onHeaderChange = (id: string, header: LocalHeader) => {
@@ -98,7 +87,7 @@ export const CustomHeaders: React.FC<Props> = ({
         title="HTTP headers"
         description="Pass along additional context and metadata about the request/response"
         isCollapsible
-        isOpen={headers.length > 0}
+        isInitiallyOpen={headers.length > 0}
       >
         <div>
           {headers.map((header) => (
@@ -113,14 +102,8 @@ export const CustomHeaders: React.FC<Props> = ({
           ))}
         </div>
         <div className={styles.addHeaderButton}>
-          <Button
-            icon="plus"
-            variant="secondary"
-            fill="outline"
-            onClick={onHeaderAdd}
-            disabled={readOnly}
-          >
-            {headers.length === 0 ? "Add header" : "Add another header"}
+          <Button icon="plus" variant="secondary" fill="outline" onClick={onHeaderAdd} disabled={readOnly}>
+            {headers.length === 0 ? 'Add header' : 'Add another header'}
           </Button>
         </div>
       </ConfigSubSection>

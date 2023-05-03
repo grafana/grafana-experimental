@@ -1,24 +1,21 @@
-import React from "react";
-import { css } from "@emotion/css";
-import { AuthMethod, CustomMethod, CustomMethodId } from "./types";
-import { AuthMethodSettings } from "./auth-method/AuthMethodSettings";
-import { TLSSettings, Props as TLSSettingsProps } from "./tls/TLSSettings";
-import { Props as BasicAuthProps } from "./auth-method/BasicAuth";
-import {
-  CustomHeaders,
-  Props as CustomHeadersProps,
-} from "./custom-headers/CustomHeaders";
-import { ConfigSection } from "../ConfigEditor";
+import React from 'react';
+import { css } from '@emotion/css';
+import { AuthMethod, CustomMethod, CustomMethodId } from './types';
+import { AuthMethodSettings } from './auth-method/AuthMethodSettings';
+import { TLSSettings, Props as TLSSettingsProps } from './tls/TLSSettings';
+import { Props as BasicAuthProps } from './auth-method/BasicAuth';
+import { CustomHeaders, Props as CustomHeadersProps } from './custom-headers/CustomHeaders';
+import { ConfigSection } from '../ConfigSection';
 
 export type Props = {
   selectedMethod: AuthMethod | CustomMethodId;
   mostCommonMethod?: AuthMethod | CustomMethodId;
-  visibleMethods?: (AuthMethod | CustomMethodId)[];
+  visibleMethods?: Array<AuthMethod | CustomMethodId>;
   customMethods?: CustomMethod[];
   onAuthMethodSelect: (authType: AuthMethod | CustomMethodId) => void;
-  basicAuth?: Omit<BasicAuthProps, "readOnly">;
-  TLS?: Omit<TLSSettingsProps, "readOnly">;
-  customHeaders?: Omit<CustomHeadersProps, "readOnly">;
+  basicAuth?: Omit<BasicAuthProps, 'readOnly'>;
+  TLS?: Omit<TLSSettingsProps, 'readOnly'>;
+  customHeaders?: Omit<CustomHeadersProps, 'readOnly'>;
   readOnly?: boolean;
 };
 
@@ -52,9 +49,7 @@ export const Auth: React.FC<Props> = ({
           readOnly={readOnly}
         />
         {TLS && <TLSSettings {...TLS} readOnly={readOnly} />}
-        {customHeaders && (
-          <CustomHeaders {...customHeaders} readOnly={readOnly} />
-        )}
+        {customHeaders && <CustomHeaders {...customHeaders} readOnly={readOnly} />}
       </ConfigSection>
     </div>
   );

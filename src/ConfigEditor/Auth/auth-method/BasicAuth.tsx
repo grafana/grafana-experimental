@@ -1,9 +1,8 @@
-import React from "react";
-import { cx, css } from "@emotion/css";
-import { InlineField, Input, PopoverContent } from "@grafana/ui";
-import { InlineLabel } from "../../ConfigEditor";
-import { SecretInput } from "../../../unreleasedComponents/SecretInput";
-import { useCommonStyles } from "../styles";
+import React from 'react';
+import { cx, css } from '@emotion/css';
+import { InlineField, Input, SecretInput, PopoverContent } from '@grafana/ui';
+import { InlineLabel } from '../shared';
+import { useCommonStyles } from '../styles';
 
 export type Props = {
   user?: string;
@@ -19,8 +18,8 @@ export type Props = {
 export const BasicAuth: React.FC<Props> = ({
   user,
   passwordConfigured,
-  userTooltip = "The username of the data source account",
-  passwordTooltip = "The password of the data source account",
+  userTooltip = 'The username of the data source account',
+  passwordTooltip = 'The password of the data source account',
   onUserChange,
   onPasswordChange,
   onPasswordReset,
@@ -37,13 +36,7 @@ export const BasicAuth: React.FC<Props> = ({
       <InlineField
         className={commonStyles.inlineFieldNoMarginRight}
         label={
-          <InlineLabel
-            width={24}
-            tooltip={userTooltip}
-            required
-            htmlFor="basic-auth-user-input"
-            interactive
-          >
+          <InlineLabel width={24} tooltip={userTooltip} required htmlFor="basic-auth-user-input" interactive>
             User
           </InlineLabel>
         }
@@ -65,13 +58,7 @@ export const BasicAuth: React.FC<Props> = ({
           styles.lastInlineField
         )}
         label={
-          <InlineLabel
-            width={24}
-            tooltip={passwordTooltip}
-            required
-            htmlFor="basic-auth-password-input"
-            interactive
-          >
+          <InlineLabel width={24} tooltip={passwordTooltip} required htmlFor="basic-auth-password-input" interactive>
             Password
           </InlineLabel>
         }

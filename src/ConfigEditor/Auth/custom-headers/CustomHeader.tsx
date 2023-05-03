@@ -1,15 +1,8 @@
-import React from "react";
-import { css, cx } from "@emotion/css";
-import {
-  InlineFieldRow,
-  InlineField,
-  Input,
-  IconButton,
-  useTheme2,
-} from "@grafana/ui";
-import { SecretInput } from "../../../unreleasedComponents/SecretInput";
-import type { LocalHeader } from "../types";
-import { useCommonStyles } from "../styles";
+import React from 'react';
+import { css, cx } from '@emotion/css';
+import { InlineFieldRow, InlineField, Input, IconButton, useTheme2, SecretInput } from '@grafana/ui';
+import type { LocalHeader } from '../types';
+import { useCommonStyles } from '../styles';
 
 export type Props = {
   header: LocalHeader;
@@ -19,29 +12,23 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const CustomHeader: React.FC<Props> = ({
-  header,
-  onChange,
-  onBlur,
-  onDelete,
-  readOnly,
-}) => {
+export const CustomHeader: React.FC<Props> = ({ header, onChange, onBlur, onDelete, readOnly }) => {
   const { spacing } = useTheme2();
   const commonStyles = useCommonStyles();
   const styles = {
     container: css({
-      alignItems: "center",
+      alignItems: 'center',
     }),
     input: css({
-      minWidth: "100%",
+      minWidth: '100%',
     }),
     headerNameField: css({
-      width: "40%",
+      width: '40%',
       marginRight: 0,
       paddingRight: spacing(1),
     }),
     headerValueField: css({
-      width: "45%",
+      width: '45%',
       marginRight: 0,
     }),
     removeHeaderBtn: css({
@@ -65,9 +52,7 @@ export const CustomHeader: React.FC<Props> = ({
             placeholder="X-Custom-Header"
             value={header.name}
             width={12}
-            onChange={(e) =>
-              onChange({ ...header, name: e.currentTarget.value })
-            }
+            onChange={(e) => onChange({ ...header, name: e.currentTarget.value })}
             onBlur={onBlur}
             className={styles.input}
           />
@@ -76,10 +61,7 @@ export const CustomHeader: React.FC<Props> = ({
           label="Value"
           labelWidth={9}
           grow
-          className={cx(
-            commonStyles.inlineFieldWithSecret,
-            styles.headerValueField
-          )}
+          className={cx(commonStyles.inlineFieldWithSecret, styles.headerValueField)}
           htmlFor={`custom-header-${header.id}-value-input`}
           disabled={readOnly}
         >
@@ -89,14 +71,8 @@ export const CustomHeader: React.FC<Props> = ({
             placeholder="Header value"
             value={header.value}
             width={12}
-            onChange={(e) =>
-              onChange({ ...header, value: e.currentTarget.value })
-            }
-            onReset={
-              readOnly
-                ? () => {}
-                : () => onChange({ ...header, configured: false, value: "" })
-            }
+            onChange={(e) => onChange({ ...header, value: e.currentTarget.value })}
+            onReset={readOnly ? () => {} : () => onChange({ ...header, configured: false, value: '' })}
             onBlur={onBlur}
             className={styles.input}
           />

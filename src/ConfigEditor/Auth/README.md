@@ -23,7 +23,7 @@ Even though the new component has completely different props shape, there is a s
 **Example**:
 
 ```tsx
-import { Auth, convertLegacyAuthProps } from "@grafana/plugin-ui";
+import { Auth, convertLegacyAuthProps } from '@grafana/plugin-ui';
 
 // Your config editor component
 export const ConfigEditor = (props) => {
@@ -133,10 +133,10 @@ type Props = {
 
 // Default auth methods
 enum AuthMethod {
-  NoAuth = "NoAuth",
-  BasicAuth = "BasicAuth",
-  OAuthForward = "OAuthForward",
-  CrossSiteCredentials = "CrossSiteCredentials",
+  NoAuth = 'NoAuth',
+  BasicAuth = 'BasicAuth',
+  OAuthForward = 'OAuthForward',
+  CrossSiteCredentials = 'CrossSiteCredentials',
 }
 
 // All custom auth method ids should have `custom-` prefix

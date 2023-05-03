@@ -1,39 +1,39 @@
-import React, { ComponentProps } from "react";
-import { screen, render } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { TLSSettingsSection, Props } from "./TLSSettingsSection";
+import React from 'react';
+import { screen, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { TLSSettingsSection, Props } from './TLSSettingsSection';
 
 const getProps = (partialProps?: Partial<Props>): Props => ({
   enabled: false,
-  label: "Default test label",
-  tooltipText: "Default test tooltip",
+  label: 'Default test label',
+  tooltipText: 'Default test tooltip',
   onToggle: jest.fn,
   readOnly: false,
   ...partialProps,
 });
 
-describe("<TLSSettingsSection />", () => {
-  it("should render label", () => {
-    const props = getProps({ label: "Test label" });
+describe('<TLSSettingsSection />', () => {
+  it('should render label', () => {
+    const props = getProps({ label: 'Test label' });
     render(<TLSSettingsSection {...props} />);
 
-    expect(screen.getByText("Test label")).toBeInTheDocument();
+    expect(screen.getByText('Test label')).toBeInTheDocument();
   });
 
-  it("should render tooltip", async () => {
-    const props = getProps({ tooltipText: "Test tooltip text" });
+  it('should render tooltip', async () => {
+    const props = getProps({ tooltipText: 'Test tooltip text' });
     render(<TLSSettingsSection {...props} />);
 
-    await userEvent.hover(screen.getByTestId("info-circle"));
+    await userEvent.hover(screen.getByTestId('info-circle'));
 
-    expect(await screen.findByText("Test tooltip text")).toBeInTheDocument();
+    expect(await screen.findByText('Test tooltip text')).toBeInTheDocument();
   });
 
-  it("should call `onToggle` when checkbox is clicked", async () => {
+  it('should call `onToggle` when checkbox is clicked', async () => {
     const onToggle = jest.fn();
-    const props = getProps({ label: "Test label", onToggle });
+    const props = getProps({ label: 'Test label', onToggle });
     const { rerender } = render(<TLSSettingsSection {...props} />);
-    const checkbox = screen.getByRole("checkbox");
+    const checkbox = screen.getByRole('checkbox');
 
     await userEvent.click(checkbox);
 
@@ -47,7 +47,7 @@ describe("<TLSSettingsSection />", () => {
     expect(onToggle).toHaveBeenNthCalledWith(2, false);
   });
 
-  it("should not render content when not enabled", () => {
+  it('should not render content when not enabled', () => {
     const props = getProps();
     render(
       <TLSSettingsSection {...props}>
@@ -55,10 +55,10 @@ describe("<TLSSettingsSection />", () => {
       </TLSSettingsSection>
     );
 
-    expect(() => screen.getByText("Test content")).toThrow();
+    expect(() => screen.getByText('Test content')).toThrow();
   });
 
-  it("should render content when enabled", () => {
+  it('should render content when enabled', () => {
     const props = getProps({ enabled: true });
     render(
       <TLSSettingsSection {...props}>
@@ -66,20 +66,20 @@ describe("<TLSSettingsSection />", () => {
       </TLSSettingsSection>
     );
 
-    expect(screen.getByText("Test content")).toBeInTheDocument();
+    expect(screen.getByText('Test content')).toBeInTheDocument();
   });
 
-  it("should have checkbox checked when enabled", () => {
+  it('should have checkbox checked when enabled', () => {
     const props = getProps({ enabled: true });
     render(<TLSSettingsSection {...props} />);
 
-    expect(screen.getByRole("checkbox")).toBeChecked();
+    expect(screen.getByRole('checkbox')).toBeChecked();
   });
 
-  it("should have checkbox disabled when in read only mode", () => {
+  it('should have checkbox disabled when in read only mode', () => {
     const props = getProps({ readOnly: true });
     render(<TLSSettingsSection {...props} />);
 
-    expect(screen.getByRole("checkbox")).toBeDisabled();
+    expect(screen.getByRole('checkbox')).toBeDisabled();
   });
 });

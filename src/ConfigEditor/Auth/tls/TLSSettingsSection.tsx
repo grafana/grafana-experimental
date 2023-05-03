@@ -1,6 +1,6 @@
-import React from "react";
-import { css } from "@emotion/css";
-import { Checkbox, Tooltip, Icon, useTheme2 } from "@grafana/ui";
+import React from 'react';
+import { css } from '@emotion/css';
+import { Checkbox, Tooltip, Icon, useTheme2 } from '@grafana/ui';
 
 export type Props = {
   enabled: boolean;
@@ -10,22 +10,15 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const TLSSettingsSection: React.FC<Props> = ({
-  children,
-  enabled,
-  label,
-  tooltipText,
-  onToggle,
-  readOnly,
-}) => {
+export const TLSSettingsSection: React.FC<Props> = ({ children, enabled, label, tooltipText, onToggle, readOnly }) => {
   const { colors, spacing } = useTheme2();
   const styles = {
     container: css({
       marginTop: 3,
     }),
     checkboxContainer: css({
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
     }),
     infoIcon: css({
       marginTop: -2,
@@ -40,12 +33,7 @@ export const TLSSettingsSection: React.FC<Props> = ({
   return (
     <div className={styles.container}>
       <div className={styles.checkboxContainer}>
-        <Checkbox
-          value={enabled}
-          label={label}
-          onChange={() => onToggle(!enabled)}
-          disabled={readOnly}
-        />
+        <Checkbox value={enabled} label={label} onChange={() => onToggle(!enabled)} disabled={readOnly} />
         <Tooltip placement="top" content={tooltipText} interactive>
           <Icon name="info-circle" className={styles.infoIcon} size="sm" />
         </Tooltip>

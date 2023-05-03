@@ -1,10 +1,9 @@
-import React from "react";
-import { cx } from "@emotion/css";
-import { InlineField, Input } from "@grafana/ui";
-import { InlineLabel } from "../../ConfigEditor";
-import { SecretTextArea } from "../../../unreleasedComponents/SecretTextarea";
-import { TLSSettingsSection } from "./TLSSettingsSection";
-import { useCommonStyles } from "../styles";
+import React from 'react';
+import { cx } from '@emotion/css';
+import { InlineField, Input, SecretTextArea } from '@grafana/ui';
+import { InlineLabel } from '../shared';
+import { TLSSettingsSection } from './TLSSettingsSection';
+import { useCommonStyles } from '../styles';
 
 export type Props = {
   enabled: boolean;
@@ -54,8 +53,7 @@ export const TLSClientAuth: React.FC<Props> = ({
           <InlineLabel
             width={24}
             tooltip={
-              tooltips?.serverNameLabel ??
-              "A Servername is used to verify the hostname on the returned certificate"
+              tooltips?.serverNameLabel ?? 'A Servername is used to verify the hostname on the returned certificate'
             }
             required
             htmlFor="client-auth-servername-input"
@@ -82,7 +80,7 @@ export const TLSClientAuth: React.FC<Props> = ({
             width={24}
             tooltip={
               tooltips?.certificateLabel ??
-              "The client certificate can be generated from a Certificate Authority or be self-signed"
+              'The client certificate can be generated from a Certificate Authority or be self-signed'
             }
             required
             htmlFor="client-auth-client-certificate-input"
@@ -92,10 +90,7 @@ export const TLSClientAuth: React.FC<Props> = ({
           </InlineLabel>
         }
         grow
-        className={cx(
-          commonStyles.inlineFieldNoMarginRight,
-          commonStyles.inlineFieldWithSecret
-        )}
+        className={cx(commonStyles.inlineFieldNoMarginRight, commonStyles.inlineFieldWithSecret)}
         disabled={readOnly}
       >
         <SecretTextArea
@@ -113,8 +108,7 @@ export const TLSClientAuth: React.FC<Props> = ({
           <InlineLabel
             width={24}
             tooltip={
-              tooltips?.keyLabel ??
-              "The client key can be generated from a Certificate Authority or be self-signed"
+              tooltips?.keyLabel ?? 'The client key can be generated from a Certificate Authority or be self-signed'
             }
             required
             htmlFor="client-auth-client-key-input"
@@ -124,10 +118,7 @@ export const TLSClientAuth: React.FC<Props> = ({
           </InlineLabel>
         }
         grow
-        className={cx(
-          commonStyles.inlineFieldNoMarginRight,
-          commonStyles.inlineFieldWithSecret
-        )}
+        className={cx(commonStyles.inlineFieldNoMarginRight, commonStyles.inlineFieldWithSecret)}
         disabled={readOnly}
       >
         <SecretTextArea

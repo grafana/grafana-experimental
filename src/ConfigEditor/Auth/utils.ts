@@ -1,9 +1,9 @@
-import { DataSourceSettings } from "@grafana/data";
-import { Props as AuthProps } from "./Auth";
-import { AuthMethod, Header, CustomMethodId } from "./types";
+import { DataSourceSettings } from '@grafana/data';
+import { Props as AuthProps } from './Auth';
+import { AuthMethod, Header, CustomMethodId } from './types';
 
-const headerNamePrefix = "httpHeaderName";
-const headerValuePrefix = "httpHeaderValue";
+const headerNamePrefix = 'httpHeaderName';
+const headerValuePrefix = 'httpHeaderValue';
 
 type onChangeHandler = (config: DataSourceSettings) => void;
 
@@ -26,9 +26,7 @@ export function convertLegacyAuthProps({
   return props;
 }
 
-export function getSelectedMethod(
-  config: DataSourceSettings<any, any>
-): AuthMethod {
+export function getSelectedMethod(config: DataSourceSettings<any, any>): AuthMethod {
   if (config.basicAuth) {
     return AuthMethod.BasicAuth;
   }
@@ -61,12 +59,11 @@ export function getOnAuthMethodSelectHandler(
 export function getBasicAuthProps(
   config: DataSourceSettings<any, any>,
   onChange: (config: DataSourceSettings<any, any>) => void
-): AuthProps["basicAuth"] {
+): AuthProps['basicAuth'] {
   return {
     user: config.basicAuthUser,
     passwordConfigured: config.secureJsonFields.basicAuthPassword,
-    onUserChange: (user: string) =>
-      onChange({ ...config, basicAuthUser: user }),
+    onUserChange: (user: string) => onChange({ ...config, basicAuthUser: user }),
     onPasswordChange: (password: string) =>
       onChange({
         ...config,
@@ -78,7 +75,7 @@ export function getBasicAuthProps(
     onPasswordReset: () =>
       onChange({
         ...config,
-        secureJsonData: { ...config.secureJsonData, basicAuthPassword: "" },
+        secureJsonData: { ...config.secureJsonData, basicAuthPassword: '' },
         secureJsonFields: {
           ...config.secureJsonFields,
           basicAuthPassword: false,
@@ -87,10 +84,7 @@ export function getBasicAuthProps(
   };
 }
 
-export function getTLSProps(
-  config: DataSourceSettings<any, any>,
-  onChange: onChangeHandler
-): AuthProps["TLS"] {
+export function getTLSProps(config: DataSourceSettings<any, any>, onChange: onChangeHandler): AuthProps['TLS'] {
   return {
     selfSignedCertificate: {
       enabled: Boolean(config.jsonData.tlsAuthWithCACert),
@@ -108,7 +102,7 @@ export function getTLSProps(
       onCertificateReset: () =>
         onChange({
           ...config,
-          secureJsonData: { ...config.secureJsonData, tlsCACert: "" },
+          secureJsonData: { ...config.secureJsonData, tlsCACert: '' },
           secureJsonFields: { ...config.secureJsonFields, tlsCACert: false },
         }),
     },
@@ -140,7 +134,7 @@ export function getTLSProps(
           ...config,
           secureJsonData: {
             ...config.secureJsonData,
-            tlsClientCert: "",
+            tlsClientCert: '',
           },
           secureJsonFields: {
             ...config.secureJsonFields,
@@ -160,7 +154,7 @@ export function getTLSProps(
           ...config,
           secureJsonData: {
             ...config.secureJsonData,
-            tlsClientKey: "",
+            tlsClientKey: '',
           },
           secureJsonFields: {
             ...config.secureJsonFields,
@@ -182,7 +176,7 @@ export function getTLSProps(
 export function getCustomHeaders(
   config: DataSourceSettings<any, any>,
   onChange: onChangeHandler
-): AuthProps["customHeaders"] {
+): AuthProps['customHeaders'] {
   const headers: Header[] = Object.keys(config.jsonData)
     .filter((key) => key.startsWith(headerNamePrefix))
     .sort()
@@ -190,8 +184,7 @@ export function getCustomHeaders(
       const index = key.slice(headerNamePrefix.length);
       return {
         name: config.jsonData[key],
-        configured:
-          config.secureJsonFields[`${headerValuePrefix}${index}`] ?? false,
+        configured: config.secureJsonFields[`${headerValuePrefix}${index}`] ?? false,
       };
     });
 
@@ -199,19 +192,13 @@ export function getCustomHeaders(
     headers,
     onChange: (headers) => {
       const newJsonData = Object.fromEntries(
-        Object.entries(config.jsonData).filter(
-          ([key]) => !key.startsWith(headerNamePrefix)
-        )
+        Object.entries(config.jsonData).filter(([key]) => !key.startsWith(headerNamePrefix))
       );
       const newSecureJsonData = Object.fromEntries(
-        Object.entries(config.secureJsonData || {}).filter(
-          ([key]) => !key.startsWith(headerValuePrefix)
-        )
+        Object.entries(config.secureJsonData || {}).filter(([key]) => !key.startsWith(headerValuePrefix))
       );
       const newSecureJsonFields = Object.fromEntries(
-        Object.entries(config.secureJsonFields).filter(
-          ([key]) => !key.startsWith(headerValuePrefix)
-        )
+        Object.entries(config.secureJsonFields).filter(([key]) => !key.startsWith(headerValuePrefix))
       );
 
       headers.forEach((header, index) => {

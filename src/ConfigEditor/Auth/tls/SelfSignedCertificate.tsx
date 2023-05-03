@@ -1,10 +1,9 @@
-import React from "react";
-import { cx } from "@emotion/css";
-import { InlineField } from "@grafana/ui";
-import { InlineLabel } from "../../ConfigEditor";
-import { TLSSettingsSection } from "./TLSSettingsSection";
-import { SecretTextArea } from "../../../unreleasedComponents/SecretTextarea";
-import { useCommonStyles } from "../styles";
+import React from 'react';
+import { cx } from '@emotion/css';
+import { InlineField, SecretTextArea } from '@grafana/ui';
+import { InlineLabel } from '../shared';
+import { TLSSettingsSection } from './TLSSettingsSection';
+import { useCommonStyles } from '../styles';
 
 export type Props = {
   enabled: boolean;
@@ -41,9 +40,7 @@ export const SelfSignedCertificate: React.FC<Props> = ({
         label={
           <InlineLabel
             width={24}
-            tooltip={
-              tooltips?.certificateLabel ?? "Your self-signed certificate"
-            }
+            tooltip={tooltips?.certificateLabel ?? 'Your self-signed certificate'}
             required
             htmlFor="self-signed-certificate-input"
             interactive
@@ -52,10 +49,7 @@ export const SelfSignedCertificate: React.FC<Props> = ({
           </InlineLabel>
         }
         grow
-        className={cx(
-          commonStyles.inlineFieldNoMarginRight,
-          commonStyles.inlineFieldWithSecret
-        )}
+        className={cx(commonStyles.inlineFieldNoMarginRight, commonStyles.inlineFieldWithSecret)}
         disabled={readOnly}
       >
         <SecretTextArea

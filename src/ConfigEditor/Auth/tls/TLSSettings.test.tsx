@@ -1,16 +1,12 @@
-import React from "react";
-import { screen, render } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { TLSSettings, Props } from "./TLSSettings";
+import React from 'react';
+import { screen, render } from '@testing-library/react';
+import { TLSSettings, Props } from './TLSSettings';
 
 type PartialProps = Partial<
-  Omit<
-    Props,
-    "selfSignedCertificate" | "TLSClientAuth" | "skipTLSVerification"
-  > & {
-    selfSignedCertificate: Partial<Props["selfSignedCertificate"]>;
-    TLSClientAuth: Partial<Props["TLSClientAuth"]>;
-    skipTLSVerification: Partial<Props["skipTLSVerification"]>;
+  Omit<Props, 'selfSignedCertificate' | 'TLSClientAuth' | 'skipTLSVerification'> & {
+    selfSignedCertificate: Partial<Props['selfSignedCertificate']>;
+    TLSClientAuth: Partial<Props['TLSClientAuth']>;
+    skipTLSVerification: Partial<Props['skipTLSVerification']>;
   }
 >;
 
@@ -28,7 +24,7 @@ const getProps = (partialProps?: PartialProps): Props => ({
   TLSClientAuth: {
     enabled: false,
     onToggle: jest.fn(),
-    serverName: "",
+    serverName: '',
     clientCertificateConfigured: false,
     clientKeyConfigured: false,
     onServerNameChange: jest.fn(),
@@ -45,22 +41,20 @@ const getProps = (partialProps?: PartialProps): Props => ({
   },
 });
 
-describe("<TLSSettings />", () => {
-  it("should render all sections", () => {
+describe('<TLSSettings />', () => {
+  it('should render all sections', () => {
     render(<TLSSettings {...getProps()} />);
 
-    expect(screen.getAllByRole("checkbox")).toHaveLength(3);
-    expect(screen.getByText("Add self-signed certificate")).toBeInTheDocument();
-    expect(screen.getByText("TLS Client Authentication")).toBeInTheDocument();
-    expect(
-      screen.getByText("Skip TLS certificate validation")
-    ).toBeInTheDocument();
+    expect(screen.getAllByRole('checkbox')).toHaveLength(3);
+    expect(screen.getByText('Add self-signed certificate')).toBeInTheDocument();
+    expect(screen.getByText('TLS Client Authentication')).toBeInTheDocument();
+    expect(screen.getByText('Skip TLS certificate validation')).toBeInTheDocument();
   });
 
-  it("should render checkboxes as disabled when in read only mode", () => {
+  it('should render checkboxes as disabled when in read only mode', () => {
     const props = getProps({ readOnly: true });
     render(<TLSSettings {...props} />);
-    const checkboxes = screen.getAllByRole("checkbox");
+    const checkboxes = screen.getAllByRole('checkbox');
 
     expect(checkboxes[0]).toBeDisabled();
     expect(checkboxes[1]).toBeDisabled();

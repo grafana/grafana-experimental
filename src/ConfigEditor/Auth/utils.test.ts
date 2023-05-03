@@ -1,4 +1,4 @@
-import { DataSourceSettings } from "@grafana/data";
+import { DataSourceSettings } from '@grafana/data';
 import {
   getSelectedMethod,
   getOnAuthMethodSelectHandler,
@@ -6,23 +6,23 @@ import {
   getTLSProps,
   getCustomHeaders,
   convertLegacyAuthProps,
-} from "./utils";
-import { Props as AuthProps } from "./Auth";
-import { AuthMethod } from "./types";
+} from './utils';
+import { Props as AuthProps } from './Auth';
+import { AuthMethod } from './types';
 
-describe("utils", () => {
-  describe("convertLegacyAuthProps", () => {
-    it("should convert legacy props to new props correctly", () => {
-      const config = ({
+describe('utils', () => {
+  describe('convertLegacyAuthProps', () => {
+    it('should convert legacy props to new props correctly', () => {
+      const config = {
         basicAuth: true,
-        basicAuthUser: "test-user",
+        basicAuthUser: 'test-user',
         jsonData: {
           tlsAuthWithCACert: false,
           tlsAuth: false,
-          serverName: "test.server.name",
+          serverName: 'test.server.name',
           tlsSkipVerify: true,
-          httpHeaderName1: "X-Name1",
-          httpHeaderName2: "X-Name2",
+          httpHeaderName1: 'X-Name1',
+          httpHeaderName2: 'X-Name2',
         },
         secureJsonFields: {
           tlsCACert: false,
@@ -33,14 +33,14 @@ describe("utils", () => {
           httpHeaderValue2: true,
         },
         readOnly: true,
-      } as unknown) as DataSourceSettings<any, any>;
+      } as unknown as DataSourceSettings<any, any>;
       const onChange = jest.fn();
       const newProps = convertLegacyAuthProps({ config, onChange });
       const expected: AuthProps = {
         selectedMethod: AuthMethod.BasicAuth,
         onAuthMethodSelect: expect.any(Function),
         basicAuth: {
-          user: "test-user",
+          user: 'test-user',
           passwordConfigured: false,
           onUserChange: expect.any(Function),
           onPasswordChange: expect.any(Function),
@@ -57,7 +57,7 @@ describe("utils", () => {
           TLSClientAuth: {
             enabled: false,
             onToggle: expect.any(Function),
-            serverName: "test.server.name",
+            serverName: 'test.server.name',
             clientCertificateConfigured: false,
             clientKeyConfigured: false,
             onServerNameChange: expect.any(Function),
@@ -73,8 +73,8 @@ describe("utils", () => {
         },
         customHeaders: {
           headers: [
-            { name: "X-Name1", configured: false },
-            { name: "X-Name2", configured: true },
+            { name: 'X-Name1', configured: false },
+            { name: 'X-Name2', configured: true },
           ],
           onChange: expect.any(Function),
         },
@@ -85,27 +85,27 @@ describe("utils", () => {
     });
   });
 
-  describe("getSelectedMethod", () => {
-    it("should return basic auth selected method", () => {
+  describe('getSelectedMethod', () => {
+    it('should return basic auth selected method', () => {
       const res = getSelectedMethod({ basicAuth: true } as DataSourceSettings);
       expect(res).toBe(AuthMethod.BasicAuth);
     });
 
-    it("should return cross site credentials selected method", () => {
+    it('should return cross site credentials selected method', () => {
       const res = getSelectedMethod({
         withCredentials: true,
       } as DataSourceSettings);
       expect(res).toBe(AuthMethod.CrossSiteCredentials);
     });
 
-    it("should return OAuth forward selected method", () => {
+    it('should return OAuth forward selected method', () => {
       const res = getSelectedMethod({
         jsonData: { oauthPassThru: true },
       } as DataSourceSettings<any>);
       expect(res).toBe(AuthMethod.OAuthForward);
     });
 
-    it("should return no auth selected method", () => {
+    it('should return no auth selected method', () => {
       const res = getSelectedMethod({
         jsonData: {},
       } as DataSourceSettings<any>);
@@ -113,7 +113,7 @@ describe("utils", () => {
     });
   });
 
-  describe("getOnAuthMethodSelectHandler", () => {
+  describe('getOnAuthMethodSelectHandler', () => {
     let config: DataSourceSettings<any, any>;
     let onChange: jest.Mock<any, any>;
 
@@ -121,13 +121,13 @@ describe("utils", () => {
       onChange = jest.fn();
       config = {} as DataSourceSettings;
     });
-    it("should return correct onAuthMethodSelect handler", () => {
+    it('should return correct onAuthMethodSelect handler', () => {
       const onAuthMethodSelect = getOnAuthMethodSelectHandler(config, onChange);
 
       expect(onAuthMethodSelect).toStrictEqual(expect.any(Function));
     });
 
-    it("should behave correctly when basic auth method is selected", () => {
+    it('should behave correctly when basic auth method is selected', () => {
       const onAuthMethodSelect = getOnAuthMethodSelectHandler(config, onChange);
 
       onAuthMethodSelect(AuthMethod.BasicAuth);
@@ -139,7 +139,7 @@ describe("utils", () => {
         jsonData: { oauthPassThru: false },
       });
     });
-    it("should behave correctly cross site credentials method is selected", () => {
+    it('should behave correctly cross site credentials method is selected', () => {
       const onAuthMethodSelect = getOnAuthMethodSelectHandler(config, onChange);
 
       onAuthMethodSelect(AuthMethod.CrossSiteCredentials);
@@ -151,7 +151,7 @@ describe("utils", () => {
         jsonData: { oauthPassThru: false },
       });
     });
-    it("should behave correctly when OAuth forward method is selected", () => {
+    it('should behave correctly when OAuth forward method is selected', () => {
       const onAuthMethodSelect = getOnAuthMethodSelectHandler(config, onChange);
 
       onAuthMethodSelect(AuthMethod.OAuthForward);
@@ -163,7 +163,7 @@ describe("utils", () => {
         jsonData: { oauthPassThru: true },
       });
     });
-    it("should behave correctly when no-auth method is selected", () => {
+    it('should behave correctly when no-auth method is selected', () => {
       const onAuthMethodSelect = getOnAuthMethodSelectHandler(config, onChange);
 
       onAuthMethodSelect(AuthMethod.NoAuth);
@@ -175,10 +175,10 @@ describe("utils", () => {
         jsonData: { oauthPassThru: false },
       });
     });
-    it("should behave correctly when custom auth method is selected", () => {
+    it('should behave correctly when custom auth method is selected', () => {
       const onAuthMethodSelect = getOnAuthMethodSelectHandler(config, onChange);
 
-      onAuthMethodSelect("custom-method");
+      onAuthMethodSelect('custom-method');
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
@@ -189,25 +189,25 @@ describe("utils", () => {
     });
   });
 
-  describe("getBasicAuthProps", () => {
+  describe('getBasicAuthProps', () => {
     let config: DataSourceSettings<any, any>;
     let onChange: jest.Mock<any, any>;
 
     beforeEach(() => {
-      config = ({
-        basicAuthUser: "test-user",
+      config = {
+        basicAuthUser: 'test-user',
         secureJsonFields: {
           basicAuthPassword: false,
         },
-      } as unknown) as DataSourceSettings<any, any>;
+      } as unknown as DataSourceSettings<any, any>;
       onChange = jest.fn();
     });
 
-    it("should return correct basic auth props", () => {
+    it('should return correct basic auth props', () => {
       const basicAuth = getBasicAuthProps(config, onChange);
 
       expect(basicAuth).toStrictEqual({
-        user: "test-user",
+        user: 'test-user',
         passwordConfigured: false,
         onUserChange: expect.any(Function),
         onPasswordChange: expect.any(Function),
@@ -215,65 +215,65 @@ describe("utils", () => {
       });
     });
 
-    it("should call `onUserChange` correctly", () => {
+    it('should call `onUserChange` correctly', () => {
       const basicAuth = getBasicAuthProps(config, onChange);
 
-      basicAuth?.onUserChange("test-user2");
+      basicAuth?.onUserChange('test-user2');
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
-        basicAuthUser: "test-user2",
+        basicAuthUser: 'test-user2',
         secureJsonFields: {
           basicAuthPassword: false,
         },
       });
     });
 
-    it("should call `onPasswordChange` correctly", () => {
+    it('should call `onPasswordChange` correctly', () => {
       const basicAuth = getBasicAuthProps(config, onChange);
 
-      basicAuth?.onPasswordChange("test-password");
+      basicAuth?.onPasswordChange('test-password');
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
-        basicAuthUser: "test-user",
+        basicAuthUser: 'test-user',
         secureJsonFields: {
           basicAuthPassword: false,
         },
         secureJsonData: {
-          basicAuthPassword: "test-password",
+          basicAuthPassword: 'test-password',
         },
       });
     });
 
-    it("should call `onPasswordReset` correctly", () => {
+    it('should call `onPasswordReset` correctly', () => {
       const basicAuth = getBasicAuthProps(config, onChange);
 
       basicAuth?.onPasswordReset();
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
-        basicAuthUser: "test-user",
+        basicAuthUser: 'test-user',
         secureJsonFields: {
           basicAuthPassword: false,
         },
         secureJsonData: {
-          basicAuthPassword: "",
+          basicAuthPassword: '',
         },
       });
     });
   });
 
-  describe("getTLSProps", () => {
+  describe('getTLSProps', () => {
     let config: DataSourceSettings<any, any>;
     let onChange: jest.Mock<any, any>;
 
     beforeEach(() => {
-      config = ({
+      config = {
         jsonData: {
           tlsAuthWithCACert: false,
           tlsAuth: false,
-          serverName: "test.server.name",
+          serverName: 'test.server.name',
           tlsSkipVerify: false,
         },
         secureJsonFields: {
@@ -281,11 +281,11 @@ describe("utils", () => {
           tlsClientCert: false,
           tlsClientKey: false,
         },
-      } as unknown) as DataSourceSettings<any, any>;
+      } as unknown as DataSourceSettings<any, any>;
       onChange = jest.fn();
     });
 
-    it("should return correct TLS settings", () => {
+    it('should return correct TLS settings', () => {
       const tls = getTLSProps(config, onChange);
 
       expect(tls).toStrictEqual({
@@ -299,7 +299,7 @@ describe("utils", () => {
         TLSClientAuth: {
           enabled: false,
           onToggle: expect.any(Function),
-          serverName: "test.server.name",
+          serverName: 'test.server.name',
           clientCertificateConfigured: false,
           clientKeyConfigured: false,
           onServerNameChange: expect.any(Function),
@@ -315,7 +315,7 @@ describe("utils", () => {
       });
     });
 
-    it("should call `selfSignedCertificate.onToggle` correctly", () => {
+    it('should call `selfSignedCertificate.onToggle` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
       tls?.selfSignedCertificate.onToggle(true);
@@ -330,22 +330,22 @@ describe("utils", () => {
       });
     });
 
-    it("should call `selfSignedCertificate.onCertificateChange` correctly", () => {
+    it('should call `selfSignedCertificate.onCertificateChange` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
-      tls?.selfSignedCertificate.onCertificateChange("test-cert");
+      tls?.selfSignedCertificate.onCertificateChange('test-cert');
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
         ...config,
         secureJsonData: {
           ...config.secureJsonData,
-          tlsCACert: "test-cert",
+          tlsCACert: 'test-cert',
         },
       });
     });
 
-    it("should call `selfSignedCertificate.onCertificateReset` correctly", () => {
+    it('should call `selfSignedCertificate.onCertificateReset` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
       tls?.selfSignedCertificate.onCertificateReset();
@@ -353,12 +353,12 @@ describe("utils", () => {
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
         ...config,
-        secureJsonData: { ...config.secureJsonData, tlsCACert: "" },
+        secureJsonData: { ...config.secureJsonData, tlsCACert: '' },
         secureJsonFields: { ...config.secureJsonFields, tlsCACert: false },
       });
     });
 
-    it("should call `TLSClientAuth.onToggle` correctly", () => {
+    it('should call `TLSClientAuth.onToggle` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
       tls?.TLSClientAuth.onToggle(true);
@@ -370,34 +370,34 @@ describe("utils", () => {
       });
     });
 
-    it("should call `TLSClientAuth.onServerNameChange` correctly", () => {
+    it('should call `TLSClientAuth.onServerNameChange` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
-      tls?.TLSClientAuth.onServerNameChange("new.server.name");
+      tls?.TLSClientAuth.onServerNameChange('new.server.name');
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
         ...config,
-        jsonData: { ...config.jsonData, serverName: "new.server.name" },
+        jsonData: { ...config.jsonData, serverName: 'new.server.name' },
       });
     });
 
-    it("should call `TLSClientAuth.onClientCertificateChange` correctly", () => {
+    it('should call `TLSClientAuth.onClientCertificateChange` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
-      tls?.TLSClientAuth.onClientCertificateChange("client-cert");
+      tls?.TLSClientAuth.onClientCertificateChange('client-cert');
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
         ...config,
         secureJsonData: {
           ...config.secureJsonData,
-          tlsClientCert: "client-cert",
+          tlsClientCert: 'client-cert',
         },
       });
     });
 
-    it("should call `TLSClientAuth.onClientCertificateReset` correctly", () => {
+    it('should call `TLSClientAuth.onClientCertificateReset` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
       tls?.TLSClientAuth.onClientCertificateReset();
@@ -407,7 +407,7 @@ describe("utils", () => {
         ...config,
         secureJsonData: {
           ...config.secureJsonData,
-          tlsClientCert: "",
+          tlsClientCert: '',
         },
         secureJsonFields: {
           ...config.secureJsonFields,
@@ -416,22 +416,22 @@ describe("utils", () => {
       });
     });
 
-    it("should call `TLSClientAuth.onClientKeyChange` correctly", () => {
+    it('should call `TLSClientAuth.onClientKeyChange` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
-      tls?.TLSClientAuth.onClientKeyChange("client-key");
+      tls?.TLSClientAuth.onClientKeyChange('client-key');
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
         ...config,
         secureJsonData: {
           ...config.secureJsonData,
-          tlsClientKey: "client-key",
+          tlsClientKey: 'client-key',
         },
       });
     });
 
-    it("should call `TLSClientAuth.onClientKeyReset` correctly", () => {
+    it('should call `TLSClientAuth.onClientKeyReset` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
       tls?.TLSClientAuth.onClientKeyReset();
@@ -441,7 +441,7 @@ describe("utils", () => {
         ...config,
         secureJsonData: {
           ...config.secureJsonData,
-          tlsClientKey: "",
+          tlsClientKey: '',
         },
         secureJsonFields: {
           ...config.secureJsonFields,
@@ -450,7 +450,7 @@ describe("utils", () => {
       });
     });
 
-    it("should call `skipTLSVerification.onToggle` correctly", () => {
+    it('should call `skipTLSVerification.onToggle` correctly', () => {
       const tls = getTLSProps(config, onChange);
 
       tls?.skipTLSVerification.onToggle(true);
@@ -463,55 +463,55 @@ describe("utils", () => {
     });
   });
 
-  describe("getCustomHeaders", () => {
+  describe('getCustomHeaders', () => {
     let config: DataSourceSettings<any, any>;
     let onChange: jest.Mock<any, any>;
 
     beforeEach(() => {
-      config = ({
+      config = {
         jsonData: {
-          httpHeaderName1: "X-Name1",
-          httpHeaderName2: "X-Name2",
+          httpHeaderName1: 'X-Name1',
+          httpHeaderName2: 'X-Name2',
         },
         secureJsonFields: {
           httpHeaderValue1: false,
           httpHeaderValue2: true,
         },
-      } as unknown) as DataSourceSettings<any, any>;
+      } as unknown as DataSourceSettings<any, any>;
       onChange = jest.fn();
     });
 
-    it("should return correct custom headers settings", () => {
+    it('should return correct custom headers settings', () => {
       const customHeaders = getCustomHeaders(config, onChange);
 
       expect(customHeaders).toStrictEqual({
         headers: [
-          { name: "X-Name1", configured: false },
-          { name: "X-Name2", configured: true },
+          { name: 'X-Name1', configured: false },
+          { name: 'X-Name2', configured: true },
         ],
         onChange: expect.any(Function),
       });
     });
 
-    it("should call `onChange` correctly", () => {
+    it('should call `onChange` correctly', () => {
       const customHeaders = getCustomHeaders(config, onChange);
 
       customHeaders?.onChange([
-        { name: "X-Name111", value: "Value1", configured: false },
-        { name: "X-Name2", value: "Value2", configured: true },
-        { name: "X-Name3", value: "", configured: false },
+        { name: 'X-Name111', value: 'Value1', configured: false },
+        { name: 'X-Name2', value: 'Value2', configured: true },
+        { name: 'X-Name3', value: '', configured: false },
       ]);
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith({
         jsonData: {
-          httpHeaderName1: "X-Name111",
-          httpHeaderName2: "X-Name2",
-          httpHeaderName3: "X-Name3",
+          httpHeaderName1: 'X-Name111',
+          httpHeaderName2: 'X-Name2',
+          httpHeaderName3: 'X-Name3',
         },
         secureJsonData: {
-          httpHeaderValue1: "Value1",
-          httpHeaderValue3: "",
+          httpHeaderValue1: 'Value1',
+          httpHeaderValue3: '',
         },
         secureJsonFields: {
           httpHeaderValue2: true,

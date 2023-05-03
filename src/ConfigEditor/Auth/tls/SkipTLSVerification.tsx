@@ -1,5 +1,5 @@
-import React from "react";
-import { TLSSettingsSection } from "./TLSSettingsSection";
+import React from 'react';
+import { TLSSettingsSection } from './TLSSettingsSection';
 
 export type Props = {
   enabled: boolean;
@@ -7,11 +7,7 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const SkipTLSVerification: React.FC<Props> = ({
-  enabled,
-  onToggle,
-  readOnly,
-}) => {
+export const SkipTLSVerification: React.FC<Props> = ({ enabled, onToggle, readOnly }) => {
   return (
     <TLSSettingsSection
       enabled={enabled}
