@@ -1,6 +1,6 @@
 # Auth component
 
-Auth component is meant to replace the old [`DataSourceHttpSettings`](https://github.com/grafana/grafana/blob/d02aee24795aecc09efa6d81e35b25d8f151bb25/packages/grafana-ui/src/components/DataSourceSettings/DataSourceHttpSettings.tsx) component which has a number of UX issues. The new component is stored here in `@grafana/plugin-ui` so that it can be used in external datasources regardless of Grafana version (Enterprise datasources must support at least 2 latest major Grafana versions).
+Auth component is meant to replace the old [`DataSourceHttpSettings`](https://github.com/grafana/grafana/blob/d02aee24795aecc09efa6d81e35b25d8f151bb25/packages/grafana-ui/src/components/DataSourceSettings/DataSourceHttpSettings.tsx) component which has a number of UX issues. The new component is stored here in `@grafana/experimental` so that it can be used in external datasources regardless of Grafana version (Enterprise datasources must support at least 2 latest major Grafana versions).
 
 In the new component only one authentication method can be selected at a time and all TLS options are located in a separate section and can be added to any selected authentication method.
 
@@ -23,7 +23,7 @@ Even though the new component has completely different props shape, there is a s
 **Example**:
 
 ```tsx
-import { Auth, convertLegacyAuthProps } from '@grafana/plugin-ui';
+import { Auth, convertLegacyAuthProps } from '@grafana/experimental';
 
 // Your config editor component
 export const ConfigEditor = (props) => {
