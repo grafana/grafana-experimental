@@ -177,7 +177,9 @@ const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinit
 
 export const registerLanguageAndSuggestions = async (monaco: Monaco, l: LanguageDefinition, lid: string) => {
   const languageDefinition = resolveLanguage(monaco, l);
-  //@ts-ignore
+  if (!languageDefinition.loader) {
+    return;
+  }
   const { language, conf } = await languageDefinition.loader(monaco);
   monaco.languages.register({ id: lid });
   monaco.languages.setMonarchTokensProvider(lid, { ...language });
@@ -186,12 +188,11 @@ export const registerLanguageAndSuggestions = async (monaco: Monaco, l: Language
   if (languageDefinition.formatter) {
     monaco.languages.registerDocumentFormattingEditProvider(lid, {
       provideDocumentFormattingEdits: (model) => {
-        //@ts-ignore
-        const formatted = l.formatter(model.getValue());
+        const formatted = l.formatter?.(model.getValue());
         return [
           {
             range: model.getFullModelRange(),
-            text: formatted,
+            text: formatted || '',
           },
         ];
       },
@@ -346,7 +347,9 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
     const s = stbBehaviour.suggestions;
     stbBehaviour.suggestions = async (ctx, m) => {
       const standardSchemas = await s(ctx, m);
-      //@ts-ignore
+      if (!customProvider.schemas) {
+        return [...standardSchemas];
+      }
       const customSchemas = await customProvider.schemas.resolve();
       const customSchemaCompletionItems = customSchemas.map((x) => ({
         label: x.name,
