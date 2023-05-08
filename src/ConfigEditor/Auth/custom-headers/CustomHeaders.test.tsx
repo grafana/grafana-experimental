@@ -11,38 +11,40 @@ const getProps = (partialProps?: Partial<Props>): Props => ({
 });
 
 describe('<CustomHeaders />', () => {
-  it('should render', () => {
+  it('should render', async () => {
     render(<CustomHeaders {...getProps()} />);
   });
 
-  it('should be collapsed and expandable when there are no headers', () => {
+  it('should be collapsed and expandable when there are no headers', async () => {
+    const user = userEvent.setup();
     render(<CustomHeaders {...getProps({ headers: [] })} />);
     const expandBtn = screen.getByTestId('angle-down');
 
     expect(() => screen.getByText('Add header')).toThrow();
 
-    userEvent.click(expandBtn);
+    await user.click(expandBtn);
 
     expect(screen.getByText('Add header')).toBeInTheDocument();
   });
 
-  it('should have different add header button text for 0 headers and 1+ headers', () => {
+  it('should have different add header button text for 0 headers and 1+ headers', async () => {
     const props = getProps();
+    const user = userEvent.setup();
     render(<CustomHeaders {...props} />);
     const expandBtn = screen.getByTestId('angle-down');
 
-    userEvent.click(expandBtn);
+    await user.click(expandBtn);
 
     expect(screen.getByText('Add header')).toBeInTheDocument();
     expect(() => screen.getByText('Add another header')).toThrow();
 
-    userEvent.click(screen.getByText('Add header'));
+    await user.click(screen.getByText('Add header'));
 
     expect(screen.getByText('Add another header')).toBeInTheDocument();
     expect(() => screen.getByText('Add header')).toThrow();
   });
 
-  it('should be expanded and render name and value fields when headers are passed', () => {
+  it('should be expanded and render name and value fields when headers are passed', async () => {
     const props = getProps({
       headers: [
         { name: 'X-Name1', configured: false },
@@ -61,7 +63,7 @@ describe('<CustomHeaders />', () => {
     expect(valueFields[1]).toHaveValue('');
   });
 
-  it('should render configured headers as configured', () => {
+  it('should render configured headers as configured', async () => {
     const props = getProps({
       headers: [
         { name: 'X-Name1', configured: false },
@@ -78,7 +80,7 @@ describe('<CustomHeaders />', () => {
     expect(screen.getByText('Reset')).toBeInTheDocument();
   });
 
-  it('should change header state to configured when was not configured and rerendered as configured', () => {
+  it('should change header state to configured when was not configured and rerendered as configured', async () => {
     const props = getProps({
       headers: [
         { name: 'X-Name1', configured: false },
@@ -110,34 +112,36 @@ describe('<CustomHeaders />', () => {
     expect(screen.getByText('Reset')).toBeInTheDocument();
   });
 
-  it('should add a new header when user clicks add header button', () => {
+  it('should add a new header when user clicks add header button', async () => {
     const props = getProps({
       onChange: jest.fn(),
       headers: [{ name: 'X-Name', configured: false }],
     });
+    const user = userEvent.setup();
     render(<CustomHeaders {...props} />);
     const addHeaderBtn = screen.getByText('Add another header');
 
     expect(screen.getAllByPlaceholderText('X-Custom-Header')).toHaveLength(1);
     expect(screen.getAllByPlaceholderText('Header value')).toHaveLength(1);
 
-    userEvent.click(addHeaderBtn);
+    await user.click(addHeaderBtn);
 
     expect(screen.getAllByPlaceholderText('X-Custom-Header')).toHaveLength(2);
     expect(screen.getAllByPlaceholderText('Header value')).toHaveLength(2);
   });
 
-  it('should call `onChange` when user adds new header and types something in there and blurs', () => {
+  it('should call `onChange` when user adds new header and types something in there and blurs', async () => {
     const props = getProps({
       onChange: jest.fn(),
       headers: [{ name: 'X-Name1', configured: false }],
     });
+    const user = userEvent.setup();
     render(<CustomHeaders {...props} />);
     const addHeaderBtn = screen.getByText('Add another header');
 
-    userEvent.click(addHeaderBtn);
+    await user.click(addHeaderBtn);
     const name2Field = screen.getAllByPlaceholderText('X-Custom-Header')[1];
-    userEvent.type(name2Field, 'X-Name2');
+    await user.type(name2Field, 'X-Name2');
     name2Field.blur();
 
     expect(props.onChange).toHaveBeenCalledTimes(1);
@@ -147,37 +151,39 @@ describe('<CustomHeaders />', () => {
     ]);
   });
 
-  it('should call `onChange` when user types in header name field and blurs', () => {
+  it('should call `onChange` when user types in header name field and blurs', async () => {
     const props = getProps({
       headers: [{ name: 'X-Test', configured: false }],
       onChange: jest.fn(),
     });
+    const user = userEvent.setup();
     render(<CustomHeaders {...props} />);
     const nameField = screen.getByPlaceholderText('X-Custom-Header');
 
-    userEvent.type(nameField, '-Header');
+    await user.type(nameField, '-Header');
     nameField.blur();
 
     expect(props.onChange).toHaveBeenCalledTimes(1);
     expect(props.onChange).toHaveBeenCalledWith([{ name: 'X-Test-Header', value: '', configured: false }]);
   });
 
-  it('should call `onChange` when user types in header value field and blurs', () => {
+  it('should call `onChange` when user types in header value field and blurs', async () => {
     const props = getProps({
       headers: [{ name: 'X-Test', configured: false }],
       onChange: jest.fn(),
     });
+    const user = userEvent.setup();
     render(<CustomHeaders {...props} />);
     const valueField = screen.getByPlaceholderText('Header value');
 
-    userEvent.type(valueField, 'TestValue');
+    await user.type(valueField, 'TestValue');
     valueField.blur();
 
     expect(props.onChange).toHaveBeenCalledTimes(1);
     expect(props.onChange).toHaveBeenCalledWith([{ name: 'X-Test', value: 'TestValue', configured: false }]);
   });
 
-  it('should call `onChange` when user resets configured header and types new value and blurs', () => {
+  it('should call `onChange` when user resets configured header and types new value and blurs', async () => {
     const props = getProps({
       headers: [
         { name: 'X-Test1', configured: false },
@@ -185,11 +191,12 @@ describe('<CustomHeaders />', () => {
       ],
       onChange: jest.fn(),
     });
+    const user = userEvent.setup();
     render(<CustomHeaders {...props} />);
 
-    userEvent.click(screen.getByText('Reset'));
+    await user.click(screen.getByText('Reset'));
     const value2Field = screen.getAllByPlaceholderText('Header value')[1];
-    userEvent.type(value2Field, 'newValue');
+    await user.type(value2Field, 'newValue');
     value2Field.blur();
 
     expect(props.onChange).toHaveBeenCalledTimes(1);
@@ -199,7 +206,7 @@ describe('<CustomHeaders />', () => {
     ]);
   });
 
-  it('should call `onChange` when user removes header', () => {
+  it('should call `onChange` when user removes header', async () => {
     const props = getProps({
       headers: [
         { name: 'X-Test1', configured: true },
@@ -207,15 +214,16 @@ describe('<CustomHeaders />', () => {
       ],
       onChange: jest.fn(),
     });
+    const user = userEvent.setup();
     render(<CustomHeaders {...props} />);
 
-    userEvent.click(screen.getAllByLabelText('Remove header')[1]);
+    await user.click(screen.getAllByLabelText('Remove header')[1]);
 
     expect(props.onChange).toHaveBeenCalledTimes(1);
     expect(props.onChange).toHaveBeenCalledWith([{ name: 'X-Test1', value: '', configured: true }]);
   });
 
-  it('should have inputs and buttons disabled when in read only mode', () => {
+  it('should have inputs and buttons disabled when in read only mode', async () => {
     const props = getProps({
       headers: [{ name: 'X-Name', configured: false }],
       readOnly: true,

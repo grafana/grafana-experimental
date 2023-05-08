@@ -24,14 +24,14 @@ const getProps = (partialProps?: PartialProps): Props => {
 };
 
 describe('<CustomHeader />', () => {
-  it('should render name and value fields', () => {
+  it('should render name and value fields', async () => {
     render(<CustomHeader {...getProps()} />);
 
     expect(screen.getByPlaceholderText('X-Custom-Header')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Header value')).toBeInTheDocument();
   });
 
-  it('should render header name and value', () => {
+  it('should render header name and value', async () => {
     const props = getProps({
       header: { name: 'X-Test-Test', value: 'test_value' },
     });
@@ -43,22 +43,24 @@ describe('<CustomHeader />', () => {
     expect(valueField).toHaveValue('test_value');
   });
 
-  it('should call `onChange` when user types in header name field', () => {
+  it('should call `onChange` when user types in header name field', async () => {
     const props = getProps({ onChange: jest.fn() });
+    const user = userEvent.setup();
     render(<CustomHeader {...props} />);
     const nameField = screen.getByPlaceholderText('X-Custom-Header');
 
-    userEvent.type(nameField, 'X');
+    await user.type(nameField, 'X');
 
     expect(props.onChange).toHaveBeenCalledWith({ ...props.header, name: 'X' });
   });
 
-  it('should call `onChange` when user types in header value field', () => {
+  it('should call `onChange` when user types in header value field', async () => {
     const props = getProps({ onChange: jest.fn() });
+    const user = userEvent.setup();
     render(<CustomHeader {...props} />);
     const valueField = screen.getByPlaceholderText('Header value');
 
-    userEvent.type(valueField, 'V');
+    await user.type(valueField, 'V');
 
     expect(props.onChange).toHaveBeenCalledWith({
       ...props.header,
@@ -66,29 +68,31 @@ describe('<CustomHeader />', () => {
     });
   });
 
-  it('should call `onBlur` when user blurs from header name field', () => {
+  it('should call `onBlur` when user blurs from header name field', async () => {
     const props = getProps({ onBlur: jest.fn() });
+    const user = userEvent.setup();
     render(<CustomHeader {...props} />);
     const nameField = screen.getByPlaceholderText('X-Custom-Header');
 
-    userEvent.type(nameField, 'X-Test-Test');
+    await user.type(nameField, 'X-Test-Test');
     nameField.blur();
 
     expect(props.onBlur).toHaveBeenCalledTimes(1);
   });
 
-  it('should call `onBlur` when user blurs from header value field', () => {
+  it('should call `onBlur` when user blurs from header value field', async () => {
     const props = getProps({ onBlur: jest.fn() });
+    const user = userEvent.setup();
     render(<CustomHeader {...props} />);
     const valueField = screen.getByPlaceholderText('Header value');
 
-    userEvent.type(valueField, 'Value');
+    await user.type(valueField, 'Value');
     valueField.blur();
 
     expect(props.onBlur).toHaveBeenCalledTimes(1);
   });
 
-  it('should render header value as configured when header value is configured', () => {
+  it('should render header value as configured when header value is configured', async () => {
     const props = getProps({ header: { configured: true } });
     render(<CustomHeader {...props} />);
     const valueField = screen.getByPlaceholderText('Header value');
@@ -98,14 +102,15 @@ describe('<CustomHeader />', () => {
     expect(screen.getByText('Reset')).toBeInTheDocument();
   });
 
-  it('should call `onChange` correctly when header value is configured and user clicks Reset button', () => {
+  it('should call `onChange` correctly when header value is configured and user clicks Reset button', async () => {
     const props = getProps({
       header: { name: 'X-Test', value: 'Value', configured: true },
       onChange: jest.fn(),
     });
+    const user = userEvent.setup();
     render(<CustomHeader {...props} />);
 
-    userEvent.click(screen.getByText('Reset'));
+    await user.click(screen.getByText('Reset'));
 
     expect(props.onChange).toHaveBeenCalledTimes(1);
     expect(props.onChange).toHaveBeenCalledWith({
@@ -115,35 +120,37 @@ describe('<CustomHeader />', () => {
     });
   });
 
-  it('should not call `onChange` when in read only mode with header value configured and user clicks Reset button', () => {
+  it('should not call `onChange` when in read only mode with header value configured and user clicks Reset button', async () => {
     const props = getProps({
       header: { name: 'X-Test', value: 'Value', configured: true },
       onChange: jest.fn(),
       readOnly: true,
     });
+    const user = userEvent.setup();
     render(<CustomHeader {...props} />);
 
-    userEvent.click(screen.getByText('Reset'));
+    await user.click(screen.getByText('Reset'));
 
     expect(props.onChange).not.toHaveBeenCalled();
   });
 
-  it('should render remove header button', () => {
+  it('should render remove header button', async () => {
     render(<CustomHeader {...getProps()} />);
 
     expect(screen.getByLabelText('Remove header')).toBeInTheDocument();
   });
 
-  it('should call `onDelete` when user clicks remove header button', () => {
+  it('should call `onDelete` when user clicks remove header button', async () => {
     const props = getProps({ onDelete: jest.fn() });
+    const user = userEvent.setup();
     render(<CustomHeader {...props} />);
 
-    userEvent.click(screen.getByLabelText('Remove header'));
+    await user.click(screen.getByLabelText('Remove header'));
 
     expect(props.onDelete).toHaveBeenCalledTimes(1);
   });
 
-  it('should have remove header button disabled when in read only mode', () => {
+  it('should have remove header button disabled when in read only mode', async () => {
     const props = getProps({ readOnly: true });
     render(<CustomHeader {...props} />);
 

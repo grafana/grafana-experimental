@@ -13,7 +13,7 @@ const getProps = (partialProps?: Partial<Props>): Props => ({
 });
 
 describe('<BasicAuth />', () => {
-  it('should render user and password fields', () => {
+  it('should render user and password fields', async () => {
     render(<BasicAuth {...getProps()} />);
 
     expect(screen.getByLabelText('User *')).toBeInTheDocument();
@@ -22,14 +22,14 @@ describe('<BasicAuth />', () => {
     expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
   });
 
-  it('should render user value when user is passed', () => {
+  it('should render user value when user is passed', async () => {
     const props = getProps({ user: 'test-username' });
     render(<BasicAuth {...props} />);
 
     expect(screen.getByPlaceholderText('User')).toHaveValue('test-username');
   });
 
-  it('should render password as configured when password is configured', () => {
+  it('should render password as configured when password is configured', async () => {
     const props = getProps({ passwordConfigured: true });
     render(<BasicAuth {...props} />);
     const passwordField = screen.getByPlaceholderText('Password');
@@ -39,41 +39,44 @@ describe('<BasicAuth />', () => {
     expect(screen.getByText('Reset')).toBeInTheDocument();
   });
 
-  it('should call `onUserChange` when user types in the user input', () => {
+  it('should call `onUserChange` when user types in the user input', async () => {
     const props = getProps({ onUserChange: jest.fn() });
+    const user = userEvent.setup();
     render(<BasicAuth {...props} />);
     const userField = screen.getByPlaceholderText('User');
 
-    userEvent.type(userField, 'X');
+    await user.type(userField, 'X');
 
     expect(props.onUserChange).toHaveBeenCalledTimes(1);
     expect(props.onUserChange).toHaveBeenCalledWith('X');
   });
 
-  it('should call `onPasswordChange` when user types in the password input', () => {
+  it('should call `onPasswordChange` when user types in the password input', async () => {
     const props = getProps({ onPasswordChange: jest.fn() });
+    const user = userEvent.setup();
     render(<BasicAuth {...props} />);
     const passwordField = screen.getByPlaceholderText('Password');
 
-    userEvent.type(passwordField, '&');
+    await user.type(passwordField, '&');
 
     expect(props.onPasswordChange).toHaveBeenCalledTimes(1);
     expect(props.onPasswordChange).toHaveBeenCalledWith('&');
   });
 
-  it('should call `onPasswordReset` when user resets password', () => {
+  it('should call `onPasswordReset` when user resets password', async () => {
     const props = getProps({
       passwordConfigured: true,
       onPasswordReset: jest.fn(),
     });
+    const user = userEvent.setup();
     render(<BasicAuth {...props} />);
 
-    userEvent.click(screen.getByText('Reset'));
+    await user.click(screen.getByText('Reset'));
 
     expect(props.onPasswordReset).toHaveBeenCalledTimes(1);
   });
 
-  it('should render as disabled in read only mode', () => {
+  it('should render as disabled in read only mode', async () => {
     const props = getProps({ readOnly: true });
     render(<BasicAuth {...props} />);
 

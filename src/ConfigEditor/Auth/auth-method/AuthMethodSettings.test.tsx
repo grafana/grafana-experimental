@@ -20,7 +20,7 @@ const getProps = (partialProps?: PartialProps): Props => ({
 });
 
 describe('<AuthMethodSettings />', () => {
-  it('should render selected method when select box is closed', () => {
+  it('should render selected method when select box is closed', async () => {
     const props = getProps({ selectedMethod: AuthMethod.BasicAuth });
     render(<AuthMethodSettings {...props} />);
 
@@ -29,11 +29,12 @@ describe('<AuthMethodSettings />', () => {
     expect(() => screen.getByText('No Authentication')).toThrow();
   });
 
-  it('should render all default available auth methods when select is open', () => {
+  it('should render all default available auth methods when select is open', async () => {
     const props = getProps();
+    const user = userEvent.setup();
     render(<AuthMethodSettings {...props} />);
 
-    openSelect();
+    await openSelect(user);
 
     const selectOptionsMenu = screen.getByLabelText('Select options menu');
     expect(screen.getAllByLabelText('Select option')).toHaveLength(3);
@@ -42,13 +43,14 @@ describe('<AuthMethodSettings />', () => {
     expect(within(selectOptionsMenu).getByText('No Authentication')).toBeInTheDocument();
   });
 
-  it('should render only passed visible methods in the correct order when select is open', () => {
+  it('should render only passed visible methods in the correct order when select is open', async () => {
     const props = getProps({
       visibleMethods: [AuthMethod.CrossSiteCredentials, AuthMethod.NoAuth],
     });
+    const user = userEvent.setup();
     render(<AuthMethodSettings {...props} />);
 
-    openSelect();
+    await openSelect(user);
 
     const allOptions = screen.getAllByLabelText('Select option');
     expect(allOptions).toHaveLength(2);
@@ -58,7 +60,7 @@ describe('<AuthMethodSettings />', () => {
     expect(() => screen.getByText('Forward OAuth Identity')).toThrow();
   });
 
-  it('should have most common auth method preselected', () => {
+  it('should have most common auth method preselected', async () => {
     const props = getProps({ mostCommonMethod: AuthMethod.BasicAuth });
     render(<AuthMethodSettings {...props} />);
 
@@ -66,18 +68,19 @@ describe('<AuthMethodSettings />', () => {
     expect(screen.getByText('Basic authentication (most common)')).toBeInTheDocument();
   });
 
-  it('should render most common label for the option in the list', () => {
+  it('should render most common label for the option in the list', async () => {
     const props = getProps({ mostCommonMethod: AuthMethod.BasicAuth });
+    const user = userEvent.setup();
     render(<AuthMethodSettings {...props} />);
 
-    openSelect();
+    await openSelect(user);
 
     const selectOptions = screen.getByLabelText('Select options menu');
     expect(() => screen.getByText('Basic authentication')).toThrow();
     expect(within(selectOptions).getByText('Basic authentication (most common)')).toBeInTheDocument();
   });
 
-  it('should be disabled when in read only mode', () => {
+  it('should be disabled when in read only mode', async () => {
     const props = getProps({
       selectedMethod: AuthMethod.BasicAuth,
       readOnly: true,
@@ -92,18 +95,19 @@ describe('<AuthMethodSettings />', () => {
     expect(screen.getByPlaceholderText('Password')).toBeDisabled();
   });
 
-  it('should call `onAuthMethodSelect` when default auth method is selected', () => {
+  it('should call `onAuthMethodSelect` when default auth method is selected', async () => {
     const props = getProps({ onAuthMethodSelect: jest.fn() });
+    const user = userEvent.setup();
     render(<AuthMethodSettings {...props} />);
 
-    openSelect();
-    userEvent.click(screen.getByText('Basic authentication'));
+    await openSelect(user);
+    await user.click(screen.getByText('Basic authentication'));
 
     expect(props.onAuthMethodSelect).toHaveBeenCalledTimes(1);
     expect(props.onAuthMethodSelect).toHaveBeenCalledWith(AuthMethod.BasicAuth);
   });
 
-  it('should call `onAuthMethodSelect` when custom auth method is selected', () => {
+  it('should call `onAuthMethodSelect` when custom auth method is selected', async () => {
     const props = getProps({
       onAuthMethodSelect: jest.fn(),
       customMethods: [
@@ -115,16 +119,17 @@ describe('<AuthMethodSettings />', () => {
         },
       ],
     });
+    const user = userEvent.setup();
     render(<AuthMethodSettings {...props} />);
 
-    openSelect();
-    userEvent.click(screen.getByText('Custom method label'));
+    await openSelect(user);
+    await user.click(screen.getByText('Custom method label'));
 
     expect(props.onAuthMethodSelect).toHaveBeenCalledTimes(1);
     expect(props.onAuthMethodSelect).toHaveBeenCalledWith('custom-test');
   });
 
-  it('should render custom auth method in the options list', () => {
+  it('should render custom auth method in the options list', async () => {
     const props = getProps({
       customMethods: [
         {
@@ -135,16 +140,17 @@ describe('<AuthMethodSettings />', () => {
         },
       ],
     });
+    const user = userEvent.setup();
     render(<AuthMethodSettings {...props} />);
 
-    openSelect();
+    await openSelect(user);
     const selectOptionsMenu = screen.getByLabelText('Select options menu');
 
     expect(within(selectOptionsMenu).getByText('Custom method label')).toBeInTheDocument();
     expect(within(selectOptionsMenu).getByText('Custom method description')).toBeInTheDocument();
   });
 
-  it('should show corresponding fields for the selected auth method', () => {
+  it('should show corresponding fields for the selected auth method', async () => {
     const props = getProps({
       customMethods: [
         {
@@ -173,7 +179,7 @@ describe('<AuthMethodSettings />', () => {
     expect(() => screen.getByLabelText('User *')).toThrow();
   });
 
-  it('should not render select when only single auth method is visible', () => {
+  it('should not render select when only single auth method is visible', async () => {
     const props = getProps({ visibleMethods: [AuthMethod.BasicAuth] });
     render(<AuthMethodSettings {...props} />);
 
@@ -183,6 +189,6 @@ describe('<AuthMethodSettings />', () => {
   });
 });
 
-function openSelect() {
-  userEvent.click(screen.getByRole('combobox'));
+async function openSelect(user: ReturnType<typeof userEvent['setup']>) {
+  await user.click(screen.getByRole('combobox'));
 }

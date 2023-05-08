@@ -23,20 +23,24 @@ export const CustomHeaders: React.FC<Props> = ({ headers: headersFromProps, onCh
   );
 
   useEffect(() => {
-    let changed = false;
-    const newHeaders = headers.map<LocalHeader>((header) => {
-      const configured = headersFromProps.find((h) => h.name === header.name)?.configured;
-      if (typeof configured !== 'undefined' && header.configured !== configured) {
-        changed = true;
-        return { ...header, configured };
-      }
-      return header;
-    });
+    setHeaders((headers) => {
+      let changed = false;
+      const newHeaders = headers.map<LocalHeader>((header) => {
+        const configured = headersFromProps.find((h) => h.name === header.name)?.configured;
+        if (typeof configured !== 'undefined' && header.configured !== configured) {
+          changed = true;
+          return { ...header, configured };
+        }
+        return header;
+      });
 
-    if (changed) {
-      setHeaders(newHeaders);
-    }
-  }, [headers, headersFromProps]);
+      if (changed) {
+        return newHeaders;
+      }
+
+      return headers;
+    });
+  }, [headersFromProps]);
 
   const onHeaderAdd = () => {
     setHeaders([...headers, { id: uniqueId(), name: '', value: '', configured: false }]);
@@ -63,7 +67,7 @@ export const CustomHeaders: React.FC<Props> = ({ headers: headersFromProps, onCh
     );
   };
 
-  const onBlur = () =>
+  const onBlur = () => {
     onChange(
       headers.map(({ name, value, configured }) => ({
         name,
@@ -71,6 +75,7 @@ export const CustomHeaders: React.FC<Props> = ({ headers: headersFromProps, onCh
         configured,
       }))
     );
+  };
 
   const styles = {
     container: css({
