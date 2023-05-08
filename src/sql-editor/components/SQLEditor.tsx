@@ -367,15 +367,7 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
       const tableToken = getTableToken(ctx.currentToken);
       const tableNameParser = customProvider.tables?.parseName ?? defaultTableNameParser;
 
-      if (!tableToken) {
-        return o;
-      }
-
       const tableIdentifier = tableNameParser(tableToken);
-
-      if (!tableIdentifier) {
-        return o;
-      }
 
       const oo = ((await customProvider.tables?.resolve?.(tableIdentifier)) ?? []).map((x) => ({
         label: x.name,
