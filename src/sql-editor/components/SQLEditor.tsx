@@ -41,7 +41,7 @@ export interface LanguageDefinition extends monacoTypes.languages.ILanguageExten
     conf: monacoTypes.languages.LanguageConfiguration;
   }>;
   // Provides API for customizing the autocomplete
-  completionProvider?: (m: Monaco, language?: SQLMonarchLanguage) => SQLCompletionItemProvider;
+  completionProvider?: (m: Monaco, language: SQLMonarchLanguage) => SQLCompletionItemProvider;
   // Function that returns a formatted query
   formatter?: (q: string) => string;
 }
@@ -165,7 +165,7 @@ const resolveLanguage = (monaco: Monaco, languageDefinitionProp: LanguageDefinit
     if (!custom) {
       throw Error(`Unknown Monaco language ${languageDefinitionProp?.id}`);
     }
-    // @ts-ignore
+
     return { completionProvider: getStandardSQLCompletionProvider, ...custom, ...languageDefinitionProp };
   }
 
@@ -361,15 +361,23 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
 
   if (customProvider.tables) {
     const stbBehaviour = instanceSuggestionsRegistry.get(SuggestionKind.Tables);
-    const s = stbBehaviour!.suggestions;
-    stbBehaviour!.suggestions = async (ctx, m) => {
+    const s = stbBehaviour.suggestions;
+    stbBehaviour.suggestions = async (ctx, m) => {
       const o = await s(ctx, m);
       const tableToken = getTableToken(ctx.currentToken);
       const tableNameParser = customProvider.tables?.parseName ?? defaultTableNameParser;
-      // @ts-ignore
+
+      if (!tableToken) {
+        return o;
+      }
+
       const tableIdentifier = tableNameParser(tableToken);
-      // @ts-ignore
-      const oo = (await customProvider.tables!.resolve!(tableIdentifier)).map((x) => ({
+
+      if (!tableIdentifier) {
+        return o;
+      }
+
+      const oo = ((await customProvider.tables?.resolve?.(tableIdentifier)) ?? []).map((x) => ({
         label: x.name,
         // if no custom completion is provided it's safe to move cursor further in the statement
         insertText: `${x.completion ?? x.name}${x.completion === x.name ? ' $0' : ''}`,
@@ -384,8 +392,8 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
 
   if (customProvider.columns) {
     const stbBehaviour = instanceSuggestionsRegistry.get(SuggestionKind.Columns);
-    const s = stbBehaviour!.suggestions;
-    stbBehaviour!.suggestions = async (ctx, m) => {
+    const s = stbBehaviour.suggestions;
+    stbBehaviour.suggestions = async (ctx, m) => {
       const o = await s(ctx, m);
       const tableToken = getTableToken(ctx.currentToken);
       let tableIdentifier;

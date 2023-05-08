@@ -7,7 +7,7 @@ const standardSQLLanguageDefinition: LanguageDefinition = {
   aliases: ['sql'],
   mimetypes: [],
   loader: () => import('./language'),
-  // @ts-ignore
+  
   completionProvider: getStandardSQLCompletionProvider,
 };
 
