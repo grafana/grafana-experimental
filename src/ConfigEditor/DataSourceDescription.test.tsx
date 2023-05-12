@@ -45,4 +45,16 @@ describe('<DataSourceDescription />', () => {
 
     expect(() => getByText('Fields marked in', { exact: false })).toThrow();
   });
+
+  it('should render passed `className`', () => {
+    const { container } = render(
+      <DataSourceDescription
+        dataSourceName={'Test data source name'}
+        docsLink={'https://grafana.com/test-datasource-docs'}
+        className="test-class-name"
+      />
+    );
+
+    expect(container.firstChild).toHaveClass('test-class-name');
+  });
 });
