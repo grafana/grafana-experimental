@@ -5,13 +5,13 @@ import { AuthMethod, Header, CustomMethodId } from './types';
 const headerNamePrefix = 'httpHeaderName';
 const headerValuePrefix = 'httpHeaderValue';
 
-type onChangeHandler = (config: DataSourceSettings) => void;
+type onChangeHandler = (config: DataSourceSettings<any, any>) => void;
 
 export function convertLegacyAuthProps({
   config,
   onChange,
 }: {
-  config: DataSourceSettings;
+  config: DataSourceSettings<any, any>;
   onChange: onChangeHandler;
 }): AuthProps {
   const props: AuthProps = {
