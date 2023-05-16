@@ -4,7 +4,7 @@ import { useTheme2, IconButton, IconName } from '@grafana/ui';
 
 export type Props = {
   title: string;
-  description?: string;
+  description?: ReactNode;
   isCollapsible?: boolean;
   isInitiallyOpen?: boolean;
   kind?: 'section' | 'sub-section';
