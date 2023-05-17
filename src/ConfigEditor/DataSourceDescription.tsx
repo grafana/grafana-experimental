@@ -32,9 +32,6 @@ export const DataSourceDescription = ({ dataSourceName, docsLink, hasRequiredFie
         },
       }),
     }),
-    asterisk: css`
-      color: ${theme.colors.error.main};
-    `,
   };
 
   return (
@@ -49,9 +46,7 @@ export const DataSourceDescription = ({ dataSourceName, docsLink, hasRequiredFie
       </p>
       {hasRequiredFields && (
         <p className={styles.text}>
-          <i>
-            Fields marked in <span className={styles.asterisk}>*</span> are required
-          </i>
+          <i>Fields marked in * are required</i>
         </p>
       )}
     </div>

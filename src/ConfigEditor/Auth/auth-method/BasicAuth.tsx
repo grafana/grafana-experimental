@@ -1,7 +1,6 @@
 import React from 'react';
 import { cx, css } from '@emotion/css';
 import { InlineField, Input, SecretInput, PopoverContent } from '@grafana/ui';
-import { InlineLabel } from '../shared';
 import { useCommonStyles } from '../styles';
 
 export type Props = {
@@ -35,11 +34,12 @@ export const BasicAuth: React.FC<Props> = ({
     <>
       <InlineField
         className={commonStyles.inlineFieldNoMarginRight}
-        label={
-          <InlineLabel width={24} tooltip={userTooltip} required htmlFor="basic-auth-user-input" interactive>
-            User
-          </InlineLabel>
-        }
+        label="User"
+        labelWidth={24}
+        tooltip={userTooltip}
+        required
+        htmlFor="basic-auth-user-input"
+        interactive
         grow
         disabled={readOnly}
       >
@@ -57,11 +57,12 @@ export const BasicAuth: React.FC<Props> = ({
           commonStyles.inlineFieldWithSecret,
           styles.lastInlineField
         )}
-        label={
-          <InlineLabel width={24} tooltip={passwordTooltip} required htmlFor="basic-auth-password-input" interactive>
-            Password
-          </InlineLabel>
-        }
+        label="Password"
+        labelWidth={24}
+        tooltip={passwordTooltip}
+        required
+        htmlFor="basic-auth-password-input"
+        interactive
         grow
         disabled={readOnly}
       >
