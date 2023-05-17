@@ -1,7 +1,6 @@
 import React from 'react';
 import { cx } from '@emotion/css';
 import { InlineField, Input, SecretTextArea } from '@grafana/ui';
-import { InlineLabel } from '../shared';
 import { TLSSettingsSection } from './TLSSettingsSection';
 import { useCommonStyles } from '../styles';
 
@@ -49,19 +48,12 @@ export const TLSClientAuth: React.FC<Props> = ({
       readOnly={readOnly}
     >
       <InlineField
-        label={
-          <InlineLabel
-            width={24}
-            tooltip={
-              tooltips?.serverNameLabel ?? 'A Servername is used to verify the hostname on the returned certificate'
-            }
-            required
-            htmlFor="client-auth-servername-input"
-            interactive
-          >
-            ServerName
-          </InlineLabel>
-        }
+        label="ServerName"
+        labelWidth={24}
+        tooltip={tooltips?.serverNameLabel ?? 'A Servername is used to verify the hostname on the returned certificate'}
+        required
+        htmlFor="client-auth-servername-input"
+        interactive
         grow
         className={commonStyles.inlineFieldNoMarginRight}
         disabled={readOnly}
@@ -75,20 +67,15 @@ export const TLSClientAuth: React.FC<Props> = ({
         />
       </InlineField>
       <InlineField
-        label={
-          <InlineLabel
-            width={24}
-            tooltip={
-              tooltips?.certificateLabel ??
-              'The client certificate can be generated from a Certificate Authority or be self-signed'
-            }
-            required
-            htmlFor="client-auth-client-certificate-input"
-            interactive
-          >
-            Client Certificate
-          </InlineLabel>
+        label="Client Certificate"
+        labelWidth={24}
+        tooltip={
+          tooltips?.certificateLabel ??
+          'The client certificate can be generated from a Certificate Authority or be self-signed'
         }
+        required
+        htmlFor="client-auth-client-certificate-input"
+        interactive
         grow
         className={cx(commonStyles.inlineFieldNoMarginRight, commonStyles.inlineFieldWithSecret)}
         disabled={readOnly}
@@ -104,19 +91,12 @@ export const TLSClientAuth: React.FC<Props> = ({
         />
       </InlineField>
       <InlineField
-        label={
-          <InlineLabel
-            width={24}
-            tooltip={
-              tooltips?.keyLabel ?? 'The client key can be generated from a Certificate Authority or be self-signed'
-            }
-            required
-            htmlFor="client-auth-client-key-input"
-            interactive
-          >
-            Client Key
-          </InlineLabel>
-        }
+        label="Client Key"
+        labelWidth={24}
+        tooltip={tooltips?.keyLabel ?? 'The client key can be generated from a Certificate Authority or be self-signed'}
+        required
+        htmlFor="client-auth-client-key-input"
+        interactive
         grow
         className={cx(commonStyles.inlineFieldNoMarginRight, commonStyles.inlineFieldWithSecret)}
         disabled={readOnly}
