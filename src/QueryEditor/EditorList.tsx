@@ -3,18 +3,18 @@ import React from 'react';
 
 import { Stack } from './Stack';
 
-interface EditorListProps<T> {
-  items: Array<Partial<T>>;
+interface EditorListProps {
+  items: unknown[];
   renderItem: (
-    item: Partial<T>,
-    onChangeItem: (item: Partial<T>) => void,
+    item: unknown,
+    onChangeItem: (item: unknown) => void,
     onDeleteItem: () => void
   ) => React.ReactElement;
-  onChange: (items: Array<Partial<T>>) => void;
+  onChange: (items: unknown[]) => void;
 }
 
-export const EditorList = React.forwardRef(function EditorList<T>(
-  { items, renderItem, onChange }: EditorListProps<T>,
+export const EditorList = React.forwardRef(function EditorList(
+  { items, renderItem, onChange }: EditorListProps,
   ref: React.Ref<HTMLButtonElement>
 ) {
   const onAddItem = () => {
@@ -23,7 +23,7 @@ export const EditorList = React.forwardRef(function EditorList<T>(
     onChange(newItems);
   };
 
-  const onChangeItem = (itemIndex: number, newItem: Partial<T>) => {
+  const onChangeItem = (itemIndex: number, newItem: unknown) => {
     const newItems = [...items];
     newItems[itemIndex] = newItem;
     onChange(newItems);

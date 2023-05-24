@@ -113,7 +113,7 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
         // depending on whether the schema was the last token in the query or not, current token might be whitespace or dot. if whitespace, just use the previous token
         if (currentToken?.isWhiteSpace() && currentToken?.next) {
           currentToken = currentToken?.previous;
-          previousNonWhiteSpace = currentToken?.getPreviousNonWhiteSpaceToken();
+          previousNonWhiteSpace = currentToken!.getPreviousNonWhiteSpaceToken();
         }
         return Boolean(
           currentToken?.isIdentifier() &&
@@ -162,9 +162,9 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) =>
         Boolean(
           previousKeyword?.value.toLowerCase() === WHERE &&
-            !previousNonWhiteSpace?.getPreviousNonWhiteSpaceToken().isOperator() &&
-            !currentToken.is(TokenType.Delimiter, '.') &&
-            !currentToken.isParenthesis() &&
+            !previousNonWhiteSpace?.getPreviousNonWhiteSpaceToken()?.isOperator() &&
+            !currentToken?.is(TokenType.Delimiter, '.') &&
+            !currentToken?.isParenthesis() &&
             (previousNonWhiteSpace?.isIdentifier() || previousNonWhiteSpace?.isDoubleQuotedString())
         ),
     },
@@ -180,8 +180,8 @@ export function initStatementPositionResolvers(): StatementPositionResolversRegi
       resolve: (currentToken, previousKeyword, previousNonWhiteSpace, previousIsSlash) => {
         return Boolean(
           previousKeyword?.value.toLowerCase() === WHERE &&
-            (previousNonWhiteSpace.is(TokenType.Operator, 'and') ||
-              previousNonWhiteSpace.is(TokenType.Operator, 'or') ||
+            (previousNonWhiteSpace?.is(TokenType.Operator, 'and') ||
+              previousNonWhiteSpace?.is(TokenType.Operator, 'or') ||
               previousNonWhiteSpace?.isString() ||
               previousNonWhiteSpace?.isNumber() ||
               previousNonWhiteSpace?.is(TokenType.Parenthesis, ')') ||

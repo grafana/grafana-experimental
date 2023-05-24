@@ -51,10 +51,9 @@ export const getTableToken = (currentToken: LinkedToken | null) => {
   } else {
     return nextNonWhiteSpace;
   }
-  return null;
 };
 
-export const defaultTableNameParser = (token: LinkedToken) => {
+export const defaultTableNameParser = (token: LinkedToken | null | undefined) => {
   const parts = token?.value.split('.');
 
   if (parts?.length === 1) {

@@ -231,42 +231,42 @@ describe('getStandardSuggestions', () => {
 
     expect(result).toHaveLength(2);
     expect(result).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "command": Object {
-            "id": "editor.action.triggerSuggest",
-            "title": "",
-          },
-          "insertText": "SELECT $0",
-          "insertTextRules": 4,
-          "kind": 27,
-          "label": "SELECT <column>",
-          "range": Object {
-            "endColumn": 7,
-            "endLineNumber": 1,
-            "startColumn": 0,
-            "startLineNumber": 1,
-          },
-          "sortText": "g",
-        },
-        Object {
-          "command": Object {
-            "id": "editor.action.triggerSuggest",
-            "title": "",
-          },
-          "insertText": "SELECT $2 FROM $1",
-          "insertTextRules": 4,
-          "kind": 27,
-          "label": "SELECT <column> FROM <table>",
-          "range": Object {
-            "endColumn": 7,
-            "endLineNumber": 1,
-            "startColumn": 0,
-            "startLineNumber": 1,
-          },
-          "sortText": "g",
-        },
-      ]
-    `);
+[
+  {
+    "command": {
+      "id": "editor.action.triggerSuggest",
+      "title": "",
+    },
+    "insertText": "SELECT $0",
+    "insertTextRules": 4,
+    "kind": 27,
+    "label": "SELECT <column>",
+    "range": {
+      "endColumn": 7,
+      "endLineNumber": 1,
+      "startColumn": 0,
+      "startLineNumber": 1,
+    },
+    "sortText": "g",
+  },
+  {
+    "command": {
+      "id": "editor.action.triggerSuggest",
+      "title": "",
+    },
+    "insertText": "SELECT $2 FROM $1",
+    "insertTextRules": 4,
+    "kind": 27,
+    "label": "SELECT <column> FROM <table>",
+    "range": {
+      "endColumn": 7,
+      "endLineNumber": 1,
+      "startColumn": 0,
+      "startLineNumber": 1,
+    },
+    "sortText": "g",
+  },
+]
+`);
   });
 });

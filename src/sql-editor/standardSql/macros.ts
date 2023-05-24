@@ -1,4 +1,4 @@
-import { MacroType } from 'sql-editor/types';
+import { MacroType } from '../types';
 import { MacrosRegistryItem } from './types';
 
 const COLUMN = 'column',

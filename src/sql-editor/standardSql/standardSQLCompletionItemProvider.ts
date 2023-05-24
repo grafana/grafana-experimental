@@ -1,5 +1,5 @@
 import { Monaco } from '@grafana/ui';
-import { Operator, OperatorType, SQLCompletionItemProvider } from 'sql-editor/types';
+import { Operator, OperatorType, SQLCompletionItemProvider } from '../types';
 import { MACROS } from './macros';
 import { SQLMonarchLanguage } from './types';
 
@@ -8,8 +8,8 @@ export function getStandardSQLCompletionProvider(
   language: SQLMonarchLanguage
 ): SQLCompletionItemProvider {
   const provider: SQLCompletionItemProvider = { triggerCharacters: ['.', ' ', '$', ',', '(', "'"] };
-  if (language?.builtinFunctions.length) {
-    provider.supportedFunctions = () => language.builtinFunctions.map((f) => ({ id: f, name: f }));
+  if (language && Array.isArray(language.builtinFunctions)) {
+    provider.supportedFunctions = () => language.builtinFunctions!.map((f) => ({ id: f, name: f }));
   }
 
   const operators: Operator[] = [];

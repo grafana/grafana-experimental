@@ -7,4 +7,4 @@ export const SQLEditorTestUtils = {
   testStatementPosition,
 };
 
-export { TestQueryModel };
+export type { TestQueryModel };

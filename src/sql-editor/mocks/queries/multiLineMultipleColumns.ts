@@ -1,11 +1,11 @@
-import { TestQueryModel } from 'sql-editor/test-utils/types';
+import { TestQueryModel } from '../../test-utils/types';
 
 export const multiLineMultipleColumns: TestQueryModel = {
-  query: `SELECT count(column1), column2 
-  FROM table1 
-  
-  WHERE column1 = "value1" 
-  GROUP BY column1 ORDER BY column1, avg(column2) DESC 
+  query: `SELECT count(column1), column2
+  FROM table1
+
+  WHERE column1 = "value1"
+  GROUP BY column1 ORDER BY column1, avg(column2) DESC
   LIMIT 10;`,
   tokens: [
     [
