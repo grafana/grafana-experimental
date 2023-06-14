@@ -1,32 +1,36 @@
-import { DataSourceSettings } from '@grafana/data';
+import { DataSourceSettings, DataSourceJsonData } from '@grafana/data';
 import { Props as AuthProps } from './Auth';
 import { AuthMethod, Header, CustomMethodId } from './types';
 
 const headerNamePrefix = 'httpHeaderName';
 const headerValuePrefix = 'httpHeaderValue';
 
-type onChangeHandler = (config: DataSourceSettings<any, any>) => void;
+export type Config<JSONData extends DataSourceJsonData = any, SecureJSONData = any> = DataSourceSettings<
+  JSONData,
+  SecureJSONData
+>;
+export type OnChangeHandler<C extends Config = Config> = (config: C) => void;
 
-export function convertLegacyAuthProps({
+export function convertLegacyAuthProps<C extends Config = Config>({
   config,
   onChange,
 }: {
-  config: DataSourceSettings<any, any>;
-  onChange: onChangeHandler;
+  config: C;
+  onChange: OnChangeHandler<C>;
 }): AuthProps {
   const props: AuthProps = {
-    selectedMethod: getSelectedMethod(config),
-    onAuthMethodSelect: getOnAuthMethodSelectHandler(config, onChange),
-    basicAuth: getBasicAuthProps(config, onChange),
-    TLS: getTLSProps(config, onChange),
-    customHeaders: getCustomHeaders(config, onChange),
+    selectedMethod: getSelectedMethod<C>(config),
+    onAuthMethodSelect: getOnAuthMethodSelectHandler<C>(config, onChange),
+    basicAuth: getBasicAuthProps<C>(config, onChange),
+    TLS: getTLSProps<C>(config, onChange),
+    customHeaders: getCustomHeaders<C>(config, onChange),
     readOnly: config.readOnly,
   };
 
   return props;
 }
 
-export function getSelectedMethod(config: DataSourceSettings<any, any>): AuthMethod {
+export function getSelectedMethod<C extends Config = Config>(config: C): AuthMethod {
   if (config.basicAuth) {
     return AuthMethod.BasicAuth;
   }
@@ -39,9 +43,9 @@ export function getSelectedMethod(config: DataSourceSettings<any, any>): AuthMet
   return AuthMethod.NoAuth;
 }
 
-export function getOnAuthMethodSelectHandler(
-  config: DataSourceSettings<any, any>,
-  onChange: onChangeHandler
+export function getOnAuthMethodSelectHandler<C extends Config = Config>(
+  config: C,
+  onChange: OnChangeHandler<C>
 ): (method: AuthMethod | CustomMethodId) => void {
   return (method: AuthMethod | CustomMethodId) => {
     onChange({
@@ -56,9 +60,9 @@ export function getOnAuthMethodSelectHandler(
   };
 }
 
-export function getBasicAuthProps(
-  config: DataSourceSettings<any, any>,
-  onChange: (config: DataSourceSettings<any, any>) => void
+export function getBasicAuthProps<C extends Config = Config>(
+  config: C,
+  onChange: OnChangeHandler<C>
 ): AuthProps['basicAuth'] {
   return {
     user: config.basicAuthUser,
@@ -84,7 +88,7 @@ export function getBasicAuthProps(
   };
 }
 
-export function getTLSProps(config: DataSourceSettings<any, any>, onChange: onChangeHandler): AuthProps['TLS'] {
+export function getTLSProps<C extends Config = Config>(config: C, onChange: OnChangeHandler<C>): AuthProps['TLS'] {
   return {
     selfSignedCertificate: {
       enabled: Boolean(config.jsonData.tlsAuthWithCACert),
@@ -173,9 +177,9 @@ export function getTLSProps(config: DataSourceSettings<any, any>, onChange: onCh
   };
 }
 
-export function getCustomHeaders(
-  config: DataSourceSettings<any, any>,
-  onChange: onChangeHandler
+export function getCustomHeaders<C extends Config = Config>(
+  config: C,
+  onChange: OnChangeHandler<C>
 ): AuthProps['customHeaders'] {
   const headers: Header[] = Object.keys(config.jsonData)
     .filter((key) => key.startsWith(headerNamePrefix))
