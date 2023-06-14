@@ -1,6 +1,7 @@
 import React from 'react';
 import { cx, css } from '@emotion/css';
-import { InlineField, Input, SecretInput, PopoverContent } from '@grafana/ui';
+import { InlineField, Input, PopoverContent } from '@grafana/ui';
+import { SecretInput } from '../common';
 import { useCommonStyles } from '../styles';
 
 export type Props = {

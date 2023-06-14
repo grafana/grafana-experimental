@@ -1,4 +1,3 @@
-import { DataSourceSettings } from '@grafana/data';
 import {
   getSelectedMethod,
   getOnAuthMethodSelectHandler,
@@ -6,6 +5,7 @@ import {
   getTLSProps,
   getCustomHeaders,
   convertLegacyAuthProps,
+  Config,
 } from './utils';
 import { Props as AuthProps } from './Auth';
 import { AuthMethod } from './types';
@@ -33,7 +33,7 @@ describe('utils', () => {
           httpHeaderValue2: true,
         },
         readOnly: true,
-      } as unknown as DataSourceSettings<any, any>;
+      } as unknown as Config;
       const onChange = jest.fn();
       const newProps = convertLegacyAuthProps({ config, onChange });
       const expected: AuthProps = {
@@ -87,39 +87,39 @@ describe('utils', () => {
 
   describe('getSelectedMethod', () => {
     it('should return basic auth selected method', () => {
-      const res = getSelectedMethod({ basicAuth: true } as DataSourceSettings);
+      const res = getSelectedMethod({ basicAuth: true } as Config);
       expect(res).toBe(AuthMethod.BasicAuth);
     });
 
     it('should return cross site credentials selected method', () => {
       const res = getSelectedMethod({
         withCredentials: true,
-      } as DataSourceSettings);
+      } as Config);
       expect(res).toBe(AuthMethod.CrossSiteCredentials);
     });
 
     it('should return OAuth forward selected method', () => {
       const res = getSelectedMethod({
         jsonData: { oauthPassThru: true },
-      } as DataSourceSettings<any>);
+      } as Config);
       expect(res).toBe(AuthMethod.OAuthForward);
     });
 
     it('should return no auth selected method', () => {
       const res = getSelectedMethod({
         jsonData: {},
-      } as DataSourceSettings<any>);
+      } as Config);
       expect(res).toBe(AuthMethod.NoAuth);
     });
   });
 
   describe('getOnAuthMethodSelectHandler', () => {
-    let config: DataSourceSettings<any, any>;
+    let config: Config;
     let onChange: jest.Mock<any, any>;
 
     beforeEach(() => {
       onChange = jest.fn();
-      config = {} as DataSourceSettings;
+      config = {} as Config;
     });
     it('should return correct onAuthMethodSelect handler', () => {
       const onAuthMethodSelect = getOnAuthMethodSelectHandler(config, onChange);
@@ -190,7 +190,7 @@ describe('utils', () => {
   });
 
   describe('getBasicAuthProps', () => {
-    let config: DataSourceSettings<any, any>;
+    let config: Config;
     let onChange: jest.Mock<any, any>;
 
     beforeEach(() => {
@@ -199,7 +199,7 @@ describe('utils', () => {
         secureJsonFields: {
           basicAuthPassword: false,
         },
-      } as unknown as DataSourceSettings<any, any>;
+      } as unknown as Config;
       onChange = jest.fn();
     });
 
@@ -265,7 +265,7 @@ describe('utils', () => {
   });
 
   describe('getTLSProps', () => {
-    let config: DataSourceSettings<any, any>;
+    let config: Config;
     let onChange: jest.Mock<any, any>;
 
     beforeEach(() => {
@@ -281,7 +281,7 @@ describe('utils', () => {
           tlsClientCert: false,
           tlsClientKey: false,
         },
-      } as unknown as DataSourceSettings<any, any>;
+      } as unknown as Config;
       onChange = jest.fn();
     });
 
@@ -464,7 +464,7 @@ describe('utils', () => {
   });
 
   describe('getCustomHeaders', () => {
-    let config: DataSourceSettings<any, any>;
+    let config: Config;
     let onChange: jest.Mock<any, any>;
 
     beforeEach(() => {
@@ -477,7 +477,7 @@ describe('utils', () => {
           httpHeaderValue1: false,
           httpHeaderValue2: true,
         },
-      } as unknown as DataSourceSettings<any, any>;
+      } as unknown as Config;
       onChange = jest.fn();
     });
 
