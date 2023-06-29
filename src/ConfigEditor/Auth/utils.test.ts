@@ -5,10 +5,10 @@ import {
   getTLSProps,
   getCustomHeaders,
   convertLegacyAuthProps,
-  Config,
 } from './utils';
 import { Props as AuthProps } from './Auth';
 import { AuthMethod } from './types';
+import { Config } from '../types';
 
 describe('utils', () => {
   describe('convertLegacyAuthProps', () => {

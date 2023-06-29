@@ -1,15 +1,9 @@
-import { DataSourceSettings, DataSourceJsonData } from '@grafana/data';
 import { Props as AuthProps } from './Auth';
 import { AuthMethod, Header, CustomMethodId } from './types';
+import { Config, OnChangeHandler } from '../types';
 
 const headerNamePrefix = 'httpHeaderName';
 const headerValuePrefix = 'httpHeaderValue';
-
-export type Config<JSONData extends DataSourceJsonData = any, SecureJSONData = any> = DataSourceSettings<
-  JSONData,
-  SecureJSONData
->;
-export type OnChangeHandler<C extends Config = Config> = (config: C) => void;
 
 export function convertLegacyAuthProps<C extends Config = Config>({
   config,
