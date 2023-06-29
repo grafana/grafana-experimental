@@ -1,8 +1,8 @@
 # Auth component
 
-Auth component is meant to be used instead of the old [`DataSourceHttpSettings`](https://github.com/grafana/grafana/blob/d02aee24795aecc09efa6d81e35b25d8f151bb25/packages/grafana-ui/src/components/DataSourceSettings/DataSourceHttpSettings.tsx) component which has a number of UX issues.
+Auth component is meant to be used for authentication section of the datasource configuration page. It is also a replacement of the old [`DataSourceHttpSettings`](https://github.com/grafana/grafana/blob/d02aee24795aecc09efa6d81e35b25d8f151bb25/packages/grafana-ui/src/components/DataSourceSettings/DataSourceHttpSettings.tsx) component which has a number of UX issues.
 
-> ❗️Note 2: The new component only takes care about the Auth section of the old component (see screenshot above). So the HTTP section of the old component (URL, Allowed cookies, Timeout) should be added alongside the new component separately when needed. For a complete migration guide from `DataSourceHttpSettings` check [this page](../migrating-from-datasource-http-settings.md).
+> ❗️Note: The new component only takes care about the Auth section of the old component (see screenshot above). So the HTTP section of the old component (URL, Allowed cookies, Timeout) should be added alongside the new component separately when needed. For a complete migration guide from `DataSourceHttpSettings` check [this page](../migrating-from-datasource-http-settings.md).
 
 In the new component only one authentication method can be selected at a time and all TLS options are located in a separate section and can be added to any selected authentication method.
 
