@@ -1,6 +1,8 @@
 # Auth component
 
-Auth component is meant to replace the old [`DataSourceHttpSettings`](https://github.com/grafana/grafana/blob/d02aee24795aecc09efa6d81e35b25d8f151bb25/packages/grafana-ui/src/components/DataSourceSettings/DataSourceHttpSettings.tsx) component which has a number of UX issues. The new component is stored here in `@grafana/experimental` so that it can be used in external datasources regardless of Grafana version (Enterprise datasources must support at least 2 latest major Grafana versions).
+Auth component is meant to be used instead of the old [`DataSourceHttpSettings`](https://github.com/grafana/grafana/blob/d02aee24795aecc09efa6d81e35b25d8f151bb25/packages/grafana-ui/src/components/DataSourceSettings/DataSourceHttpSettings.tsx) component which has a number of UX issues.
+
+> ❗️Note 2: The new component only takes care about the Auth section of the old component (see screenshot above). So the HTTP section of the old component (URL, Allowed cookies, Timeout) should be added alongside the new component separately when needed. For a complete migration guide from `DataSourceHttpSettings` check [this page](../migrating-from-datasource-http-settings.md).
 
 In the new component only one authentication method can be selected at a time and all TLS options are located in a separate section and can be added to any selected authentication method.
 
@@ -16,9 +18,7 @@ Screenshots of the component:
 
 Even though the new component has completely different props shape, there is a special utility that takes the legacy props and returns the new props.
 
-> ❗️Note 1: The new component doesn't show "Enable cross-site access control requests" (previously known as "With credentials") auth method by default as in most of the cases it's not used and we are moving away from it. You can still enable it using `visibleMethods` prop if needed.
-
-> ❗️Note 2: The new component only takes care about the Auth section of the old component (see screenshot above). So the HTTP section of the old component (URL, Allowed cookies, Timeout) should be added alongside the new component separately when needed.
+> ❗️Note: The new component doesn't show "Enable cross-site access control requests" (previously known as "With credentials") auth method by default as in most of the cases it's not used and we are moving away from it. You can still enable it using `visibleMethods` prop if needed.
 
 **Example**:
 
