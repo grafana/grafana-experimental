@@ -6,8 +6,8 @@ Contains components to be used for datasource connection configuration.
 
 ### Overview
 
-`ConnectionSettings` component is used to simplify migrating from legacy `DataSourceHttpSettings` component.
-Currently renders as a config section with only on field for the URL.
+`ConnectionSettings` component is used to simplify migrating from legacy `DataSourceHttpSettings` component (you can find the detailed explanation [here](../migrating-from-datasource-http-settings.md)).
+`ConnectionSettings` renders as a config section with only on field for the URL.
 
 > ❗️ Note: If you are not migrating from `DataSourceHttpSettings` or if you need to add more fields to the "Connection" section for your datasource, then it's better that you create your own implementation of the component.\
 > `ConnectionSection` stores the URL not inside `jsonData` but right inside the config object of the datasource, which might be not what you want if you are for example creating the datasource from scratch.
