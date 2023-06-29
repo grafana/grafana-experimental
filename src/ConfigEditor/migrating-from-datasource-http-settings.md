@@ -6,7 +6,7 @@ As `DataSourceHttpSettings` is considered deprecated, `@grafana/experimental` pa
 
 According to the [datasource configuration best practices](https://docs.google.com/document/d/11XMaYHSMSra8AoN2-yVW-5QPbjEXgkAFbTIF6N84cGE/edit) the data source configuration page should consist of multiple sections, so there is no single component that can just replace `DataSourceHttpSettings` component. Instead, there are 3 components that will take care of different parts of the `DataSourceHttpSettings` and they can be placed in different places inside the datasource config editor. This is how mapping old -> new looks like:
 
-<img src="./docs-img/migrate-from-datasource-http-settings.png" width="600">
+![image](./docs-img/migrate-from-datasource-http-settings.png)
 
 New components are:
 
