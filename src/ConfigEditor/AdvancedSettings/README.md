@@ -9,7 +9,10 @@ Contains components to be used for datasource advanced configuration.
 `AdvancedHttpSettings` component is used to simplify migrating from legacy `DataSourceHttpSettings` component.
 Currently renders as a config **sub section** with "Allowed cookies" and "Timeout" fields.
 
-> ❗️ `AdvancedHttpSettings` should be used inside "Additional settings" config section alongside sub sections for other advanced datasource settings.
+> ❗️ Note: If you are not migrating from `DataSourceHttpSettings` then you might not need this component.\
+> If you need to add more fields to the `AdvancedHttpSettings` for your datasource then it's better that you create your own implementation of the component.
+
+> ❗️ Note: `AdvancedHttpSettings` should be used inside "Additional settings" config section alongside sub sections for other advanced datasource settings (see [usage example](#usage) below).
 
 `AdvancedHttpSettings` has the following properties type:
 

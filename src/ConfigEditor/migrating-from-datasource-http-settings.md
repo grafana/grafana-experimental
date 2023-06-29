@@ -10,7 +10,7 @@ According to the [datasource configuration best practices](https://docs.google.c
 
 New components are:
 
-- [ConnnectionSettings](./Connection)
+- [ConnectionSettings](./Connection)
 - [Auth](./Auth)
 - [AdvancedHttpSettings](./AdvancedSettings)
 
@@ -83,6 +83,6 @@ export const ConfigEditor = (props: Props) => {
 
 ## More complex migrations
 
-In case you need to add more fields inside connection section or inside advanced HTTP settings you will need to implement those sections yourself. Feel free to copy the code from those components and extend it with the fields you need.
+In case you need to add more fields inside `ConnectionSettings` section or inside `AdvancedHttpSettings` you will need to implement those components yourself. Feel free to copy the code from the existing implementation and extend it with the fields you need.
 
-In case you have some custom auth methods or you use some exotic auth methods from DataSourceHttpSettings component (like Sigv4), you can add those to the new Auth component as custom auth methods alongside default ones. This example is described in the [README of the Auth component](./Auth/README.md).
+In case you have some custom auth methods or you use some exotic auth methods from `DataSourceHttpSettings` component (like Sigv4), you can add those to the new `Auth` component as custom auth methods alongside default ones. This example is described in the [README of the `Auth` component](./Auth/README.md).
