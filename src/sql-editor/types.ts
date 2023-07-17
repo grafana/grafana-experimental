@@ -122,9 +122,9 @@ export interface SQLCompletionItemProvider
    * @alpha
    */
   tables?: {
-    resolve: (TableIdentifier: TableIdentifier) => Promise<TableDefinition[]>;
+    resolve: (TableIdentifier: TableIdentifier | null) => Promise<TableDefinition[]>;
     // Allows providing a custom function for calculating the table name from the query. If not specified a default implemnentation is used.
-    parseName?: (token: LinkedToken) => TableIdentifier;
+    parseName?: (token: LinkedToken | null | undefined) => TableIdentifier;
   };
   /**
    * Allows providing a custom function for resolving table.
