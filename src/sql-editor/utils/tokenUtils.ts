@@ -53,7 +53,7 @@ export const getTableToken = (currentToken: LinkedToken | null) => {
   }
 };
 
-export const defaultTableNameParser = (token: LinkedToken | null | undefined) => {
+export const defaultTableNameParser = (token: LinkedToken) => {
   const parts = token?.value.split('.');
 
   if (parts?.length === 1) {
