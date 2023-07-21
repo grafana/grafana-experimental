@@ -46,7 +46,7 @@ export const DataSourceDescription = ({ dataSourceName, docsLink, hasRequiredFie
       </p>
       {hasRequiredFields && (
         <p className={styles.text}>
-          <i>Fields marked in * are required</i>
+          <i>Fields marked with * are required</i>
         </p>
       )}
     </div>
