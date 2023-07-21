@@ -31,7 +31,7 @@ describe('<DataSourceDescription />', () => {
       />
     );
 
-    expect(getByText('Fields marked in', { exact: false })).toBeInTheDocument();
+    expect(getByText('Fields marked with', { exact: false })).toBeInTheDocument();
   });
 
   it('should not render text about required fields when `hasRequiredFields` props is `false`', () => {
@@ -43,7 +43,7 @@ describe('<DataSourceDescription />', () => {
       />
     );
 
-    expect(() => getByText('Fields marked in', { exact: false })).toThrow();
+    expect(() => getByText('Fields marked with', { exact: false })).toThrow();
   });
 
   it('should render passed `className`', () => {

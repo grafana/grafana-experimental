@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/css';
-import { AuthMethod, CustomMethod, CustomMethodId } from './types';
+import { AuthMethod, DefaultAuthMethod, CustomMethod, CustomMethodId } from './types';
 import { AuthMethodSettings } from './auth-method/AuthMethodSettings';
 import { TLSSettings, Props as TLSSettingsProps } from './tls/TLSSettings';
 import { Props as BasicAuthProps } from './auth-method/BasicAuth';
@@ -11,6 +11,7 @@ export type Props = {
   selectedMethod: AuthMethod | CustomMethodId;
   mostCommonMethod?: AuthMethod | CustomMethodId;
   visibleMethods?: Array<AuthMethod | CustomMethodId>;
+  extendedDefaultOptions?: Partial<Record<AuthMethod, DefaultAuthMethod>>;
   customMethods?: CustomMethod[];
   onAuthMethodSelect: (authType: AuthMethod | CustomMethodId) => void;
   basicAuth?: Omit<BasicAuthProps, 'readOnly'>;
@@ -23,6 +24,7 @@ export const Auth: React.FC<Props> = ({
   selectedMethod,
   mostCommonMethod,
   visibleMethods,
+  extendedDefaultOptions,
   customMethods,
   onAuthMethodSelect,
   basicAuth,
@@ -44,6 +46,7 @@ export const Auth: React.FC<Props> = ({
           mostCommonMethod={mostCommonMethod}
           customMethods={customMethods}
           visibleMethods={visibleMethods}
+          extendedDefaultOptions={extendedDefaultOptions}
           onAuthMethodSelect={onAuthMethodSelect}
           basicAuth={basicAuth}
           readOnly={readOnly}

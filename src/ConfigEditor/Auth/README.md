@@ -61,6 +61,10 @@ type Props = {
   // Can also be used for reordering the list of auth methods.
   visibleMethods?: (AuthMethod | CustomMethodId)[];
 
+  // Allows overriding name and description properties of the built-in
+  // authentication methods that are displayed in the selection dropdown
+  extendDefaultOptions?: Partial<Record<AuthMethod, DefaultAuthMethod>>
+
   // Allows to render custom auth methods alongside default ones.
   // It is also possible to render only custom auth methods.
   customMethods?: {
@@ -155,6 +159,49 @@ type HeaderWithValue = Header & { value: string };
 If `TLS` is not passed, the TLS settings section will not be rendered.
 
 If `customHeaders` is not passed, custom headers section will not be rendered.
+
+## Mixing old and new style props
+
+In some cases you might want to use the `convertLegacyAuthProps` helper to create base properties that can then be extended with custom parameters. This is useful when the provisioning file used has similar structure to the one defined in ()[]. It can make using the `Auth` component extremely easy and still provide enough flexibility to customize it for your needs. For instance using the `BasicAuth` we can change it's name and description shown in the dropdown, as well as tooltips.
+
+```ts
+import { Auth, AuthMethod, convertLegacyAuthProps } from '@grafana/experimental';
+
+export const ConfigEditor = ({ options, onOptionsChange }) => {
+  const AuthMethodsList = [AuthMethod.NoAuth, AuthMethod.BasicAuth];
+
+  const convertedProps = convertLegacyAuthProps({
+    config: props.options,
+    onChange: onOptionsChange
+  });
+  const newAuthProps = {
+    ...convertedProps,
+    basicAuth: {
+      ...convertedProps.basicAuth,
+      userTooltip: 'The user is the username assigned to the MongoDB account.',
+      passwordTooltip: 'The password is the password assigned to the MongoDB account.',
+    }
+  };
+  const extendDefaultAuth = {
+    [AuthMethod.BasicAuth]: {
+      label: 'Credentials',
+      description: 'Authenticate with default credentials assigned to the MongoDB account upon creation.'
+    },
+  };
+
+  return (
+    <div>
+      <Auth
+        {...newAuthProps}
+        extendedDefaultOptions={extendDefaultAuth}
+        visibleMethods={AuthMethodsList}
+        // when custom headers section should not be visible and props were converted using the helper function it is required to set the value to null
+        customHeaders={null}
+      />
+    </div>
+  );
+};
+```
 
 ## Adding your own auth methods
 
