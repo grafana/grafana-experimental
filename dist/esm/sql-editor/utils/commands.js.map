@@ -1,0 +1,1 @@
+{"version":3,"file":"commands.js","sources":["../../../../src/sql-editor/utils/commands.ts"],"sourcesContent":["export const TRIGGER_SUGGEST = {\n  id: 'editor.action.triggerSuggest',\n  title: '',\n};\n"],"names":[],"mappings":"AAAO,MAAM,eAAkB,GAAA;AAAA,EAC7B,EAAI,EAAA,8BAAA;AAAA,EACJ,KAAO,EAAA,EAAA;AACT;;;;"}
