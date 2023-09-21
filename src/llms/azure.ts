@@ -333,7 +333,7 @@ export const enabled = async () => {
     const settings = await getBackendSrv().get(`${LLM_PLUGIN_ROUTE}/settings`, undefined, undefined, {
       showSuccessAlert: false, showErrorAlert: false,
     });
-    return settings.enabled && (settings?.secureJsonFields?.openAIKey ?? false);
+    return settings.enabled && (settings?.secureJsonFields?.azureOpenAIKey ?? false);
   } catch (e) {
     if (!loggedWarning) {
       logDebug(String(e));
