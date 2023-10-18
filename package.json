@@ -1,6 +1,6 @@
 {
   "name": "@grafana/experimental",
-  "version": "1.6.2",
+  "version": "1.7.4",
   "description": "Experimental Grafana components and APIs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -31,7 +31,8 @@
     "@grafana/ui": "^10.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-select": "^5.2.1"
+    "react-select": "^5.2.1",
+    "rxjs": "7.8.0"
   },
   "devDependencies": {
     "@grafana/data": "^10.0.0",
@@ -71,6 +72,7 @@
   },
   "dependencies": {
     "@types/uuid": "^8.3.3",
+    "semver": "^7.5.4",
     "uuid": "^8.3.2"
   }
 }
