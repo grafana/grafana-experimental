@@ -78,7 +78,7 @@ export async function search<T extends SearchResultPayload>(request: SearchReque
 let loggedWarning = false;
 
 /** Check if the vector API is enabled and configured via the LLM plugin. */
-export const enabled = async (): Promise<VectorHealthDetails> => {
+export const health = async (): Promise<VectorHealthDetails> => {
   // First check if the plugin is enabled.
   try {
     const settings = await getBackendSrv().get(`${LLM_PLUGIN_ROUTE}/settings`, undefined, undefined, {
@@ -123,3 +123,8 @@ export const enabled = async (): Promise<VectorHealthDetails> => {
     { enabled: details.vector, ok: details.vector } :
     details.vector;
 };
+
+export const enabled = async (): Promise<boolean> => {
+  const healthDetails = await health();
+  return healthDetails.enabled && healthDetails.ok;
+}
