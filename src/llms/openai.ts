@@ -487,10 +487,7 @@ export function useOpenAIStream(
     [notifyError]
   );
 
-  const { error: enabledError, value: isEnabled } = useAsync(
-    async () => await enabled().then((response) => response.ok),
-    [enabled]
-  );
+  const { error: enabledError, value: isEnabled } = useAsync(async () => await enabled(), [enabled]);
 
   const { error: asyncError, value } = useAsync(async () => {
     if (!isEnabled || !messages.length) {
