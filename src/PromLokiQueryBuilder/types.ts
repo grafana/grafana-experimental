@@ -1,4 +1,4 @@
-import { ComponentType } from 'react';
+import { FunctionComponent } from 'react';
 
 import { DataSourceApi, RegistryItem, SelectableValue } from '@grafana/data';
 
@@ -65,7 +65,7 @@ export interface QueryBuilderOperationParamDef {
   placeholder?: string;
   description?: string;
   minWidth?: number;
-  editor?: ComponentType<QueryBuilderOperationParamEditorProps>;
+  editor?: FunctionComponent<QueryBuilderOperationParamEditorProps>;
   runQueryOnEnter?: boolean;
 }
 

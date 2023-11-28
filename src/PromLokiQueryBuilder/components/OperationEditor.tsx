@@ -13,7 +13,6 @@ import {
   QueryBuilderOperation,
   QueryBuilderOperationDef,
   QueryBuilderOperationParamDef,
-  QueryBuilderOperationParamEditorProps,
   QueryBuilderOperationParamValue,
   VisualQueryModeller,
 } from '../types';
@@ -80,7 +79,7 @@ export function OperationEditor({
 
   for (let paramIndex = 0; paramIndex < operation.params.length; paramIndex++) {
     const paramDef = def.params[Math.min(def.params.length - 1, paramIndex)];
-    const Editor = getOperationParamEditor(paramDef) as React.ComponentType<QueryBuilderOperationParamEditorProps>;
+    const Editor = getOperationParamEditor(paramDef);
 
     operationElements.push(
       <div className={styles.paramRow} key={`${paramIndex}-1`}>

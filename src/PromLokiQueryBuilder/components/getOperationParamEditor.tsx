@@ -1,5 +1,5 @@
 import { css } from '@emotion/css';
-import React, { ComponentType } from 'react';
+import React, { FunctionComponent } from 'react';
 
 import { GrafanaTheme2, SelectableValue, toOption } from '@grafana/data';
 import { AutoSizeInput, Button, Checkbox, Select, useStyles2 } from '@grafana/ui';
@@ -11,7 +11,7 @@ import { Stack } from 'src/QueryEditor';
 
 export function getOperationParamEditor(
   paramDef: QueryBuilderOperationParamDef
-): ComponentType<QueryBuilderOperationParamEditorProps> {
+): FunctionComponent<QueryBuilderOperationParamEditorProps> {
   if (paramDef.editor) {
     return paramDef.editor;
   }
