@@ -4,10 +4,10 @@ import React, { FunctionComponent } from 'react';
 import { GrafanaTheme2, SelectableValue, toOption } from '@grafana/data';
 import { AutoSizeInput, Button, Checkbox, Select, useStyles2 } from '@grafana/ui';
 
-import { QueryBuilderOperationParamDef, QueryBuilderOperationParamEditorProps } from '../types';
+import { QueryBuilderOperationParamDef, QueryBuilderOperationParamEditorProps } from './types';
 
-import { getOperationParamId } from '../operationUtils';
-import { Stack } from 'src/QueryEditor';
+import { getOperationParamId } from './operationUtils';
+import { Stack } from '../QueryEditor/Stack';
 
 export function getOperationParamEditor(
   paramDef: QueryBuilderOperationParamDef

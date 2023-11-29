@@ -8,9 +8,10 @@ import { Button, Cascader, CascaderOption, useStyles2 } from '@grafana/ui';
 
 import { OperationEditor } from './OperationEditor';
 import { QueryBuilderOperation, QueryWithOperations, VisualQueryModeller } from '../types';
-import { Stack } from 'src/QueryEditor';
+import { Stack } from '../../QueryEditor/Stack';
+import { LokiAndPromQueryModellerBase } from '../LokiAndPromQueryModellerBase';
 
-export interface Props<T extends QueryWithOperations> {
+interface Props<T extends QueryWithOperations> {
   query: T;
   datasource: DataSourceApi;
   onChange: (query: T) => void;
@@ -18,6 +19,7 @@ export interface Props<T extends QueryWithOperations> {
   queryModeller: VisualQueryModeller;
   explainMode?: boolean;
   highlightedOp?: QueryBuilderOperation;
+  modeller: LokiAndPromQueryModellerBase;
 }
 
 export function OperationList<T extends QueryWithOperations>({
@@ -27,6 +29,7 @@ export function OperationList<T extends QueryWithOperations>({
   onChange,
   onRunQuery,
   highlightedOp,
+  modeller,
 }: Props<T>) {
   const styles = useStyles2(getStyles);
   const { operations } = query;
@@ -105,6 +108,7 @@ export function OperationList<T extends QueryWithOperations>({
                         onRunQuery={onRunQuery}
                         flash={opsToHighlight[index]}
                         highlight={highlightedOp === op}
+                        modeller={modeller}
                       />
                     );
                   })}

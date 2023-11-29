@@ -6,9 +6,9 @@ import { getValueFormat, GrafanaTheme2 } from '@grafana/data';
 import { config } from '@grafana/runtime';
 import { Collapse, Icon, Tooltip, useStyles2 } from '@grafana/ui';
 import { QueryStats } from '../types';
-import { Stack } from 'src/QueryEditor';
+import { Stack } from '../../QueryEditor/Stack';
 
-export interface Props {
+interface Props {
   title: string;
   collapsedInfo: string[];
   queryStats?: QueryStats | null;

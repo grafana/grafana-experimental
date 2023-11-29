@@ -7,7 +7,7 @@ import { DataSourceApi, GrafanaTheme2 } from '@grafana/data';
 import { Button, Icon, InlineField, Tooltip, useTheme2 } from '@grafana/ui';
 
 import { OperationHeader } from './OperationHeader';
-import { getOperationParamEditor } from './getOperationParamEditor';
+import { getOperationParamEditor } from '../getOperationParamEditor';
 import { getOperationParamId } from '../operationUtils';
 import {
   QueryBuilderOperation,
@@ -16,9 +16,10 @@ import {
   QueryBuilderOperationParamValue,
   VisualQueryModeller,
 } from '../types';
-import { Stack } from 'src/QueryEditor';
+import { Stack } from '../../QueryEditor/Stack';
+import { LokiAndPromQueryModellerBase } from '../LokiAndPromQueryModellerBase';
 
-export interface Props {
+interface Props {
   operation: QueryBuilderOperation;
   index: number;
   query: any;
@@ -30,6 +31,7 @@ export interface Props {
   flash?: boolean;
   highlight?: boolean;
   isConflictingFilter?: boolean;
+  modeller: LokiAndPromQueryModellerBase;
 }
 
 export function OperationEditor({
@@ -43,6 +45,7 @@ export function OperationEditor({
   datasource,
   flash,
   highlight,
+  modeller,
   isConflictingFilter = false,
 }: Props) {
   const def = queryModeller.getOperationDef(operation.id);
@@ -105,6 +108,7 @@ export function OperationEditor({
               onRunQuery={onRunQuery}
               query={query}
               datasource={datasource}
+              modeller={modeller}
             />
             {paramDef.restParam && (operation.params.length > def.params.length || paramDef.optional) && (
               <Button

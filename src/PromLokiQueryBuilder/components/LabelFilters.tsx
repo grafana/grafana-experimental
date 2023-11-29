@@ -6,11 +6,13 @@ import { SelectableValue } from '@grafana/data';
 import { QueryBuilderLabelFilter } from '../types';
 
 import { LabelFilterItem } from './LabelFilterItem';
-import { EditorField, EditorFieldGroup, EditorList } from 'src/QueryEditor';
+import { EditorField, } from '../../QueryEditor/EditorField';
+import { EditorFieldGroup } from '../../QueryEditor/EditorFieldGroup';
+import { EditorList } from '../../QueryEditor/EditorList';
 
 export const MISSING_LABEL_FILTER_ERROR_MESSAGE = 'Select at least 1 label filter (label and value)';
 
-export interface Props {
+interface Props {
   labelsFilters: QueryBuilderLabelFilter[];
   onChange: (labelFilters: QueryBuilderLabelFilter[]) => void;
   onGetLabelNames: (forLabel: Partial<QueryBuilderLabelFilter>) => Promise<SelectableValue[]>;
@@ -19,13 +21,13 @@ export interface Props {
   labelFilterRequired?: boolean;
 }
 
-export function LabelFilters({
+export const LabelFilters = ({
   labelsFilters,
   onChange,
   onGetLabelNames,
   onGetLabelValues,
   labelFilterRequired,
-}: Props) {
+}: Props) => {
   const defaultOp = '=';
   const [items, setItems] = useState<Array<Partial<QueryBuilderLabelFilter>>>([{ op: defaultOp }]);
 

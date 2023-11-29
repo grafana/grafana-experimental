@@ -6,9 +6,9 @@ import { GrafanaTheme2, renderMarkdown } from '@grafana/data';
 import { Button, Portal, useStyles2 } from '@grafana/ui';
 
 import { QueryBuilderOperation, QueryBuilderOperationDef } from '../types';
-import { FlexItem } from 'src/QueryEditor';
+import { FlexItem } from '../../QueryEditor/FlexItem';
 
-export interface Props {
+interface Props {
   operation: QueryBuilderOperation;
   def: QueryBuilderOperationDef;
 }

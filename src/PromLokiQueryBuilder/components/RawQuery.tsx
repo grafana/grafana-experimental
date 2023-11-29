@@ -5,7 +5,7 @@ import React from 'react';
 import { GrafanaTheme2 } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
 
-export interface Props {
+interface Props {
   query: string;
   lang: {
     grammar: Grammar;

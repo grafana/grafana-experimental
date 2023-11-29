@@ -7,7 +7,8 @@ import { InlineField, Select } from '@grafana/ui';
 
 import { isConflictingSelector } from '../operationUtils';
 import { QueryBuilderLabelFilter } from '../types';
-import { AccessoryButton, InputGroup } from 'src/QueryEditor';
+import { InputGroup } from '../../QueryEditor/InputGroup';
+import { AccessoryButton } from '../../QueryEditor/AccessoryButton';
 
 export interface Props {
   defaultOp: string;
