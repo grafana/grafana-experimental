@@ -347,7 +347,7 @@ export function streamChatCompletions(request: ChatCompletionsRequest): Observab
 let loggedWarning = false;
 
 /** Check if the OpenAI API is enabled via the LLM plugin. */
-export const enabled = async (): Promise<OpenAIHealthDetails> => {
+export const health = async (): Promise<OpenAIHealthDetails> => {
   // First check if the plugin is enabled.
   try {
     const settings = await getBackendSrv().get(`${LLM_PLUGIN_ROUTE}/settings`, undefined, undefined, {
@@ -389,6 +389,11 @@ export const enabled = async (): Promise<OpenAIHealthDetails> => {
   return typeof details.openAI === 'boolean' ?
     { configured: details.openAI, ok: details.openAI } :
     details.openAI;
+}
+
+export const enabled = async (): Promise<boolean> => {
+  const healthDetails = await health();
+  return healthDetails.configured && healthDetails.ok;
 }
 
 /**
@@ -482,10 +487,7 @@ export function useOpenAIStream(
     [notifyError]
   );
 
-  const { error: enabledError, value: isEnabled } = useAsync(
-    async () => await enabled().then((response) => response.ok),
-    [enabled]
-  );
+  const { error: enabledError, value: isEnabled } = useAsync(async () => await enabled(), [enabled]);
 
   const { error: asyncError, value } = useAsync(async () => {
     if (!isEnabled || !messages.length) {
