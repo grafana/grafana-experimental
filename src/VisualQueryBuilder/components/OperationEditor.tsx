@@ -7,8 +7,7 @@ import { DataSourceApi, GrafanaTheme2 } from '@grafana/data';
 import { Button, Icon, InlineField, Tooltip, useTheme2 } from '@grafana/ui';
 
 import { OperationHeader } from './OperationHeader';
-import { getOperationParamEditor } from '../getOperationParamEditor';
-import { getOperationParamId } from '../operationUtils';
+import { getOperationParamEditor, getOperationParamId } from '../getOperationParamEditor';
 import {
   QueryBuilderOperation,
   QueryBuilderOperationDef,

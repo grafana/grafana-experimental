@@ -1,35 +1,37 @@
 import { css } from '@emotion/css';
 import React, { useState, useEffect } from 'react';
 
-import { DataSourceApi, GrafanaTheme2, PanelData, QueryHint } from '@grafana/data';
+import { DataQuery, DataSourceApi, GrafanaTheme2, PanelData, QueryHint } from '@grafana/data';
 import { reportInteraction } from '@grafana/runtime';
 import { Button, Tooltip, useStyles2 } from '@grafana/ui';
 
-import { LokiAndPromQueryModellerBase } from '../QueryModellerBase';
-import { PromLokiVisualQuery } from '../types';
+import { QueryModellerBase } from '../QueryModellerBase';
+import { VisualQuery } from '../types';
 
-interface Props<T extends PromLokiVisualQuery> {
+interface Props<T extends VisualQuery, Q extends DataQuery> {
   query: T;
   datasource: DataSourceApi;
-  queryModeller: LokiAndPromQueryModellerBase;
-  buildVisualQueryFromString: (expr: string) => { query: T };
+  queryModeller: QueryModellerBase;
+  buildVisualQueryFromString: (queryString: string) => { query: T };
   onChange: (update: T) => void;
   data?: PanelData;
+  buildDataQueryFromString: (queryString: string) => Q;
 }
 
-export const QueryBuilderHints = <T extends PromLokiVisualQuery>({
+export const QueryBuilderHints = <T extends VisualQuery, Q extends DataQuery>({
   datasource,
   query: visualQuery,
   onChange,
   data,
   queryModeller,
   buildVisualQueryFromString,
-}: Props<T>) => {
+  buildDataQueryFromString,
+}: Props<T, Q>) => {
   const [hints, setHints] = useState<QueryHint[]>([]);
   const styles = useStyles2(getStyles);
 
   useEffect(() => {
-    const query = { expr: queryModeller.renderQuery(visualQuery), refId: '' };
+    const query = buildDataQueryFromString(queryModeller.renderQuery(visualQuery))
     // For now show only actionable hints)
     const hints = datasource.getQueryHints?.(query, data?.series || []).filter((hint) => hint.fix?.action);
     setHints(hints ?? []);
@@ -49,7 +51,8 @@ export const QueryBuilderHints = <T extends PromLokiVisualQuery>({
                       datasourceType: datasource.type,
                     });
                     if (hint?.fix?.action) {
-                      const query = { expr: queryModeller.renderQuery(visualQuery), refId: '' };
+                      // This is Loki/Prom specific logic that should be updated
+                      const query = buildDataQueryFromString(queryModeller.renderQuery(visualQuery))
                       const newQuery = datasource.modifyQuery?.(query, hint.fix.action);
                       if (newQuery && datasource.getQueryDisplayText) {
                         const newVisualQuery = buildVisualQueryFromString(datasource.getQueryDisplayText(newQuery) ?? '');

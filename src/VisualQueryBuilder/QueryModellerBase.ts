@@ -67,16 +67,16 @@ export abstract class QueryModellerBase implements VisualQueryModeller {
       return '';
     }
 
-    let expr = '{';
+    let queryString = '{';
     for (const filter of labels) {
-      if (expr !== '{') {
-        expr += ', ';
+      if (queryString !== '{') {
+        queryString += ', ';
       }
 
-      expr += `${filter.label}${filter.op}"${filter.value}"`;
+      queryString += `${filter.label}${filter.op}"${filter.value}"`;
     }
 
-    return expr + `}`;
+    return queryString + `}`;
   }
 
   renderQuery(query: VisualQuery, nested?: boolean) {

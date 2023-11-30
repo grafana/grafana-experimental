@@ -1,5 +1,5 @@
 {
-  "name": "experimental-builder",
+  "name": "@grafana/experimental",
   "version": "1.7.4",
   "description": "Experimental Grafana components and APIs",
   "main": "./dist/index.js",
