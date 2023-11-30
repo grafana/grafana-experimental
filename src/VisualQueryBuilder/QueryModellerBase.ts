@@ -1,9 +1,9 @@
 import { Registry } from '@grafana/data';
 
-import { BINARY_OPERATIONS_KEY, PromLokiVisualQuery, QueryBuilderLabelFilter, QueryBuilderOperation, QueryBuilderOperationDef, VisualQueryModeller } from './types';
+import { BINARY_OPERATIONS_KEY, VisualQuery, QueryBuilderLabelFilter, QueryBuilderOperation, QueryBuilderOperationDef, VisualQueryModeller } from './types';
 import { VisualQueryBinary } from './types';
 
-export abstract class LokiAndPromQueryModellerBase implements VisualQueryModeller {
+export abstract class QueryModellerBase implements VisualQueryModeller {
   protected operationsRegistry: Registry<QueryBuilderOperationDef>;
   private categories: string[] = [];
 
@@ -43,7 +43,7 @@ export abstract class LokiAndPromQueryModellerBase implements VisualQueryModelle
     return queryString;
   }
 
-  renderBinaryQueries(queryString: string, binaryQueries?: Array<VisualQueryBinary<PromLokiVisualQuery>>) {
+  renderBinaryQueries(queryString: string, binaryQueries?: Array<VisualQueryBinary<VisualQuery>>) {
     if (binaryQueries) {
       for (const binQuery of binaryQueries) {
         queryString = `${this.renderBinaryQuery(queryString, binQuery)}`;
@@ -52,7 +52,7 @@ export abstract class LokiAndPromQueryModellerBase implements VisualQueryModelle
     return queryString;
   }
 
-  private renderBinaryQuery(leftOperand: string, binaryQuery: VisualQueryBinary<PromLokiVisualQuery>) {
+  private renderBinaryQuery(leftOperand: string, binaryQuery: VisualQueryBinary<VisualQuery>) {
     let result = leftOperand + ` ${binaryQuery.operator} `;
 
     if (binaryQuery.vectorMatches) {
@@ -79,7 +79,7 @@ export abstract class LokiAndPromQueryModellerBase implements VisualQueryModelle
     return expr + `}`;
   }
 
-  renderQuery(query: PromLokiVisualQuery, nested?: boolean) {
+  renderQuery(query: VisualQuery, nested?: boolean) {
     let queryString = `${query.metric ?? ''}${this.renderLabels(query.labels)}`;
     queryString = this.renderOperations(queryString, query.operations);
 
@@ -96,7 +96,7 @@ export abstract class LokiAndPromQueryModellerBase implements VisualQueryModelle
     return queryString;
   }
 
-  hasBinaryOp(query: PromLokiVisualQuery): boolean {
+  hasBinaryOp(query: VisualQuery): boolean {
     return (
       query.operations.find((op) => {
         const def = this.getOperationDef(op.id);

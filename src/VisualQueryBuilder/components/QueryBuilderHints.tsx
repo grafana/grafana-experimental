@@ -5,7 +5,7 @@ import { DataSourceApi, GrafanaTheme2, PanelData, QueryHint } from '@grafana/dat
 import { reportInteraction } from '@grafana/runtime';
 import { Button, Tooltip, useStyles2 } from '@grafana/ui';
 
-import { LokiAndPromQueryModellerBase } from '../LokiAndPromQueryModellerBase';
+import { LokiAndPromQueryModellerBase } from '../QueryModellerBase';
 import { PromLokiVisualQuery } from '../types';
 
 interface Props<T extends PromLokiVisualQuery> {

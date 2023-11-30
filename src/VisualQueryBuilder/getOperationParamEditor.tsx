@@ -6,7 +6,6 @@ import { AutoSizeInput, Button, Checkbox, Select, useStyles2 } from '@grafana/ui
 
 import { QueryBuilderOperationParamDef, QueryBuilderOperationParamEditorProps } from './types';
 
-import { getOperationParamId } from './operationUtils';
 import { Stack } from '../QueryEditor/Stack';
 
 export function getOperationParamEditor(
@@ -129,3 +128,7 @@ const getStyles = (theme: GrafanaTheme2) => {
     }),
   };
 };
+
+export function getOperationParamId(operationId: string, paramIndex: number) {
+  return `operations.${operationId}.param.${paramIndex}`;
+}

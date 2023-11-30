@@ -5,7 +5,7 @@ import { Select } from '@grafana/ui';
 
 import { getOperationParamId } from '../operationUtils';
 import { QueryBuilderLabelFilter, QueryBuilderOperationParamEditorProps, VisualQuery } from '../types';
-import { LokiAndPromQueryModellerBase } from '../LokiAndPromQueryModellerBase';
+import { LokiAndPromQueryModellerBase } from '../QueryModellerBase';
 
 export const LabelParamEditor = ({
   onChange,

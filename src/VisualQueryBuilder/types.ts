@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 
 import { DataSourceApi, RegistryItem, SelectableValue } from '@grafana/data';
-import { LokiAndPromQueryModellerBase } from './LokiAndPromQueryModellerBase';
+import { QueryModellerBase } from './QueryModellerBase';
 
 export interface QueryBuilderLabelFilter {
   label: string;
@@ -91,7 +91,7 @@ export interface QueryBuilderOperationParamEditorProps {
   datasource: DataSourceApi;
   onChange: (index: number, value: QueryBuilderOperationParamValue) => void;
   onRunQuery: () => void;
-  modeller: LokiAndPromQueryModellerBase;
+  modeller: QueryModellerBase;
 }
 
 export enum QueryEditorMode {
@@ -114,11 +114,11 @@ export type QueryStats = {
 
 export const BINARY_OPERATIONS_KEY = 'Binary operations'
 
-export interface VisualQuery<T> {
+export interface VisualQuery {
   metric?: string;
   labels: QueryBuilderLabelFilter[];
   operations: QueryBuilderOperation[];
-  binaryQueries?:  Array<VisualQueryBinary<VisualQuery<T>>>;
+  binaryQueries?:  Array<VisualQueryBinary<VisualQuery>>;
 }
 
 export interface VisualQueryBinary<T> {
@@ -126,11 +126,4 @@ export interface VisualQueryBinary<T> {
   vectorMatchesType?: 'on' | 'ignoring';
   vectorMatches?: string;
   query: T;
-}
-
-export interface PromLokiVisualQuery {
-  metric?: string;
-  labels: QueryBuilderLabelFilter[];
-  operations: QueryBuilderOperation[];
-  binaryQueries?: Array<VisualQueryBinary<PromLokiVisualQuery>>;
 }

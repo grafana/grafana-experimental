@@ -1,7 +1,4 @@
-import {
-  getOperationParamId,
-  isConflictingSelector,
-} from './operationUtils';
+import { isConflictingSelector } from "./LabelFilterItem";
 
 describe('isConflictingSelector', () => {
   it('returns true if selector is conflicting', () => {
@@ -31,13 +28,3 @@ describe('isConflictingSelector', () => {
     expect(isConflictingSelector(newLabel, labels)).toBe(false);
   });
 });
-
-describe('getOperationParamId', () => {
-  it('Generates correct id for operation param', () => {
-    const operationId = 'abc';
-    const paramId = 0;
-    expect(getOperationParamId(operationId, paramId)).toBe('operations.abc.param.0');
-  });
-});
-
-

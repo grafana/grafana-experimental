@@ -9,7 +9,7 @@ import { Button, Cascader, CascaderOption, useStyles2 } from '@grafana/ui';
 import { OperationEditor } from './OperationEditor';
 import { QueryBuilderOperation, QueryWithOperations, VisualQueryModeller } from '../types';
 import { Stack } from '../../QueryEditor/Stack';
-import { LokiAndPromQueryModellerBase } from '../LokiAndPromQueryModellerBase';
+import { LokiAndPromQueryModellerBase } from '../QueryModellerBase';
 
 interface Props<T extends QueryWithOperations> {
   query: T;

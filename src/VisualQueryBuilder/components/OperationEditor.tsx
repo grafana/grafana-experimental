@@ -17,7 +17,7 @@ import {
   VisualQueryModeller,
 } from '../types';
 import { Stack } from '../../QueryEditor/Stack';
-import { LokiAndPromQueryModellerBase } from '../LokiAndPromQueryModellerBase';
+import { QueryModellerBase } from '../QueryModellerBase';
 
 interface Props {
   operation: QueryBuilderOperation;
@@ -31,7 +31,7 @@ interface Props {
   flash?: boolean;
   highlight?: boolean;
   isConflictingFilter?: boolean;
-  modeller: LokiAndPromQueryModellerBase;
+  modeller: QueryModellerBase;
 }
 
 export function OperationEditor({

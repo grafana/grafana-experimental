@@ -1,11 +1,7 @@
-export { LokiAndPromQueryModellerBase} from './LokiAndPromQueryModellerBase';
-export { LabelFilterItem } from './components/LabelFilterItem';
+export { QueryModellerBase } from './QueryModellerBase';
 export { LabelFilters } from './components/LabelFilters';
 export { LabelParamEditor } from './components/LabelParamEditor';
-export { OperationEditor } from './components/OperationEditor';
 export { OperationExplainedBox } from './components/OperationExplainedBox';
-export { OperationHeader } from './components/OperationHeader';
-export { OperationInfoButton } from './components/OperationInfoButton';
 export { OperationList } from './components/OperationList';
 export { OperationListExplained } from './components/OperationListExplained';
 export { OperationsEditorRow } from './components/OperationsEditorRow';
