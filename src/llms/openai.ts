@@ -8,16 +8,21 @@
  * The {@link enabled} function can be used to check if the plugin is enabled and configured.
  */
 
-import { isLiveChannelMessageEvent, LiveChannelAddress, LiveChannelMessageEvent, LiveChannelScope } from "@grafana/data";
-import { getBackendSrv, getGrafanaLiveSrv, logDebug, /* logError */ } from "@grafana/runtime";
+import {
+  isLiveChannelMessageEvent,
+  LiveChannelAddress,
+  LiveChannelMessageEvent,
+  LiveChannelScope,
+} from '@grafana/data';
+import { getBackendSrv, getGrafanaLiveSrv, logDebug /* logError */ } from '@grafana/runtime';
 
 import React, { useEffect, useCallback, useState } from 'react';
 import { useAsync } from 'react-use';
-import { pipe, Observable, UnaryFunction, Subscription } from "rxjs";
-import { filter, map, scan, takeWhile, tap } from "rxjs/operators";
+import { pipe, Observable, UnaryFunction, Subscription } from 'rxjs';
+import { filter, map, scan, takeWhile, tap } from 'rxjs/operators';
 
-import { LLM_PLUGIN_ID, LLM_PLUGIN_ROUTE, setLLMPluginVersion } from "./constants";
-import { HealthCheckResponse, OpenAIHealthDetails } from "./types";
+import { LLM_PLUGIN_ID, LLM_PLUGIN_ROUTE, setLLMPluginVersion } from './constants';
+import { HealthCheckResponse, OpenAIHealthDetails } from './types';
 
 const OPENAI_CHAT_COMPLETIONS_PATH = 'openai/v1/chat/completions';
 
@@ -229,9 +234,8 @@ export interface ChatCompletionsChunk {
 
 /** Return true if the message is a 'content' message. */
 export function isContentMessage(message: ChatCompletionsDelta): message is ContentMessage {
-  return 'content' in message
+  return 'content' in message;
 }
-
 
 /** Return true if the message is a 'done' message. */
 export function isDoneMessage(message: ChatCompletionsDelta): message is DoneMessage {
@@ -239,7 +243,9 @@ export function isDoneMessage(message: ChatCompletionsDelta): message is DoneMes
 }
 
 /** Return true if the response is an error response. */
-export function isErrorResponse<T>(response: ChatCompletionsResponse<T> | ChatCompletionsErrorResponse): response is ChatCompletionsErrorResponse {
+export function isErrorResponse<T>(
+  response: ChatCompletionsResponse<T> | ChatCompletionsErrorResponse
+): response is ChatCompletionsErrorResponse {
   return 'error' in response;
 }
 
@@ -257,12 +263,17 @@ export function isErrorResponse<T>(response: ChatCompletionsResponse<T> | ChatCo
  * // Output:
  * // ['Hello', '? ', 'How ', 'are ', 'you', '?']
  */
-export function extractContent(): UnaryFunction<Observable<ChatCompletionsResponse<ChatCompletionsChunk>>, Observable<string>> {
+export function extractContent(): UnaryFunction<
+  Observable<ChatCompletionsResponse<ChatCompletionsChunk>>,
+  Observable<string>
+> {
   return pipe(
     filter((response: ChatCompletionsResponse<ChatCompletionsChunk>) => isContentMessage(response.choices[0].delta)),
     // The type assertion is needed here because the type predicate above doesn't seem to propagate.
-    map((response: ChatCompletionsResponse<ChatCompletionsChunk>) => (response.choices[0].delta as ContentMessage).content),
-  )
+    map(
+      (response: ChatCompletionsResponse<ChatCompletionsChunk>) => (response.choices[0].delta as ContentMessage).content
+    )
+  );
 }
 
 /**
@@ -279,10 +290,13 @@ export function extractContent(): UnaryFunction<Observable<ChatCompletionsRespon
  * // Output:
  * // ['Hello', 'Hello! ', 'Hello! How ', 'Hello! How are ', 'Hello! How are you', 'Hello! How are you?']
  */
-export function accumulateContent(): UnaryFunction<Observable<ChatCompletionsResponse<ChatCompletionsChunk>>, Observable<string>> {
+export function accumulateContent(): UnaryFunction<
+  Observable<ChatCompletionsResponse<ChatCompletionsChunk>>,
+  Observable<string>
+> {
   return pipe(
     extractContent(),
-    scan((acc, curr) => acc + curr, ''),
+    scan((acc, curr) => acc + curr, '')
   );
 }
 
@@ -290,9 +304,13 @@ export function accumulateContent(): UnaryFunction<Observable<ChatCompletionsRes
  * Make a request to OpenAI's chat-completions API via the Grafana LLM plugin proxy.
  */
 export async function chatCompletions(request: ChatCompletionsRequest): Promise<ChatCompletionsResponse> {
-  const response = await getBackendSrv().post<ChatCompletionsResponse>('/api/plugins/grafana-llm-app/resources/openai/v1/chat/completions', request, {
-    headers: { 'Content-Type': 'application/json' }
-  });
+  const response = await getBackendSrv().post<ChatCompletionsResponse>(
+    '/api/plugins/grafana-llm-app/resources/openai/v1/chat/completions',
+    request,
+    {
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
   return response;
 }
 
@@ -323,7 +341,9 @@ export async function chatCompletions(request: ChatCompletionsRequest): Promise<
  * // Output:
  * // ['Hello', 'Hello! ', 'Hello! How ', 'Hello! How are ', 'Hello! How are you', 'Hello! How are you?']
  */
-export function streamChatCompletions(request: ChatCompletionsRequest): Observable<ChatCompletionsResponse<ChatCompletionsChunk>> {
+export function streamChatCompletions(
+  request: ChatCompletionsRequest
+): Observable<ChatCompletionsResponse<ChatCompletionsChunk>> {
   const channel: LiveChannelAddress = {
     scope: LiveChannelScope.Plugin,
     namespace: LLM_PLUGIN_ID,
@@ -332,7 +352,9 @@ export function streamChatCompletions(request: ChatCompletionsRequest): Observab
   };
   const messages = getGrafanaLiveSrv()
     .getStream(channel)
-    .pipe(filter((event) => isLiveChannelMessageEvent(event))) as Observable<LiveChannelMessageEvent<ChatCompletionsResponse<ChatCompletionsChunk>>>
+    .pipe(filter((event) => isLiveChannelMessageEvent(event))) as Observable<
+    LiveChannelMessageEvent<ChatCompletionsResponse<ChatCompletionsChunk>>
+  >;
   return messages.pipe(
     tap((event) => {
       if (isErrorResponse(event.message)) {
@@ -340,7 +362,7 @@ export function streamChatCompletions(request: ChatCompletionsRequest): Observab
       }
     }),
     takeWhile((event) => isErrorResponse(event.message) || !isDoneMessage(event.message.choices[0].delta)),
-    map((event) => event.message),
+    map((event) => event.message)
   );
 }
 
@@ -351,31 +373,37 @@ export const health = async (): Promise<OpenAIHealthDetails> => {
   // First check if the plugin is enabled.
   try {
     const settings = await getBackendSrv().get(`${LLM_PLUGIN_ROUTE}/settings`, undefined, undefined, {
-      showSuccessAlert: false, showErrorAlert: false,
+      showSuccessAlert: false,
+      showErrorAlert: false,
     });
     if (!settings.enabled) {
-      return { configured: false, ok: false, error: 'The Grafana LLM plugin is not enabled.' }
+      return { configured: false, ok: false, error: 'The Grafana LLM plugin is not enabled.' };
     }
   } catch (e) {
     logDebug(String(e));
-    logDebug('Failed to check if OpenAI is enabled. This is expected if the Grafana LLM plugin is not installed, and the above error can be ignored.');
+    logDebug(
+      'Failed to check if OpenAI is enabled. This is expected if the Grafana LLM plugin is not installed, and the above error can be ignored.'
+    );
     loggedWarning = true;
-    return { configured: false, ok: false, error: 'The Grafana LLM plugin is not installed.' }
+    return { configured: false, ok: false, error: 'The Grafana LLM plugin is not installed.' };
   }
 
   // Run a health check to see if OpenAI is configured on the plugin.
   let response: HealthCheckResponse;
   try {
     response = await getBackendSrv().get(`${LLM_PLUGIN_ROUTE}/health`, undefined, undefined, {
-      showSuccessAlert: false, showErrorAlert: false,
+      showSuccessAlert: false,
+      showErrorAlert: false,
     });
   } catch (e) {
     if (!loggedWarning) {
       logDebug(String(e));
-      logDebug('Failed to check if OpenAI is enabled. This is expected if the Grafana LLM plugin is not installed, and the above error can be ignored.');
+      logDebug(
+        'Failed to check if OpenAI is enabled. This is expected if the Grafana LLM plugin is not installed, and the above error can be ignored.'
+      );
       loggedWarning = true;
     }
-    return { configured: false, ok: false, error: 'The Grafana LLM plugin is not installed.' }
+    return { configured: false, ok: false, error: 'The Grafana LLM plugin is not installed.' };
   }
 
   const { details } = response;
@@ -384,17 +412,15 @@ export const health = async (): Promise<OpenAIHealthDetails> => {
     setLLMPluginVersion(details.version);
   }
   if (details?.openAI === undefined) {
-    return { configured: false, ok: false, error: 'The Grafana LLM plugin is outdated; please update it.' }
+    return { configured: false, ok: false, error: 'The Grafana LLM plugin is outdated; please update it.' };
   }
-  return typeof details.openAI === 'boolean' ?
-    { configured: details.openAI, ok: details.openAI } :
-    details.openAI;
-}
+  return typeof details.openAI === 'boolean' ? { configured: details.openAI, ok: details.openAI } : details.openAI;
+};
 
 export const enabled = async (): Promise<boolean> => {
   const healthDetails = await health();
   return healthDetails.configured && healthDetails.ok;
-}
+};
 
 /**
  * Enum representing different states for a stream.
@@ -442,7 +468,7 @@ export type OpenAIStreamState = {
         stream: Subscription;
       }
     | undefined;
-}
+};
 
 /**
  * A custom React hook for managing an OpenAI stream that communicates with the provided model.
@@ -463,7 +489,7 @@ export type OpenAIStreamState = {
 export function useOpenAIStream(
   model = 'gpt-4',
   temperature = 1,
-  notifyError: (title: string, text?: string, traceId?: string) => void = () => {},
+  notifyError: (title: string, text?: string, traceId?: string) => void = () => {}
 ): OpenAIStreamState {
   // The messages array to send to the LLM.
   const [messages, setMessages] = useState<Message[]>([]);
@@ -498,20 +524,19 @@ export function useOpenAIStream(
     setError(undefined);
     // Stream the completions. Each element is the next stream chunk.
     const stream = streamChatCompletions({
-        model,
-        temperature,
-        messages,
-      })
-      .pipe(
-        // Accumulate the stream content into a stream of strings, where each
-        // element contains the accumulated message so far.
-        accumulateContent()
-        // The stream is just a regular Observable, so we can use standard rxjs
-        // functionality to update state, e.g. recording when the stream
-        // has completed.
-        // The operator decision tree on the rxjs website is a useful resource:
-        // https://rxjs.dev/operator-decision-tree.)
-      );
+      model,
+      temperature,
+      messages,
+    }).pipe(
+      // Accumulate the stream content into a stream of strings, where each
+      // element contains the accumulated message so far.
+      accumulateContent()
+      // The stream is just a regular Observable, so we can use standard rxjs
+      // functionality to update state, e.g. recording when the stream
+      // has completed.
+      // The operator decision tree on the rxjs website is a useful resource:
+      // https://rxjs.dev/operator-decision-tree.)
+    );
     // Subscribe to the stream and update the state for each returned value.
     return {
       enabled: isEnabled,
