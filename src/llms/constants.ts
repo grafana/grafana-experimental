@@ -1,6 +1,6 @@
-import { logWarning } from "@grafana/runtime";
+import { logWarning } from '@grafana/runtime';
 
-import { SemVer } from "semver";
+import { SemVer } from 'semver';
 
 export const LLM_PLUGIN_ID = 'grafana-llm-app';
 export const LLM_PLUGIN_ROUTE = `/api/plugins/${LLM_PLUGIN_ID}`;
@@ -14,6 +14,6 @@ export function setLLMPluginVersion(version: string) {
   try {
     LLM_PLUGIN_VERSION = new SemVer(version);
   } catch (e) {
-    logWarning('Failed to parse version of grafana-llm-app; assuming old version is present.')
+    logWarning('Failed to parse version of grafana-llm-app; assuming old version is present.');
   }
 }
