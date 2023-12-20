@@ -1,4 +1,4 @@
-export { QueryModellerBase } from './LokiAndPromQueryModellerBase';
+export { QueryModellerBase } from './QueryModellerBase';
 export { LabelFilters } from './components/LabelFilters';
 export { LabelParamEditor } from './components/LabelParamEditor';
 export { OperationExplainedBox } from './components/OperationExplainedBox';
