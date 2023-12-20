@@ -3,9 +3,9 @@ import React from 'react';
 
 import { OperationExplainedBox } from './OperationExplainedBox';
 import { RawQuery } from './RawQuery';
-import { QueryBuilderOperation, QueryWithOperations, VisualQueryModeller } from '../types';
+import { QueryBuilderOperation, VisualQuery, VisualQueryModeller } from '../types';
 
-interface Props<T extends QueryWithOperations> {
+interface Props<T extends VisualQuery> {
   query: T;
   queryModeller: VisualQueryModeller;
   explainMode?: boolean;
@@ -19,7 +19,7 @@ interface Props<T extends QueryWithOperations> {
   onMouseLeave?: (op: QueryBuilderOperation, index: number) => void;
 }
 
-export function OperationListExplained<T extends QueryWithOperations>({
+export function OperationListExplained<T extends VisualQuery>({
   query,
   queryModeller,
   stepNumber,

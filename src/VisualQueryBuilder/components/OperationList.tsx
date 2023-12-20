@@ -7,11 +7,11 @@ import { DataSourceApi, GrafanaTheme2, TimeRange } from '@grafana/data';
 import { Button, Cascader, CascaderOption, useStyles2 } from '@grafana/ui';
 
 import { OperationEditor } from './OperationEditor';
-import { QueryBuilderOperation, QueryWithOperations, VisualQueryModeller } from '../types';
+import { QueryBuilderOperation, VisualQuery, VisualQueryModeller } from '../types';
 
 import { Stack } from '../../QueryEditor/Stack';
 
-export interface Props<T extends QueryWithOperations> {
+export interface Props<T extends VisualQuery> {
   query: T;
   datasource: DataSourceApi;
   onChange: (query: T) => void;
@@ -25,7 +25,7 @@ export interface Props<T extends QueryWithOperations> {
   innerQueryPlaceholder?: string;
 }
 
-export function OperationList<T extends QueryWithOperations>({
+export function OperationList<T extends VisualQuery>({
   query,
   datasource,
   queryModeller,

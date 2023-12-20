@@ -17,10 +17,6 @@ export interface QueryBuilderOperation {
   params: QueryBuilderOperationParamValue[];
 }
 
-export interface QueryWithOperations {
-  operations: QueryBuilderOperation[];
-}
-
 export interface QueryBuilderOperationDef<T = any> extends RegistryItem {
   documentation?: string;
   params: QueryBuilderOperationParamDef[];
