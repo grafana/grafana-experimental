@@ -26,3 +26,10 @@ function isConflictingFilter(
   return conflict;
 }
 
+Loki/Prom: 
+
+In QueryBuilderHints, 
+  buildDataQueryFromQueryString: (queryString: string) => Q;
+  buildQueryStringFromDataQuery: (dataQuery: Q) => string;
+needs to be added. This can be done trough ds.modifyQuery API
+

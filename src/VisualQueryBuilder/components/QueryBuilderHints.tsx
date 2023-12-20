@@ -3,46 +3,40 @@ import React, { useState, useEffect } from 'react';
 
 import { DataSourceApi, GrafanaTheme2, PanelData, QueryHint } from '@grafana/data';
 import { reportInteraction } from '@grafana/runtime';
+import { DataQuery } from '@grafana/schema';
 import { Button, Tooltip, useStyles2 } from '@grafana/ui';
 
-interface LokiDatasource extends DataSourceApi {
-  modifyQuery: (query: any, action: any) => any;
-  getQueryHints: (query: any, data: any) => QueryHint[];
-}
+import { VisualQuery, VisualQueryModeller } from '../types';
 
-interface PrometheusDatasource extends DataSourceApi {
-  modifyQuery: (query: any, action: any) => any;
-  getQueryHints: (query: any, data: any) => QueryHint[];
-}
-
-import { QueryModellerBase } from '../QueryModellerBase';
-import { VisualQuery } from '../types';
-
-export interface Props<T extends VisualQuery> {
+interface Props<T extends VisualQuery, Q extends DataQuery> {
   query: T;
-  datasource: PrometheusDatasource | LokiDatasource;
-  queryModeller: QueryModellerBase;
-  buildVisualQueryFromString: (expr: string) => { query: T };
+  datasource: DataSourceApi;
+  queryModeller: VisualQueryModeller;
+  buildVisualQueryFromString: (queryString: string) => { query: T };
+  buildDataQueryFromQueryString: (queryString: string) => Q;
+  buildQueryStringFromDataQuery: (dataQuery: Q) => string;
   onChange: (update: T) => void;
   data?: PanelData;
 }
 
-export const QueryBuilderHints = <T extends VisualQuery>({
+export const QueryBuilderHints = <T extends VisualQuery, Q extends DataQuery>({
   datasource,
   query: visualQuery,
   onChange,
   data,
   queryModeller,
   buildVisualQueryFromString,
-}: Props<T>) => {
+  buildDataQueryFromQueryString,
+  buildQueryStringFromDataQuery,
+}: Props<T, Q>) => {
   const [hints, setHints] = useState<QueryHint[]>([]);
   const styles = useStyles2(getStyles);
 
   useEffect(() => {
-    const query = { expr: queryModeller.renderQuery(visualQuery), refId: '' };
+    const dataQuery = buildDataQueryFromQueryString(queryModeller.renderQuery(visualQuery))
     // For now show only actionable hints
-    const hints = datasource.getQueryHints(query, data?.series || []).filter((hint) => hint.fix?.action);
-    setHints(hints);
+    const hints = datasource.getQueryHints?.(dataQuery, data?.series || []).filter((hint) => hint.fix?.action);
+    setHints(hints ?? []);
   }, [datasource, visualQuery, data, queryModeller]);
 
   return (
@@ -60,10 +54,12 @@ export const QueryBuilderHints = <T extends VisualQuery>({
                     });
 
                     if (hint?.fix?.action) {
-                      const query = { expr: queryModeller.renderQuery(visualQuery), refId: '' };
-                      const newQuery = datasource.modifyQuery(query, hint.fix.action);
-                      const newVisualQuery = buildVisualQueryFromString(newQuery.expr);
-                      return onChange(newVisualQuery.query);
+                      const dataQuery = buildDataQueryFromQueryString(queryModeller.renderQuery(visualQuery))
+                      const newQuery = datasource.modifyQuery?.(dataQuery, hint.fix.action) as Q;
+                      if (newQuery) {
+                        const newVisualQuery = buildVisualQueryFromString(buildQueryStringFromDataQuery(newQuery) ?? '');
+                        return onChange(newVisualQuery.query);
+                      }
                     }
                   }}
                   fill="outline"
