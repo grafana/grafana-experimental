@@ -33,21 +33,21 @@ export interface QueryBuilderOperationDef<T = any> extends RegistryItem {
   changeTypeHandler?: (op: QueryBuilderOperation, newDef: QueryBuilderOperationDef<T>) => QueryBuilderOperation;
 }
 
-export type QueryBuilderAddOperationHandler<T> = (
+type QueryBuilderAddOperationHandler<T> = (
   def: QueryBuilderOperationDef,
   query: T,
   modeller: VisualQueryModeller
 ) => T;
 
-export type QueryBuilderExplainOperationHandler = (op: QueryBuilderOperation, def?: QueryBuilderOperationDef) => string;
+type QueryBuilderExplainOperationHandler = (op: QueryBuilderOperation, def?: QueryBuilderOperationDef) => string;
 
-export type QueryBuilderOnParamChangedHandler = (
+type QueryBuilderOnParamChangedHandler = (
   index: number,
   operation: QueryBuilderOperation,
   operationDef: QueryBuilderOperationDef
 ) => QueryBuilderOperation;
 
-export type QueryBuilderOperationRenderer = (
+type QueryBuilderOperationRenderer = (
   model: QueryBuilderOperation,
   def: QueryBuilderOperationDef,
   innerQuery: string
@@ -69,16 +69,6 @@ export interface QueryBuilderOperationParamDef {
   runQueryOnEnter?: boolean;
 }
 
-export interface QueryBuilderOperationEditorProps {
-  operation: QueryBuilderOperation;
-  index: number;
-  query: any;
-  datasource: DataSourceApi;
-  queryModeller: VisualQueryModeller;
-  onChange: (index: number, update: QueryBuilderOperation) => void;
-  onRemove: (index: number) => void;
-}
-
 export interface QueryBuilderOperationParamEditorProps {
   value?: QueryBuilderOperationParamValue;
   paramDef: QueryBuilderOperationParamDef;
@@ -97,6 +87,12 @@ export interface QueryBuilderOperationParamEditorProps {
 export enum QueryEditorMode {
   Code = 'code',
   Builder = 'builder',
+}
+
+export type QueryStats = {
+  bytes: number;
+  // The error message displayed in the UI when we cant estimate the size of the query.
+  message?: string;
 }
 
 export interface VisualQueryModeller {
@@ -122,10 +118,4 @@ export interface VisualQuery {
   labels: QueryBuilderLabelFilter[];
   operations: QueryBuilderOperation[];
   binaryQueries?: Array<VisualQueryBinary<VisualQuery>>;
-}
-
-export interface QueryStats {
-  bytes: number;
-  // The error message displayed in the UI when we cant estimate the size of the query.
-  message?: string;
 }
