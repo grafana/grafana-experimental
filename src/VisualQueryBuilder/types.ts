@@ -95,6 +95,7 @@ export interface QueryBuilderOperationParamEditorProps {
   timeRange?: TimeRange;
   onChange: (index: number, value: QueryBuilderOperationParamValue) => void;
   onRunQuery: () => void;
+  queryModeller: VisualQueryModeller;
 }
 
 export enum QueryEditorMode {
@@ -107,6 +108,8 @@ export interface VisualQueryModeller {
   getAlternativeOperations(key: string): QueryBuilderOperationDef[];
   getCategories(): string[];
   getOperationDef(id: string): QueryBuilderOperationDef | undefined;
+  renderQuery(query: VisualQuery, nested?: boolean): string
+  renderLabels(labels: QueryBuilderLabelFilter[]): string;
 }
 
 

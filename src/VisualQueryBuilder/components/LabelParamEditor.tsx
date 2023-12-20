@@ -3,19 +3,19 @@ import React, { useState } from 'react';
 import { DataSourceApi, SelectableValue, toOption } from '@grafana/data';
 import { Select } from '@grafana/ui';
 
-import { getOperationParamId } from './OperationParamEditor';
+import { getOperationParamId } from './OperationEditor';
+import { QueryBuilderLabelFilter, QueryBuilderOperationParamEditorProps, VisualQuery, VisualQueryModeller } from '../types';
 
-import { QueryBuilderLabelFilter, QueryBuilderOperationParamEditorProps, PromVisualQuery } from '../types';
-import { promQueryModeller } from '../PromQueryModeller';
 
-export function LabelParamEditor({
+export const LabelParamEditor = ({
   onChange,
   index,
   operationId,
   value,
   query,
   datasource,
-}: QueryBuilderOperationParamEditorProps) {
+  queryModeller,
+}: QueryBuilderOperationParamEditorProps) => {
   const [state, setState] = useState<{
     options?: SelectableValue[];
     isLoading?: boolean;
@@ -28,7 +28,7 @@ export function LabelParamEditor({
       openMenuOnFocus
       onOpenMenu={async () => {
         setState({ isLoading: true });
-        const options = await loadGroupByLabels(query, datasource);
+        const options = await loadGroupByLabels(query, datasource, queryModeller);
         setState({ options, isLoading: undefined });
       }}
       isLoading={state.isLoading}
@@ -42,16 +42,16 @@ export function LabelParamEditor({
   );
 }
 
-async function loadGroupByLabels(query: PromVisualQuery, datasource: DataSourceApi): Promise<SelectableValue[]> {
+async function loadGroupByLabels(query: VisualQuery, datasource: DataSourceApi, queryModeller: VisualQueryModeller): Promise<SelectableValue[]> {
   let labels: QueryBuilderLabelFilter[] = query.labels;
 
-  // This function is used by both Prometheus and Loki and this the only difference.
-  if (datasource.type === 'prometheus') {
+  // This is currently based on Prometheus logic, but should eventually be moved to the datasource
+  if (query.metric && datasource.type === 'prometheus') {
     labels = [{ label: '__name__', op: '=', value: query.metric }, ...query.labels];
   }
 
-  const expr = promQueryModeller.renderLabels(labels);
-  const result = await datasource.languageProvider.fetchSeriesLabels(expr);
+  const queryString = queryModeller.renderLabels(labels);
+  const result = await datasource.languageProvider.fetchSeriesLabels(queryString);
 
   return Object.keys(result).map((x) => ({
     label: x,

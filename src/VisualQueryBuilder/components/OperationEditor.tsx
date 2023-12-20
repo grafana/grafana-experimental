@@ -109,6 +109,7 @@ export function OperationEditor({
               query={query}
               datasource={datasource}
               timeRange={timeRange}
+              queryModeller={queryModeller}
             />
             {paramDef.restParam && (operation.params.length > def.params.length || paramDef.optional) && (
               <Button
@@ -356,3 +357,5 @@ function isConflictingFilter(
 
   return conflict;
 }
+
+export { getOperationParamId };
