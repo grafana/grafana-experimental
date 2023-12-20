@@ -1,8 +1,6 @@
 import { Registry } from '@grafana/data';
 
-import { VisualQuery, VisualQueryBinary, BINARY_OPERATIONS_KEY } from './types';
-
-import { QueryBuilderLabelFilter, QueryBuilderOperation, QueryBuilderOperationDef, VisualQueryModeller } from './types';
+import { BINARY_OPERATIONS_KEY, VisualQuery, VisualQueryBinary, QueryBuilderLabelFilter, QueryBuilderOperation, QueryBuilderOperationDef, VisualQueryModeller } from './types';
 
 export abstract class QueryModellerBase implements VisualQueryModeller {
   protected operationsRegistry: Registry<QueryBuilderOperationDef>;
@@ -63,23 +61,25 @@ export abstract class QueryModellerBase implements VisualQueryModeller {
     return result + this.renderQuery(binaryQuery.query, true);
   }
 
+  // This is rendering labels in prom/loki format that can be overridden by class that extends VisualQueryModeller
   renderLabels(labels: QueryBuilderLabelFilter[]) {
     if (labels.length === 0) {
       return '';
     }
 
-    let expr = '{';
+    let queryString = '{';
     for (const filter of labels) {
-      if (expr !== '{') {
-        expr += ', ';
+      if (queryString !== '{') {
+        queryString += ', ';
       }
 
-      expr += `${filter.label}${filter.op}"${filter.value}"`;
+      queryString += `${filter.label}${filter.op}"${filter.value}"`;
     }
 
-    return expr + `}`;
+    return queryString + `}`;
   }
 
+  // This is rendering labels in prom/loki format that can be overridden by class that extends VisualQueryModeller
   renderQuery(query: VisualQuery, nested?: boolean) {
     let queryString = `${query.metric ?? ''}${this.renderLabels(query.labels)}`;
     queryString = this.renderOperations(queryString, query.operations);
