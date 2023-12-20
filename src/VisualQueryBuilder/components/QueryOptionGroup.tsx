@@ -10,7 +10,7 @@ import { Stack } from '../../QueryEditor/Stack';
 import { QueryStats } from '../types';
 
 
-export interface Props {
+interface Props {
   title: string;
   collapsedInfo: string[];
   queryStats?: QueryStats | null;

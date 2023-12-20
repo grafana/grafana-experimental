@@ -10,7 +10,7 @@ import { OperationInfoButton } from './OperationInfoButton';
 import { VisualQueryModeller, QueryBuilderOperation, QueryBuilderOperationDef } from '../types';
 import { FlexItem } from '../../QueryEditor/FlexItem';
 
-export interface Props {
+interface Props {
   operation: QueryBuilderOperation;
   def: QueryBuilderOperationDef;
   index: number;

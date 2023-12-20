@@ -17,7 +17,7 @@ import {
 import { Stack } from '../../QueryEditor/Stack';
 import { getOperationParamEditor, getOperationParamId } from './OperationParamEditor';
 
-export interface Props {
+interface Props {
   operation: QueryBuilderOperation;
   index: number;
   query: any;

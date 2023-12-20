@@ -9,7 +9,7 @@ import { QueryBuilderLabelFilter } from '../types';
 import { InputGroup } from '../../QueryEditor/InputGroup';
 import { AccessoryButton } from '../../QueryEditor/AccessoryButton';
 
-export interface Props {
+interface Props {
   defaultOp: string;
   item: Partial<QueryBuilderLabelFilter>;
   items: Array<Partial<QueryBuilderLabelFilter>>;

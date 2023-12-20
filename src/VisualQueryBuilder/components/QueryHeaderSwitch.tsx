@@ -7,7 +7,7 @@ import { Switch, useStyles2 } from '@grafana/ui';
 
 import { Stack } from '../../QueryEditor/Stack';
 
-export interface Props extends Omit<HTMLProps<HTMLInputElement>, 'value' | 'ref'> {
+interface Props extends Omit<HTMLProps<HTMLInputElement>, 'value' | 'ref'> {
   value?: boolean;
   label: string;
 }
