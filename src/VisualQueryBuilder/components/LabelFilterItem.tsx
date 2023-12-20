@@ -67,7 +67,7 @@ export function LabelFilterItem({
     return uniqBy([...selectedOptions, ...labelValues], 'value');
   };
 
-  const isConflicting = isConflictingSelector(item, items);
+  const isConflicting = isConflictingLabelFilter(item, items);
 
   return (
     <div data-testid="prometheus-dimensions-filter-item">
@@ -174,28 +174,15 @@ export function LabelFilterItem({
   );
 }
 
-const lokiOperators = {
-  equals: { label: '=', value: '=', description: 'Equals', isMultiValue: false },
-  doesNotEqual: { label: '!=', value: '!=', description: 'Does not equal', isMultiValue: false },
-  matchesRegex: { label: '=~', value: '=~', description: 'Matches regex', isMultiValue: true },
-  doesNotMatchRegex: { label: '!~', value: '!~', description: 'Does not match regex', isMultiValue: true },
-  greaterThan: { label: '>', value: '>', description: 'Greater than', isMultiValue: false },
-  greaterThanOrEqual: { label: '>=', value: '>=', description: 'Greater than or equal to', isMultiValue: false },
-  lessThan: { label: '<', value: '<', description: 'Less than', isMultiValue: false },
-  lessThanOrEqual: { label: '<=', value: '<=', description: 'Less than or equal to', isMultiValue: false },
-  contains: { label: '|=', value: '|=', description: 'Contains', isMultiValue: false },
-  doesNotContain: { label: '!=', value: '!=', description: 'Does not contain', isMultiValue: false },
-};
-
-
 const operators = [
-  lokiOperators.equals,
-  lokiOperators.doesNotEqual,
-  lokiOperators.matchesRegex,
-  lokiOperators.doesNotMatchRegex,
-];
+   { label: '=', value: '=', description: 'Equals', isMultiValue: false },
+   { label: '!=', value: '!=', description: 'Does not equal', isMultiValue: false },
+   { label: '=~', value: '=~', description: 'Matches regex', isMultiValue: true },
+   { label: '!~', value: '!~', description: 'Does not match regex', isMultiValue: true },
+]
 
-export function isConflictingSelector(
+
+export function isConflictingLabelFilter(
   newLabel: Partial<QueryBuilderLabelFilter>,
   labels: Array<Partial<QueryBuilderLabelFilter>>
 ): boolean {
