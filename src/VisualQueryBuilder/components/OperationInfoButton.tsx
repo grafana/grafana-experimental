@@ -11,9 +11,10 @@ import { FlexItem } from '../../QueryEditor/FlexItem';
 export interface Props {
   operation: QueryBuilderOperation;
   def: QueryBuilderOperationDef;
+  innerQueryPlaceholder: string;
 }
 
-export const OperationInfoButton = React.memo<Props>(({ def, operation }) => {
+export const OperationInfoButton = React.memo<Props>(({ def, operation, innerQueryPlaceholder }) => {
   const styles = useStyles2(getStyles);
   const [show, setShow] = useState(false);
   const { getTooltipProps, setTooltipRef, setTriggerRef, visible } = usePopperTooltip({
@@ -39,7 +40,7 @@ export const OperationInfoButton = React.memo<Props>(({ def, operation }) => {
         <Portal>
           <div ref={setTooltipRef} {...getTooltipProps()} className={styles.docBox}>
             <div className={styles.docBoxHeader}>
-              <span>{def.renderer(operation, def, '<expr>')}</span>
+              <span>{def.renderer(operation, def, innerQueryPlaceholder)}</span>
               <FlexItem grow={1} />
               <Button
                 icon="times"

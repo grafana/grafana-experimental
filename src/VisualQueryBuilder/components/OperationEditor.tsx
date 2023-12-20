@@ -30,6 +30,7 @@ export interface Props {
   highlight?: boolean;
   timeRange?: TimeRange;
   isConflictingOperation?: (operation: QueryBuilderOperation, otherOperations: QueryBuilderOperation[]) => boolean;
+  innerQueryPlaceholder: string;
 }
 
 export function OperationEditor({
@@ -45,6 +46,7 @@ export function OperationEditor({
   highlight,
   timeRange,
   isConflictingOperation,
+  innerQueryPlaceholder,
 }: Props) {
   const def = queryModeller.getOperationDef(operation.id);
   const shouldFlash = useFlash(flash);
@@ -170,6 +172,7 @@ export function OperationEditor({
               onChange={onChange}
               onRemove={onRemove}
               queryModeller={queryModeller}
+              innerQueryPlaceholder={innerQueryPlaceholder}
             />
             <div className={styles.body}>{operationElements}</div>
             {restParam}

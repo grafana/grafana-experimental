@@ -54,7 +54,7 @@ export type QueryBuilderOnParamChangedHandler = (
 export type QueryBuilderOperationRenderer = (
   model: QueryBuilderOperation,
   def: QueryBuilderOperationDef,
-  innerExpr: string
+  innerQuery: string
 ) => string;
 
 export type QueryBuilderOperationParamValue = string | number | boolean;

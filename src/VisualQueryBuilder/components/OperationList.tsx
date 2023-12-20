@@ -21,6 +21,8 @@ export interface Props<T extends QueryWithOperations> {
   highlightedOp?: QueryBuilderOperation;
   timeRange?: TimeRange;
   isConflictingOperation?: (operation: QueryBuilderOperation, otherOperations: QueryBuilderOperation[]) => boolean;
+  // This is going to be used as placeholder for other operations when showing documentation or explain for selected operation. 
+  innerQueryPlaceholder?: string;
 }
 
 export function OperationList<T extends QueryWithOperations>({
@@ -32,6 +34,7 @@ export function OperationList<T extends QueryWithOperations>({
   highlightedOp,
   timeRange,
   isConflictingOperation,
+  innerQueryPlaceholder = '<query>',
 }: Props<T>) {
   const styles = useStyles2(getStyles);
   const { operations } = query;
@@ -112,6 +115,7 @@ export function OperationList<T extends QueryWithOperations>({
                         highlight={highlightedOp === op}
                         timeRange={timeRange}
                         isConflictingOperation={isConflictingOperation}
+                        innerQueryPlaceholder={innerQueryPlaceholder}
                       />
                     );
                   })}

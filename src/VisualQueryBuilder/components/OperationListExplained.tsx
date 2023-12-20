@@ -5,11 +5,12 @@ import { OperationExplainedBox } from './OperationExplainedBox';
 import { RawQuery } from './RawQuery';
 import { QueryBuilderOperation, QueryWithOperations, VisualQueryModeller } from '../types';
 
-export interface Props<T extends QueryWithOperations> {
+interface Props<T extends QueryWithOperations> {
   query: T;
   queryModeller: VisualQueryModeller;
   explainMode?: boolean;
   stepNumber: number;
+  innerQueryPlaceholder?: string;
   lang: {
     grammar: Grammar;
     name: string;
@@ -25,6 +26,7 @@ export function OperationListExplained<T extends QueryWithOperations>({
   lang,
   onMouseEnter,
   onMouseLeave,
+  innerQueryPlaceholder = '<query>',
 }: Props<T>) {
   return (
     <>
@@ -33,7 +35,7 @@ export function OperationListExplained<T extends QueryWithOperations>({
         if (!def) {
           return `Operation ${op.id} not found`;
         }
-        const title = def.renderer(op, def, '<expr>');
+        const title = def.renderer(op, def, innerQueryPlaceholder);
         const body = def.explainHandler ? def.explainHandler(op, def) : def.documentation ?? 'no docs';
 
         return (
