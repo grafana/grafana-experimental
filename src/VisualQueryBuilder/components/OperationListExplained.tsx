@@ -11,7 +11,7 @@ interface Props<T extends QueryWithOperations> {
   explainMode?: boolean;
   stepNumber: number;
   innerQueryPlaceholder?: string;
-  lang: {
+  language: {
     grammar: Grammar;
     name: string;
   };
@@ -23,7 +23,7 @@ export function OperationListExplained<T extends QueryWithOperations>({
   query,
   queryModeller,
   stepNumber,
-  lang,
+  language,
   onMouseEnter,
   onMouseLeave,
   innerQueryPlaceholder = '<query>',
@@ -46,7 +46,7 @@ export function OperationListExplained<T extends QueryWithOperations>({
           >
             <OperationExplainedBox
               stepNumber={index + stepNumber}
-              title={<RawQuery query={title} lang={lang} />}
+              title={<RawQuery query={title} language={language} />}
               markdown={body}
             />
           </div>

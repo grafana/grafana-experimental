@@ -7,16 +7,16 @@ import { useTheme2 } from '@grafana/ui';
 
 export interface Props {
   query: string;
-  lang: {
+  language: {
     grammar: Grammar;
     name: string;
   };
   className?: string;
 }
-export function RawQuery({ query, lang, className }: Props) {
+export function RawQuery({ query, language, className }: Props) {
   const theme = useTheme2();
   const styles = getStyles(theme);
-  const highlighted = Prism.highlight(query, lang.grammar, lang.name);
+  const highlighted = Prism.highlight(query, language.grammar, language.name);
 
   return (
     <div
