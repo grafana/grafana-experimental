@@ -5,7 +5,6 @@
 import { FunctionComponent } from 'react';
 
 import { DataSourceApi, RegistryItem, SelectableValue, TimeRange } from '@grafana/data';
-import { VisualQueryBinary } from './LokiAndPromQueryModellerBase';
 
 export interface QueryBuilderLabelFilter {
   label: string;
@@ -196,3 +195,17 @@ export interface PromVisualQuery {
 }
 
 export type PromVisualQueryBinary = VisualQueryBinary<PromVisualQuery>;
+
+export interface VisualQueryBinary<T> {
+  operator: string;
+  vectorMatchesType?: 'on' | 'ignoring';
+  vectorMatches?: string;
+  query: T;
+}
+
+export interface PromLokiVisualQuery {
+  metric?: string;
+  labels: QueryBuilderLabelFilter[];
+  operations: QueryBuilderOperation[];
+  binaryQueries?: Array<VisualQueryBinary<PromLokiVisualQuery>>;
+}

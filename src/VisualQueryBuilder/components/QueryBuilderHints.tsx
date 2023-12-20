@@ -15,7 +15,8 @@ interface PrometheusDatasource extends DataSourceApi {
   getQueryHints: (query: any, data: any) => QueryHint[];
 }
 
-import { LokiAndPromQueryModellerBase, PromLokiVisualQuery } from '../LokiAndPromQueryModellerBase';
+import { LokiAndPromQueryModellerBase } from '../LokiAndPromQueryModellerBase';
+import { PromLokiVisualQuery } from '../types';
 
 export interface Props<T extends PromLokiVisualQuery> {
   query: T;

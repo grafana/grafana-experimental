@@ -1,5 +1,4 @@
 export { LokiAndPromQueryModellerBase } from './LokiAndPromQueryModellerBase';
-export type {PromLokiVisualQuery, VisualQueryBinary} from './LokiAndPromQueryModellerBase';
 export { LabelFilters } from './components/LabelFilters';
 export { LabelParamEditor } from './components/LabelParamEditor';
 export { OperationExplainedBox } from './components/OperationExplainedBox';
@@ -11,4 +10,4 @@ export { QueryEditorModeToggle } from './components/QueryEditorModeToggle';
 export { QueryHeaderSwitch } from './components/QueryHeaderSwitch';
 export { QueryOptionGroup } from './components/QueryOptionGroup';
 export { RawQuery } from './components/RawQuery';
-export type { QueryBuilderOperationParamEditorProps, QueryBuilderLabelFilter, QueryBuilderOperation, QueryEditorMode, QueryBuilderOperationParamValue, QueryBuilderOperationDef, QueryBuilderOperationParamDef, VisualQueryModeller, QueryWithOperations } from './types';
+export type { QueryBuilderOperationParamEditorProps, QueryBuilderLabelFilter, QueryBuilderOperation, QueryEditorMode, QueryBuilderOperationParamValue, QueryBuilderOperationDef, QueryBuilderOperationParamDef, VisualQueryModeller, QueryWithOperations, VisualQueryBinary, PromLokiVisualQuery } from './types';

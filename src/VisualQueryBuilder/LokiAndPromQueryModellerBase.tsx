@@ -1,22 +1,8 @@
 import { Registry } from '@grafana/data';
 
-import { PromVisualQueryOperationCategory } from './types';
+import { PromLokiVisualQuery, PromVisualQueryOperationCategory, VisualQueryBinary } from './types';
 
 import { QueryBuilderLabelFilter, QueryBuilderOperation, QueryBuilderOperationDef, VisualQueryModeller } from './types';
-
-export interface VisualQueryBinary<T> {
-  operator: string;
-  vectorMatchesType?: 'on' | 'ignoring';
-  vectorMatches?: string;
-  query: T;
-}
-
-export interface PromLokiVisualQuery {
-  metric?: string;
-  labels: QueryBuilderLabelFilter[];
-  operations: QueryBuilderOperation[];
-  binaryQueries?: Array<VisualQueryBinary<PromLokiVisualQuery>>;
-}
 
 export abstract class LokiAndPromQueryModellerBase implements VisualQueryModeller {
   protected operationsRegistry: Registry<QueryBuilderOperationDef>;
