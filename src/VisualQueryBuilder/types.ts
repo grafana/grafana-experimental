@@ -176,21 +176,6 @@ export enum LokiOperationId {
   GreaterOrEqual = '__greater_or_equal',
   LessOrEqual = '__less_or_equal',
 }
-
-export interface PromVisualQuery {
-  metric: string;
-  labels: QueryBuilderLabelFilter[];
-  operations: QueryBuilderOperation[];
-  binaryQueries?: PromVisualQueryBinary[];
-  // metrics explorer additional settings
-  useBackend?: boolean;
-  disableTextWrap?: boolean;
-  includeNullMetadata?: boolean;
-  fullMetaSearch?: boolean;
-}
-
-export type PromVisualQueryBinary = VisualQueryBinary<PromVisualQuery>;
-
 export interface VisualQueryBinary<T> {
   operator: string;
   vectorMatchesType?: 'on' | 'ignoring';
