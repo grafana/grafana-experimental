@@ -2,7 +2,7 @@ import { css, cx } from '@emotion/css';
 import Prism, { Grammar } from 'prismjs';
 import React from 'react';
 
-import { GrafanaTheme2 } from '@grafana/data';
+import { GrafanaTheme2, textUtil } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
 
 export interface Props {
@@ -22,7 +22,7 @@ export function RawQuery({ query, language, className }: Props) {
     <div
       className={cx(styles.editorField, 'prism-syntax-highlight', className)}
       aria-label="selector"
-      dangerouslySetInnerHTML={{ __html: highlighted }}
+      dangerouslySetInnerHTML={{ __html: textUtil.sanitize(highlighted) }}
     />
   );
 }
