@@ -206,3 +206,9 @@ export interface VisualQuery {
   operations: QueryBuilderOperation[];
   binaryQueries?: Array<VisualQueryBinary<VisualQuery>>;
 }
+
+export interface QueryStats {
+  bytes: number;
+  // The error message displayed in the UI when we cant estimate the size of the query.
+  message?: string;
+}

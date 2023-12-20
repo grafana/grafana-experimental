@@ -45,7 +45,7 @@ export const LabelParamEditor = ({
 async function loadGroupByLabels(query: VisualQuery, datasource: DataSourceApi, queryModeller: VisualQueryModeller): Promise<SelectableValue[]> {
   let labels: QueryBuilderLabelFilter[] = query.labels;
 
-  // This is currently based on Prometheus logic, but should eventually be moved to the datasource
+  // TODO: This is currently based on Prometheus logic, but should eventually be moved to the datasource
   if (query.metric && datasource.type === 'prometheus') {
     labels = [{ label: '__name__', op: '=', value: query.metric }, ...query.labels];
   }

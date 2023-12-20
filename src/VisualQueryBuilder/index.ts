@@ -10,4 +10,4 @@ export { QueryEditorModeToggle } from './components/QueryEditorModeToggle';
 export { QueryHeaderSwitch } from './components/QueryHeaderSwitch';
 export { QueryOptionGroup } from './components/QueryOptionGroup';
 export { RawQuery } from './components/RawQuery';
-export type { QueryBuilderOperationParamEditorProps, QueryBuilderLabelFilter, QueryBuilderOperation, QueryEditorMode, QueryBuilderOperationParamValue, QueryBuilderOperationDef, QueryBuilderOperationParamDef, VisualQueryModeller, QueryWithOperations, VisualQueryBinary, VisualQuery } from './types';
+export type { QueryBuilderOperationParamEditorProps, QueryBuilderLabelFilter, QueryBuilderOperation, QueryEditorMode, QueryBuilderOperationParamValue, QueryBuilderOperationDef, QueryBuilderOperationParamDef, VisualQueryModeller, QueryWithOperations, VisualQueryBinary, VisualQuery, QueryStats } from './types';

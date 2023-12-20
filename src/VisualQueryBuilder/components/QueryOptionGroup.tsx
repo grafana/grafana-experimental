@@ -7,15 +7,7 @@ import { config } from '@grafana/runtime';
 import { Collapse, Icon, Tooltip, useStyles2 } from '@grafana/ui';
 
 import { Stack } from '../../QueryEditor/Stack';
-
-interface QueryStats {
-  streams: number;
-  chunks: number;
-  bytes: number;
-  entries: number;
-  // The error message displayed in the UI when we cant estimate the size of the query.
-  message?: string;
-}
+import { QueryStats } from '../types';
 
 
 export interface Props {
@@ -51,7 +43,7 @@ export function QueryOptionGroup({ title, children, collapsedInfo, queryStats }:
       >
         <div className={styles.body}>{children}</div>
       </Collapse>
-
+      {/**TODO: This is Loki logic that should eventually be moved to Loki */} 
       {queryStats && config.featureToggles.lokiQuerySplitting && (
         <Tooltip content="Note: the query will be split into multiple parts and executed in sequence. Query limits will only apply each individual part.">
           <Icon tabIndex={0} name="info-circle" className={styles.tooltip} size="sm" />
