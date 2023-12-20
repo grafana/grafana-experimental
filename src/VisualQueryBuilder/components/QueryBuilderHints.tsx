@@ -15,19 +15,19 @@ interface PrometheusDatasource extends DataSourceApi {
   getQueryHints: (query: any, data: any) => QueryHint[];
 }
 
-import { LokiAndPromQueryModellerBase } from '../LokiAndPromQueryModellerBase';
-import { PromLokiVisualQuery } from '../types';
+import { QueryModellerBase } from '../LokiAndPromQueryModellerBase';
+import { VisualQuery } from '../types';
 
-export interface Props<T extends PromLokiVisualQuery> {
+export interface Props<T extends VisualQuery> {
   query: T;
   datasource: PrometheusDatasource | LokiDatasource;
-  queryModeller: LokiAndPromQueryModellerBase;
+  queryModeller: QueryModellerBase;
   buildVisualQueryFromString: (expr: string) => { query: T };
   onChange: (update: T) => void;
   data?: PanelData;
 }
 
-export const QueryBuilderHints = <T extends PromLokiVisualQuery>({
+export const QueryBuilderHints = <T extends VisualQuery>({
   datasource,
   query: visualQuery,
   onChange,

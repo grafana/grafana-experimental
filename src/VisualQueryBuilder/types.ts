@@ -109,14 +109,6 @@ export interface VisualQueryModeller {
   getOperationDef(id: string): QueryBuilderOperationDef | undefined;
 }
 
-export enum PromVisualQueryOperationCategory {
-  Aggregations = 'Aggregations',
-  RangeFunctions = 'Range functions',
-  Functions = 'Functions',
-  BinaryOps = 'Binary operations',
-  Trigonometric = 'Trigonometric',
-  Time = 'Time Functions',
-}
 
 export enum LokiOperationId {
   Json = 'json',
@@ -203,9 +195,11 @@ export interface VisualQueryBinary<T> {
   query: T;
 }
 
-export interface PromLokiVisualQuery {
+export const BINARY_OPERATIONS_KEY = 'Binary operations'
+
+export interface VisualQuery {
   metric?: string;
   labels: QueryBuilderLabelFilter[];
   operations: QueryBuilderOperation[];
-  binaryQueries?: Array<VisualQueryBinary<PromLokiVisualQuery>>;
+  binaryQueries?: Array<VisualQueryBinary<VisualQuery>>;
 }
