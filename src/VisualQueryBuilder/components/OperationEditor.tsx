@@ -5,10 +5,8 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import { DataSourceApi, GrafanaTheme2, TimeRange } from '@grafana/data';
 import { Button, Icon, InlineField, Tooltip, useTheme2 } from '@grafana/ui';
-import { LokiOperationId } from '../types';
 
 import { OperationHeader } from './OperationHeader';
-import { getOperationParamEditor, getOperationParamId } from './OperationParamEditor'
 import {
   QueryBuilderOperation,
   QueryBuilderOperationDef,
@@ -17,6 +15,7 @@ import {
   VisualQueryModeller,
 } from '../types';
 import { Stack } from '../../QueryEditor/Stack';
+import { getOperationParamEditor, getOperationParamId } from './OperationParamEditor';
 
 export interface Props {
   operation: QueryBuilderOperation;
@@ -30,6 +29,7 @@ export interface Props {
   flash?: boolean;
   highlight?: boolean;
   timeRange?: TimeRange;
+  isConflictingOperation?: (operation: QueryBuilderOperation, otherOperations: QueryBuilderOperation[]) => boolean;
 }
 
 export function OperationEditor({
@@ -44,15 +44,14 @@ export function OperationEditor({
   flash,
   highlight,
   timeRange,
+  isConflictingOperation,
 }: Props) {
   const def = queryModeller.getOperationDef(operation.id);
   const shouldFlash = useFlash(flash);
   const id = useId();
 
-  const isConflicting =
-    operation.id === LokiOperationId.LabelFilter && isConflictingFilter(operation, query.operations);
-
   const theme = useTheme2();
+  const isConflicting = isConflictingOperation ? isConflictingOperation(operation, query.operations) : false;
   const styles = getStyles(theme, isConflicting);
 
   if (!def) {
@@ -330,32 +329,5 @@ const getStyles = (theme: GrafanaTheme2, isConflicting: boolean) => {
 };
 
 type OperationEditorStyles = ReturnType<typeof getStyles>;
-
-
-function isConflictingFilter(
-  operation: QueryBuilderOperation,
-  queryOperations: QueryBuilderOperation[]
-): boolean {
-  const operationIsNegative = operation.params[1].toString().startsWith('!');
-
-  const candidates = queryOperations.filter(
-    (queryOperation) =>
-      queryOperation.id === LokiOperationId.LabelFilter &&
-      queryOperation.params[0] === operation.params[0] &&
-      queryOperation.params[2] === operation.params[2]
-  );
-
-  const conflict = candidates.some((candidate) => {
-    if (operationIsNegative && candidate.params[1].toString().startsWith('!') === false) {
-      return true;
-    }
-    if (operationIsNegative === false && candidate.params[1].toString().startsWith('!')) {
-      return true;
-    }
-    return false;
-  });
-
-  return conflict;
-}
 
 export { getOperationParamId };

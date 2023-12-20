@@ -20,6 +20,7 @@ export interface Props<T extends QueryWithOperations> {
   explainMode?: boolean;
   highlightedOp?: QueryBuilderOperation;
   timeRange?: TimeRange;
+  isConflictingOperation?: (operation: QueryBuilderOperation, otherOperations: QueryBuilderOperation[]) => boolean;
 }
 
 export function OperationList<T extends QueryWithOperations>({
@@ -30,6 +31,7 @@ export function OperationList<T extends QueryWithOperations>({
   onRunQuery,
   highlightedOp,
   timeRange,
+  isConflictingOperation,
 }: Props<T>) {
   const styles = useStyles2(getStyles);
   const { operations } = query;
@@ -109,6 +111,7 @@ export function OperationList<T extends QueryWithOperations>({
                         flash={opsToHighlight[index]}
                         highlight={highlightedOp === op}
                         timeRange={timeRange}
+                        isConflictingOperation={isConflictingOperation}
                       />
                     );
                   })}
