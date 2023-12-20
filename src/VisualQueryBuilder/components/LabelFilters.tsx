@@ -20,6 +20,7 @@ export interface Props {
   onGetLabelValues: (forLabel: Partial<QueryBuilderLabelFilter>) => Promise<SelectableValue[]>;
   /** If set to true, component will show error message until at least 1 filter is selected */
   labelFilterRequired?: boolean;
+  multiValueSeparator?: string;
 }
 
 export function LabelFilters({
@@ -28,6 +29,7 @@ export function LabelFilters({
   onGetLabelNames,
   onGetLabelValues,
   labelFilterRequired,
+  multiValueSeparator,
 }: Props) {
   const defaultOp = '=';
   const [items, setItems] = useState<Array<Partial<QueryBuilderLabelFilter>>>([{ op: defaultOp }]);
@@ -73,6 +75,7 @@ export function LabelFilters({
               onGetLabelValues={onGetLabelValues}
               invalidLabel={labelFilterRequired && !item.label}
               invalidValue={labelFilterRequired && !item.value}
+              multiValueSeparator={multiValueSeparator}
             />
           )}
         />

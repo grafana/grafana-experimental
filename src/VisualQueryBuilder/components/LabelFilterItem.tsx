@@ -1,4 +1,4 @@
-import { uniqBy } from 'lodash';
+import  { uniqBy } from 'lodash';
 import React, { useState } from 'react';
 
 import { SelectableValue, toOption } from '@grafana/data';
@@ -19,6 +19,7 @@ export interface Props {
   onDelete: () => void;
   invalidLabel?: boolean;
   invalidValue?: boolean;
+  multiValueSeparator?: string;
 }
 
 export function LabelFilterItem({
@@ -31,6 +32,7 @@ export function LabelFilterItem({
   onGetLabelValues,
   invalidLabel,
   invalidValue,
+  multiValueSeparator = "|",
 }: Props) {
   const [state, setState] = useState<{
     labelNames?: SelectableValue[];
@@ -51,8 +53,8 @@ export function LabelFilterItem({
 
   const getSelectOptionsFromString = (item?: string): string[] => {
     if (item) {
-      if (item.indexOf('|') > 0) {
-        return item.split('|');
+      if (item.indexOf(multiValueSeparator) > 0) {
+        return item.split(multiValueSeparator);
       }
       return [item];
     }
@@ -161,7 +163,7 @@ export function LabelFilterItem({
                   .map((change: any) => {
                     return change.label;
                   })
-                  .join('|');
+                  .join(multiValueSeparator);
                 onChange({ ...item, value: changes, op: item.op ?? defaultOp } as unknown as QueryBuilderLabelFilter);
               }
             }}
