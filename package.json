@@ -80,7 +80,6 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-popper-tooltip": "^4.4.2",
     "react-use": "^17.4.2",
-    "react-use-id-hook": "^1.0.1",
     "semver": "^7.5.4",
     "uuid": "^8.3.2"
   }

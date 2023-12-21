@@ -1,7 +1,7 @@
 import { css, cx } from '@emotion/css';
 import React, { useEffect, useState } from 'react';
-import { useId } from 'react-use-id-hook';
 import { Draggable } from 'react-beautiful-dnd';
+import { v4 } from 'uuid';
 
 import { DataSourceApi, GrafanaTheme2, TimeRange } from '@grafana/data';
 import { Button, Icon, InlineField, Tooltip, useTheme2 } from '@grafana/ui';
@@ -50,7 +50,7 @@ export function OperationEditor({
 }: Props) {
   const def = queryModeller.getOperationDef(operation.id);
   const shouldFlash = useFlash(flash);
-  const id = useId();
+  const id = v4();
 
   const theme = useTheme2();
   const isConflicting = isConflictingOperation ? isConflictingOperation(operation, query.operations) : false;
