@@ -37,7 +37,7 @@ export const QueryBuilderHints = <T extends VisualQuery, Q extends DataQuery>({
     // For now show only actionable hints
     const hints = datasource.getQueryHints?.(dataQuery, data?.series || []).filter((hint) => hint.fix?.action);
     setHints(hints ?? []);
-  }, [datasource, visualQuery, data, queryModeller]);
+  }, [datasource, visualQuery, data, queryModeller, buildDataQueryFromQueryString]);
 
   return (
     <>
