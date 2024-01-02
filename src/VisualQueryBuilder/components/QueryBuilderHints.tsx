@@ -8,18 +8,18 @@ import { Button, Tooltip, useStyles2 } from '@grafana/ui';
 
 import { VisualQuery, VisualQueryModeller } from '../types';
 
-interface Props<T extends VisualQuery, Q extends DataQuery> {
-  query: T;
+interface Props<TVisualQuery extends VisualQuery, TDataQuery extends DataQuery> {
+  query: TVisualQuery;
   datasource: DataSourceApi;
   queryModeller: VisualQueryModeller;
-  buildVisualQueryFromString: (queryString: string) => { query: T };
-  buildDataQueryFromQueryString: (queryString: string) => Q;
-  buildQueryStringFromDataQuery: (dataQuery: Q) => string;
-  onChange: (update: T) => void;
+  buildVisualQueryFromString: (queryString: string) => { query: TVisualQuery };
+  buildDataQueryFromQueryString: (queryString: string) => TDataQuery;
+  buildQueryStringFromDataQuery: (dataQuery: TDataQuery) => string;
+  onChange: (update: TVisualQuery) => void;
   data?: PanelData;
 }
 
-export const QueryBuilderHints = <T extends VisualQuery, Q extends DataQuery>({
+export const QueryBuilderHints = <TVisualQuery extends VisualQuery, TDataQuery extends DataQuery>({
   datasource,
   query: visualQuery,
   onChange,
@@ -28,7 +28,7 @@ export const QueryBuilderHints = <T extends VisualQuery, Q extends DataQuery>({
   buildVisualQueryFromString,
   buildDataQueryFromQueryString,
   buildQueryStringFromDataQuery,
-}: Props<T, Q>) => {
+}: Props<TVisualQuery, TDataQuery>) => {
   const [hints, setHints] = useState<QueryHint[]>([]);
   const styles = useStyles2(getStyles);
 
@@ -55,7 +55,7 @@ export const QueryBuilderHints = <T extends VisualQuery, Q extends DataQuery>({
 
                     if (hint?.fix?.action) {
                       const dataQuery = buildDataQueryFromQueryString(queryModeller.renderQuery(visualQuery))
-                      const newQuery = datasource.modifyQuery?.(dataQuery, hint.fix.action) as Q;
+                      const newQuery = datasource.modifyQuery?.(dataQuery, hint.fix.action) as TDataQuery;
                       if (newQuery) {
                         const newVisualQuery = buildVisualQueryFromString(buildQueryStringFromDataQuery(newQuery) ?? '');
                         return onChange(newVisualQuery.query);
