@@ -72,13 +72,13 @@ export function LabelFilterItem({
   const isConflicting = isConflictingLabelFilter(item, items);
 
   return (
-    <div data-testid="prometheus-dimensions-filter-item">
+    <div data-testid="visual-query-builder-dimensions-filter-item">
       <InlineField error={CONFLICTING_LABEL_FILTER_ERROR_MESSAGE} invalid={isConflicting ? true : undefined}>
         <InputGroup>
           <Select
             placeholder="Select label"
             aria-label={selectors.components.QueryBuilder.labelSelect}
-            inputId="prometheus-dimensions-filter-item-key"
+            inputId="visual-query-builder-dimensions-filter-item-key"
             width="auto"
             value={item.label ? toOption(item.label) : null}
             allowCustomValue
@@ -126,7 +126,7 @@ export function LabelFilterItem({
           <Select
             placeholder="Select value"
             aria-label={selectors.components.QueryBuilder.valueSelect}
-            inputId="prometheus-dimensions-filter-item-value"
+            inputId="visual-query-builder-dimensions-filter-item-value"
             width="auto"
             value={
               isMultiSelect()
