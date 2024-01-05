@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.7.5
+
+- Add new ConfigDescriptionLink component
+
+
 ## v1.7.4
 
 - Add support for filtered vector search
