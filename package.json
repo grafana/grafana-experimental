@@ -1,7 +1,7 @@
 {
-  "name": "@grafana/experimental",
-  "version": "1.7.5",
-  "description": "Experimental Grafana components and APIs",
+  "name": "@grafana/llms",
+  "version": "0.5.1",
+  "description": "Grafana LLM frontend components and APIs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "module": "./dist/esm/index.js",
