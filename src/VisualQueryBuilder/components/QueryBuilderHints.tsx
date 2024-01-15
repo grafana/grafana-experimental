@@ -10,7 +10,7 @@ import { VisualQuery, VisualQueryModeller } from '../types';
 
 interface Props<TVisualQuery extends VisualQuery, TDataQuery extends DataQuery> {
   query: TVisualQuery;
-  datasource: DataSourceApi;
+  datasource: DataSourceApi<TDataQuery>;
   queryModeller: VisualQueryModeller;
   buildVisualQueryFromString: (queryString: string) => { query: TVisualQuery };
   buildDataQueryFromQueryString: (queryString: string) => TDataQuery;
@@ -55,7 +55,7 @@ export const QueryBuilderHints = <TVisualQuery extends VisualQuery, TDataQuery e
 
                     if (hint?.fix?.action) {
                       const dataQuery = buildDataQueryFromQueryString(queryModeller.renderQuery(visualQuery))
-                      const newQuery = datasource.modifyQuery?.(dataQuery, hint.fix.action) as TDataQuery;
+                      const newQuery = datasource.modifyQuery?.(dataQuery, hint.fix.action);
                       if (newQuery) {
                         const newVisualQuery = buildVisualQueryFromString(buildQueryStringFromDataQuery(newQuery) ?? '');
                         return onChange(newVisualQuery.query);
