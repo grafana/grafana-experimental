@@ -14,6 +14,14 @@ export abstract class QueryModellerBase implements VisualQueryModeller {
     this.categories = categories;
   }
 
+  abstract renderOperations(queryString: string, operations: QueryBuilderOperation[]): string;
+
+  abstract renderBinaryQueries(queryString: string, binaryQueries?: Array<VisualQueryBinary<VisualQuery>>): string
+
+  abstract renderLabels(labels: QueryBuilderLabelFilter[]): string;
+
+  abstract renderQuery(query: VisualQuery, nested?: boolean): string
+
   getOperationsForCategory(category: string) {
     return this.operationsRegistry.list().filter((op) => op.category === category && !op.hideFromList);
   }
@@ -28,73 +36,6 @@ export abstract class QueryModellerBase implements VisualQueryModeller {
 
   getOperationDef(id: string): QueryBuilderOperationDef | undefined {
     return this.operationsRegistry.getIfExists(id);
-  }
-
-  renderOperations(queryString: string, operations: QueryBuilderOperation[]) {
-    for (const operation of operations) {
-      const def = this.operationsRegistry.getIfExists(operation.id);
-      if (!def) {
-        throw new Error(`Could not find operation ${operation.id} in the registry`);
-      }
-      queryString = def.renderer(operation, def, queryString);
-    }
-
-    return queryString;
-  }
-
-  renderBinaryQueries(queryString: string, binaryQueries?: Array<VisualQueryBinary<VisualQuery>>) {
-    if (binaryQueries) {
-      for (const binQuery of binaryQueries) {
-        queryString = `${this.renderBinaryQuery(queryString, binQuery)}`;
-      }
-    }
-    return queryString;
-  }
-
-  private renderBinaryQuery(leftOperand: string, binaryQuery: VisualQueryBinary<VisualQuery>) {
-    let result = leftOperand + ` ${binaryQuery.operator} `;
-
-    if (binaryQuery.vectorMatches) {
-      result += `${binaryQuery.vectorMatchesType}(${binaryQuery.vectorMatches}) `;
-    }
-
-    return result + this.renderQuery(binaryQuery.query, true);
-  }
-
-  // This is rendering labels in prom/loki format that can be overridden by class that extends VisualQueryModeller
-  renderLabels(labels: QueryBuilderLabelFilter[]) {
-    if (labels.length === 0) {
-      return '';
-    }
-
-    let queryString = '{';
-    for (const filter of labels) {
-      if (queryString !== '{') {
-        queryString += ', ';
-      }
-
-      queryString += `${filter.label}${filter.op}"${filter.value}"`;
-    }
-
-    return queryString + `}`;
-  }
-
-  // This is rendering labels in prom/loki format that can be overridden by class that extends VisualQueryModeller
-  renderQuery(query: VisualQuery, nested?: boolean) {
-    let queryString = `${query.metric ?? ''}${this.renderLabels(query.labels)}`;
-    queryString = this.renderOperations(queryString, query.operations);
-
-    if (!nested && this.hasBinaryOp(query) && Boolean(query.binaryQueries?.length)) {
-      queryString = `(${queryString})`;
-    }
-
-    queryString = this.renderBinaryQueries(queryString, query.binaryQueries);
-
-    if (nested && (this.hasBinaryOp(query) || Boolean(query.binaryQueries?.length))) {
-      queryString = `(${queryString})`;
-    }
-
-    return queryString;
   }
 
   hasBinaryOp(query: VisualQuery): boolean {
