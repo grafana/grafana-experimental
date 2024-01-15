@@ -9,6 +9,7 @@ import { QueryBuilderLabelFilter } from '../types';
 import { InputGroup } from '../../QueryEditor/InputGroup';
 import { AccessoryButton } from '../../QueryEditor/AccessoryButton';
 
+const CONFLICTING_LABEL_FILTER_ERROR_MESSAGE = 'You have conflicting label filters';
 interface Props {
   defaultOp: string;
   item: Partial<QueryBuilderLabelFilter>;
@@ -45,7 +46,6 @@ export function LabelFilterItem({
   // instead, we explicitly control the menu visibility and prevent showing it until the options have fully loaded
   const [labelNamesMenuOpen, setLabelNamesMenuOpen] = useState(false);
   const [labelValuesMenuOpen, setLabelValuesMenuOpen] = useState(false);
-  const CONFLICTING_LABEL_FILTER_ERROR_MESSAGE = 'You have conflicting label filters';
 
   const isMultiSelect = (operator = item.op) => {
     return operators.find((op) => op.label === operator)?.isMultiValue;
