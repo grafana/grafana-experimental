@@ -5,16 +5,16 @@ import { usePopperTooltip } from 'react-popper-tooltip';
 import { GrafanaTheme2, renderMarkdown } from '@grafana/data';
 import { Button, Portal, useStyles2 } from '@grafana/ui';
 
-import { QueryBuilderOperation, QueryBuilderOperationDef } from '../types';
+import { QueryBuilderOperation, QueryBuilderOperationDefinition } from '../types';
 import { FlexItem } from '../../QueryEditor/FlexItem';
 
 interface Props {
   operation: QueryBuilderOperation;
-  def: QueryBuilderOperationDef;
+  definition: QueryBuilderOperationDefinition;
   innerQueryPlaceholder: string;
 }
 
-export const OperationInfoButton = React.memo<Props>(({ def, operation, innerQueryPlaceholder }) => {
+export const OperationInfoButton = React.memo<Props>(({ definition, operation, innerQueryPlaceholder }) => {
   const styles = useStyles2(getStyles);
   const [show, setShow] = useState(false);
   const { getTooltipProps, setTooltipRef, setTriggerRef, visible } = usePopperTooltip({
@@ -40,7 +40,7 @@ export const OperationInfoButton = React.memo<Props>(({ def, operation, innerQue
         <Portal>
           <div ref={setTooltipRef} {...getTooltipProps()} className={styles.docBox}>
             <div className={styles.docBoxHeader}>
-              <span>{def.renderer(operation, def, innerQueryPlaceholder)}</span>
+              <span>{definition.renderer(operation, definition, innerQueryPlaceholder)}</span>
               <FlexItem grow={1} />
               <Button
                 icon="times"
@@ -52,7 +52,7 @@ export const OperationInfoButton = React.memo<Props>(({ def, operation, innerQue
             </div>
             <div
               className={styles.docBoxBody}
-              dangerouslySetInnerHTML={{ __html: getOperationDocs(def, operation) }}
+              dangerouslySetInnerHTML={{ __html: getOperationDocs(definition, operation) }}
             ></div>
           </div>
         </Portal>
@@ -97,6 +97,6 @@ const getStyles = (theme: GrafanaTheme2) => {
     }),
   };
 };
-function getOperationDocs(def: QueryBuilderOperationDef, op: QueryBuilderOperation): string {
+function getOperationDocs(def: QueryBuilderOperationDefinition, op: QueryBuilderOperation): string {
   return renderMarkdown(def.explainHandler ? def.explainHandler(op, def) : def.documentation ?? 'no docs');
 }

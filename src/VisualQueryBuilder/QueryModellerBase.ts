@@ -1,13 +1,13 @@
 import { Registry } from '@grafana/data';
 
-import { BINARY_OPERATIONS_KEY, VisualQuery, VisualQueryBinary, QueryBuilderLabelFilter, QueryBuilderOperation, QueryBuilderOperationDef, VisualQueryModeller } from './types';
+import { BINARY_OPERATIONS_KEY, VisualQuery, VisualQueryBinary, QueryBuilderLabelFilter, QueryBuilderOperation, VisualQueryModeller, QueryBuilderOperationDefinition } from './types';
 
 export abstract class QueryModellerBase implements VisualQueryModeller {
-  protected operationsRegistry: Registry<QueryBuilderOperationDef>;
+  protected operationsRegistry: Registry<QueryBuilderOperationDefinition>;
   private categories: string[] = [];
 
-  constructor(getOperations: () => QueryBuilderOperationDef[]) {
-    this.operationsRegistry = new Registry<QueryBuilderOperationDef>(getOperations);
+  constructor(getOperations: () => QueryBuilderOperationDefinition[]) {
+    this.operationsRegistry = new Registry<QueryBuilderOperationDefinition>(getOperations);
   }
 
   protected setOperationCategories(categories: string[]) {
@@ -34,14 +34,14 @@ export abstract class QueryModellerBase implements VisualQueryModeller {
     return this.categories;
   }
 
-  getOperationDef(id: string): QueryBuilderOperationDef | undefined {
+  getOperationDefinition(id: string): QueryBuilderOperationDefinition | undefined {
     return this.operationsRegistry.getIfExists(id);
   }
 
   hasBinaryOp(query: VisualQuery): boolean {
     return (
       query.operations.find((op) => {
-        const def = this.getOperationDef(op.id);
+        const def = this.getOperationDefinition(op.id);
         return def?.category === BINARY_OPERATIONS_KEY;
       }) !== undefined
     );

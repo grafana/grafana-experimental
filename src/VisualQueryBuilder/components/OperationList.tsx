@@ -67,7 +67,7 @@ export function OperationList<T extends VisualQuery>({
   });
 
   const onAddOperation = (value: string) => {
-    const operationDef = queryModeller.getOperationDef(value);
+    const operationDef = queryModeller.getOperationDefinition(value);
     if (!operationDef) {
       return;
     }

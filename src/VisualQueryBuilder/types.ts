@@ -17,7 +17,7 @@ export interface QueryBuilderOperation {
   params: QueryBuilderOperationParamValue[];
 }
 
-export interface QueryBuilderOperationDef<T = any> extends RegistryItem {
+export interface QueryBuilderOperationDefinition<T = any> extends RegistryItem {
   documentation?: string;
   params: QueryBuilderOperationParamDef[];
   defaultParams: QueryBuilderOperationParamValue[];
@@ -30,26 +30,26 @@ export interface QueryBuilderOperationDef<T = any> extends RegistryItem {
   addOperationHandler: QueryBuilderAddOperationHandler<T>;
   paramChangedHandler?: QueryBuilderOnParamChangedHandler;
   explainHandler?: QueryBuilderExplainOperationHandler;
-  changeTypeHandler?: (op: QueryBuilderOperation, newDef: QueryBuilderOperationDef<T>) => QueryBuilderOperation;
+  changeTypeHandler?: (op: QueryBuilderOperation, newDef: QueryBuilderOperationDefinition<T>) => QueryBuilderOperation;
 }
 
 type QueryBuilderAddOperationHandler<T> = (
-  def: QueryBuilderOperationDef,
+  def: QueryBuilderOperationDefinition,
   query: T,
   modeller: VisualQueryModeller
 ) => T;
 
-type QueryBuilderExplainOperationHandler = (op: QueryBuilderOperation, def?: QueryBuilderOperationDef) => string;
+type QueryBuilderExplainOperationHandler = (op: QueryBuilderOperation, def?: QueryBuilderOperationDefinition) => string;
 
 type QueryBuilderOnParamChangedHandler = (
   index: number,
   operation: QueryBuilderOperation,
-  operationDef: QueryBuilderOperationDef
+  operationDef: QueryBuilderOperationDefinition
 ) => QueryBuilderOperation;
 
 type QueryBuilderOperationRenderer = (
   model: QueryBuilderOperation,
-  def: QueryBuilderOperationDef,
+  def: QueryBuilderOperationDefinition,
   innerQuery: string
 ) => string;
 
@@ -96,10 +96,10 @@ export type QueryStats = {
 }
 
 export interface VisualQueryModeller {
-  getOperationsForCategory(category: string): QueryBuilderOperationDef[];
-  getAlternativeOperations(key: string): QueryBuilderOperationDef[];
+  getOperationsForCategory(category: string): QueryBuilderOperationDefinition[];
+  getAlternativeOperations(key: string): QueryBuilderOperationDefinition[];
   getCategories(): string[];
-  getOperationDef(id: string): QueryBuilderOperationDef | undefined;
+  getOperationDefinition(id: string): QueryBuilderOperationDefinition | undefined;
   renderQuery(query: VisualQuery, nested?: boolean): string
   renderLabels(labels: QueryBuilderLabelFilter[]): string;
 }

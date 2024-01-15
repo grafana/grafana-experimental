@@ -31,7 +31,7 @@ export function OperationListExplained<T extends VisualQuery>({
   return (
     <>
       {query.operations.map((op, index) => {
-        const def = queryModeller.getOperationDef(op.id);
+        const def = queryModeller.getOperationDefinition(op.id);
         if (!def) {
           return `Operation ${op.id} not found`;
         }

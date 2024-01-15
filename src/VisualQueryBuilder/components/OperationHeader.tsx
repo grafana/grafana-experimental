@@ -7,12 +7,12 @@ import { Button, Select, useStyles2 } from '@grafana/ui';
 
 import { OperationInfoButton } from './OperationInfoButton';
 
-import { VisualQueryModeller, QueryBuilderOperation, QueryBuilderOperationDef } from '../types';
+import { VisualQueryModeller, QueryBuilderOperation, QueryBuilderOperationDefinition } from '../types';
 import { FlexItem } from '../../QueryEditor/FlexItem';
 
 interface Props {
   operation: QueryBuilderOperation;
-  def: QueryBuilderOperationDef;
+  definition: QueryBuilderOperationDefinition;
   index: number;
   queryModeller: VisualQueryModeller;
   dragHandleProps?: DraggableProvided['dragHandleProps'];
@@ -23,11 +23,11 @@ interface Props {
 
 interface State {
   isOpen?: boolean;
-  alternatives?: Array<SelectableValue<QueryBuilderOperationDef>>;
+  alternatives?: Array<SelectableValue<QueryBuilderOperationDefinition>>;
 }
 
 export const OperationHeader = React.memo<Props>(
-  ({ operation, def, index, onChange, onRemove, queryModeller, dragHandleProps, innerQueryPlaceholder }) => {
+  ({ operation, definition, index, onChange, onRemove, queryModeller, dragHandleProps, innerQueryPlaceholder }) => {
     const styles = useStyles2(getStyles);
     const [state, setState] = useState<State>({});
 
@@ -36,7 +36,7 @@ export const OperationHeader = React.memo<Props>(
         setState({ ...state, isOpen: false });
       } else {
         const alternatives = queryModeller
-          .getAlternativeOperations(def.alternativesKey!)
+          .getAlternativeOperations(definition.alternativesKey!)
           .map((alt) => ({ label: alt.name, value: alt }));
         setState({ isOpen: true, alternatives });
       }
@@ -46,7 +46,7 @@ export const OperationHeader = React.memo<Props>(
       <div className={styles.header}>
         {!state.isOpen && (
           <>
-            <div {...dragHandleProps}>{def.name ?? def.id}</div>
+            <div {...dragHandleProps}>{definition.name ?? definition.id}</div>
             <FlexItem grow={1} />
             <div className={`${styles.operationHeaderButtons} operation-header-show-on-hover`}>
               <Button
@@ -57,7 +57,7 @@ export const OperationHeader = React.memo<Props>(
                 variant="secondary"
                 title="Click to view alternative operations"
               />
-              <OperationInfoButton def={def} operation={operation} innerQueryPlaceholder={innerQueryPlaceholder} />
+              <OperationInfoButton definition={definition} operation={operation} innerQueryPlaceholder={innerQueryPlaceholder} />
               <Button
                 icon="times"
                 size="sm"
@@ -81,18 +81,18 @@ export const OperationHeader = React.memo<Props>(
               onChange={(value) => {
                 if (value.value) {
                   // Operation should exist if it is selectable
-                  const newDef = queryModeller.getOperationDef(value.value.id)!;
+                  const newDef = queryModeller.getOperationDefinition(value.value.id)!;
 
                   // copy default params, and override with all current params
                   const newParams = [...newDef.defaultParams];
                   for (let i = 0; i < Math.min(operation.params.length, newParams.length); i++) {
-                    if (newDef.params[i].type === def.params[i].type) {
+                    if (newDef.params[i].type === definition.params[i].type) {
                       newParams[i] = operation.params[i];
                     }
                   }
 
                   const changedOp = { ...operation, params: newParams, id: value.value.id };
-                  onChange(index, def.changeTypeHandler ? def.changeTypeHandler(changedOp, newDef) : changedOp);
+                  onChange(index, definition.changeTypeHandler ? definition.changeTypeHandler(changedOp, newDef) : changedOp);
                 }
               }}
             />

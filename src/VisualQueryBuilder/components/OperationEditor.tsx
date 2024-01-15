@@ -9,7 +9,7 @@ import { Button, Icon, InlineField, Tooltip, useTheme2 } from '@grafana/ui';
 import { OperationHeader } from './OperationHeader';
 import {
   QueryBuilderOperation,
-  QueryBuilderOperationDef,
+  QueryBuilderOperationDefinition,
   QueryBuilderOperationParamDef,
   QueryBuilderOperationParamValue,
   VisualQueryModeller,
@@ -48,7 +48,7 @@ export function OperationEditor({
   isConflictingOperation,
   innerQueryPlaceholder,
 }: Props) {
-  const def = queryModeller.getOperationDef(operation.id);
+  const def = queryModeller.getOperationDefinition(operation.id);
   const shouldFlash = useFlash(flash);
   const id = v4();
 
@@ -167,7 +167,7 @@ export function OperationEditor({
             <OperationHeader
               operation={operation}
               dragHandleProps={provided.dragHandleProps}
-              def={def}
+              definition={def}
               index={index}
               onChange={onChange}
               onRemove={onRemove}
@@ -236,7 +236,7 @@ function renderAddRestParamButton(
 }
 
 function callParamChangedThenOnChange(
-  def: QueryBuilderOperationDef,
+  def: QueryBuilderOperationDefinition,
   operation: QueryBuilderOperation,
   operationIndex: number,
   paramIndex: number,
