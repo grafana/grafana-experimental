@@ -24,7 +24,7 @@ export const LabelParamEditor = ({
   return (
     <Select
       inputId={getOperationParamId(operationId, index)}
-      autoFocus={value === '' ? true : undefined}
+      autoFocus={value === ''}
       openMenuOnFocus
       onOpenMenu={async () => {
         setState({ isLoading: true });
