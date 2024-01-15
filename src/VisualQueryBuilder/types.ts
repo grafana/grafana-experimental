@@ -1,7 +1,3 @@
-/**
- * Shared types that can be reused by Loki and other data sources
- */
-
 import { FunctionComponent } from 'react';
 
 import { DataSourceApi, RegistryItem, SelectableValue, TimeRange } from '@grafana/data';

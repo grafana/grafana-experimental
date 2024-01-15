@@ -12,15 +12,16 @@ import {
   QueryBuilderOperationDefinition,
   QueryBuilderOperationParamDef,
   QueryBuilderOperationParamValue,
+  VisualQuery,
   VisualQueryModeller,
 } from '../types';
 import { Stack } from '../../QueryEditor/Stack';
 import { getOperationParamEditor, getOperationParamId } from './OperationParamEditor';
 
-interface Props {
+interface Props<T extends VisualQuery> {
   operation: QueryBuilderOperation;
   index: number;
-  query: any;
+  query: T;
   datasource: DataSourceApi;
   queryModeller: VisualQueryModeller;
   onChange: (index: number, update: QueryBuilderOperation) => void;
@@ -33,7 +34,7 @@ interface Props {
   innerQueryPlaceholder: string;
 }
 
-export function OperationEditor({
+export function OperationEditor<T extends VisualQuery>({
   operation,
   index,
   onRemove,
@@ -47,7 +48,7 @@ export function OperationEditor({
   timeRange,
   isConflictingOperation,
   innerQueryPlaceholder,
-}: Props) {
+}: Props<T>) {
   const def = queryModeller.getOperationDefinition(operation.id);
   const shouldFlash = useFlash(flash);
   const id = v4();
