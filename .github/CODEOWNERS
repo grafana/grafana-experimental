@@ -1,1 +1,2 @@
 /src/sql-editor @grafana/oss-big-tent
+/src/VisualQueryBuilder @grafana/observability-logs @grafana/observability-metrics
