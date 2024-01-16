@@ -59,4 +59,4 @@ async function loadGroupByLabels(query: VisualQuery, datasource: DataSourceApi, 
   }));
 }
 
-export const toOption = (value: QueryBuilderOperationParamValue | undefined): SelectableValue<QueryBuilderOperationParamValue | undefined> => ({ label: value?.toString(), value });
+const toOption = (value: QueryBuilderOperationParamValue | undefined): SelectableValue<QueryBuilderOperationParamValue | undefined> => ({ label: value?.toString(), value });
