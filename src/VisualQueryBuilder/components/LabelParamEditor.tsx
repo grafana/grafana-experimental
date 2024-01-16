@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { DataSourceApi, SelectableValue, toOption } from '@grafana/data';
+import { DataSourceApi, SelectableValue } from '@grafana/data';
 import { Select } from '@grafana/ui';
 
 import { getOperationParamId } from './OperationEditor';
-import { QueryBuilderLabelFilter, QueryBuilderOperationParamEditorProps, VisualQuery, VisualQueryModeller } from '../types';
+import { QueryBuilderLabelFilter, QueryBuilderOperationParamEditorProps, QueryBuilderOperationParamValue, VisualQuery, VisualQueryModeller } from '../types';
 
 
 export const LabelParamEditor = ({
@@ -22,7 +22,7 @@ export const LabelParamEditor = ({
   }>({});
 
   return (
-    <Select
+    <Select<QueryBuilderOperationParamValue | undefined>
       inputId={getOperationParamId(operationId, index)}
       autoFocus={value === ''}
       openMenuOnFocus
@@ -36,7 +36,7 @@ export const LabelParamEditor = ({
       noOptionsMessage="No labels found"
       loadingMessage="Loading labels"
       options={state.options}
-      value={toOption(value as string)}
+      value={toOption(value)}
       onChange={(value) => onChange(index, value.value!)}
     />
   );
@@ -58,3 +58,5 @@ async function loadGroupByLabels(query: VisualQuery, datasource: DataSourceApi, 
     value: x,
   }));
 }
+
+const toOption = (value: QueryBuilderOperationParamValue | undefined): SelectableValue<QueryBuilderOperationParamValue | undefined> => ({ label: value?.toString(), value });

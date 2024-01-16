@@ -15,8 +15,8 @@ interface Props {
   item: Partial<QueryBuilderLabelFilter>;
   items: Array<Partial<QueryBuilderLabelFilter>>;
   onChange: (value: QueryBuilderLabelFilter) => void;
-  onGetLabelNames: (forLabel: Partial<QueryBuilderLabelFilter>) => Promise<SelectableValue[]>;
-  onGetLabelValues: (forLabel: Partial<QueryBuilderLabelFilter>) => Promise<SelectableValue[]>;
+  onGetLabelNames: (forLabel: Partial<QueryBuilderLabelFilter>) => Promise<Array<SelectableValue<string>>>;
+  onGetLabelValues: (forLabel: Partial<QueryBuilderLabelFilter>) => Promise<Array<SelectableValue<string>>>;
   onDelete: () => void;
   invalidLabel?: boolean;
   invalidValue?: boolean;
@@ -36,8 +36,8 @@ export function LabelFilterItem({
   multiValueSeparator = "|",
 }: Props) {
   const [state, setState] = useState<{
-    labelNames?: SelectableValue[];
-    labelValues?: SelectableValue[];
+    labelNames?: Array<SelectableValue<string>>;
+    labelValues?: Array<SelectableValue<string>>;
     isLoadingLabelNames?: boolean;
     isLoadingLabelValues?: boolean;
   }>({});
@@ -61,7 +61,7 @@ export function LabelFilterItem({
     return [];
   };
 
-  const getOptions = (): SelectableValue[] => {
+  const getOptions = (): Array<SelectableValue<string>> => {
     const labelValues = state.labelValues ? [...state.labelValues] : [];
     const selectedOptions = getSelectOptionsFromString(item?.value).map(toOption);
 
@@ -75,7 +75,7 @@ export function LabelFilterItem({
     <div data-testid="visual-query-builder-dimensions-filter-item">
       <InlineField error={CONFLICTING_LABEL_FILTER_ERROR_MESSAGE} invalid={isConflicting ? true : undefined}>
         <InputGroup>
-          <Select
+          <Select<string>
             placeholder="Select label"
             aria-label={selectors.components.QueryBuilder.labelSelect}
             inputId="visual-query-builder-dimensions-filter-item-key"
@@ -95,35 +95,37 @@ export function LabelFilterItem({
             isLoading={state.isLoadingLabelNames}
             options={state.labelNames}
             onChange={(change) => {
-              if (change.label) {
+              if (change.value) {
                 onChange({
                   ...item,
+                  value: item.value ?? '',
                   op: item.op ?? defaultOp,
-                  label: change.label,
-                } as unknown as QueryBuilderLabelFilter);
+                  label: change.value,
+                });
               }
             }}
             invalid={isConflicting || invalidLabel}
           />
 
-          <Select
+          <Select<string>
             aria-label={selectors.components.QueryBuilder.matchOperatorSelect}
             value={toOption(item.op ?? defaultOp)}
             options={operators}
             width="auto"
             onChange={(change) => {
-              if (change.value != null) {
+              if (change.value) {
                 onChange({
                   ...item,
+                  label: item.label ?? '',
                   op: change.value,
-                  value: isMultiSelect(change.value) ? item.value : getSelectOptionsFromString(item?.value)[0],
-                } as unknown as QueryBuilderLabelFilter);
+                  value: isMultiSelect(change.value) ? (item.value ?? '') : getSelectOptionsFromString(item?.value)[0],
+                });
               }
             }}
             invalid={isConflicting}
           />
 
-          <Select
+          <Select<string>
             placeholder="Select value"
             aria-label={selectors.components.QueryBuilder.valueSelect}
             inputId="visual-query-builder-dimensions-filter-item-value"
@@ -157,14 +159,21 @@ export function LabelFilterItem({
                   ...item,
                   value: change.value,
                   op: item.op ?? defaultOp,
-                } as unknown as QueryBuilderLabelFilter);
+                  label: item.label ?? '',
+                });
               } else {
+                // otherwise, we're dealing with a multi-value select which is array of options
                 const changes = change
-                  .map((change: any) => {
-                    return change.label;
+                  .map((change: SelectableValue<string>) => {
+                    if (change.value) {
+                      return change.value;
+                    } else {
+                      return undefined
+                    }
                   })
+                  .filter((val: string | undefined) => val !== undefined)
                   .join(multiValueSeparator);
-                onChange({ ...item, value: changes, op: item.op ?? defaultOp } as unknown as QueryBuilderLabelFilter);
+                onChange({ ...item, label: item.label ?? '', value: changes, op: item.op ?? defaultOp });
               }
             }}
             invalid={isConflicting || invalidValue}
