@@ -9,7 +9,7 @@ export abstract class QueryModellerBase implements VisualQueryModeller {
 
   constructor(queryModellerOptions: QueryModellerOptions) {
     this.operationsRegistry = new Registry<QueryBuilderOperationDefinition>(queryModellerOptions.getOperations);
-    this.innerQueryPlaceholder = queryModellerOptions.innerQueryPlaceholder || '';
+    this.innerQueryPlaceholder = queryModellerOptions.innerQueryPlaceholder || '<query>';
   }
 
   protected setOperationCategories(categories: string[]) {
