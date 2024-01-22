@@ -98,7 +98,7 @@ export interface VisualQueryModeller {
   getOperationDefinition(id: string): QueryBuilderOperationDefinition | undefined;
   renderQuery(query: VisualQuery, nested?: boolean): string
   renderLabels(labels: QueryBuilderLabelFilter[]): string;
-  innerQueryPlaceholder : string;
+  innerQueryPlaceholder: string;
 }
 
 export interface QueryModellerOptions {
