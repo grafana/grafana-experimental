@@ -10,7 +10,6 @@ interface Props<T extends VisualQuery> {
   queryModeller: VisualQueryModeller;
   explainMode?: boolean;
   stepNumber: number;
-  innerQueryPlaceholder?: string;
   language: {
     grammar: Grammar;
     name: string;
@@ -26,7 +25,6 @@ export function OperationListExplained<T extends VisualQuery>({
   language,
   onMouseEnter,
   onMouseLeave,
-  innerQueryPlaceholder = '<query>',
 }: Props<T>) {
   return (
     <>
@@ -35,7 +33,7 @@ export function OperationListExplained<T extends VisualQuery>({
         if (!def) {
           return `Operation ${op.id} not found`;
         }
-        const title = def.renderer(op, def, innerQueryPlaceholder);
+        const title = def.renderer(op, def, queryModeller.innerQueryPlaceholder);
         const body = def.explainHandler ? def.explainHandler(op, def) : def.documentation ?? 'no docs';
 
         return (

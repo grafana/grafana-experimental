@@ -18,7 +18,6 @@ interface Props {
   dragHandleProps?: DraggableProvided['dragHandleProps'];
   onChange: (index: number, update: QueryBuilderOperation) => void;
   onRemove: (index: number) => void;
-  innerQueryPlaceholder: string;
 }
 
 interface State {
@@ -27,7 +26,7 @@ interface State {
 }
 
 export const OperationHeader = React.memo<Props>(
-  ({ operation, definition, index, onChange, onRemove, queryModeller, dragHandleProps, innerQueryPlaceholder }) => {
+  ({ operation, definition, index, onChange, onRemove, queryModeller, dragHandleProps }) => {
     const styles = useStyles2(getStyles);
     const [state, setState] = useState<State>({});
 
@@ -57,7 +56,7 @@ export const OperationHeader = React.memo<Props>(
                 variant="secondary"
                 title="Click to view alternative operations"
               />
-              <OperationInfoButton definition={definition} operation={operation} innerQueryPlaceholder={innerQueryPlaceholder} />
+              <OperationInfoButton definition={definition} operation={operation} innerQueryPlaceholder={queryModeller.innerQueryPlaceholder} />
               <Button
                 icon="times"
                 size="sm"

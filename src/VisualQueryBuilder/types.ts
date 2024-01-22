@@ -98,6 +98,13 @@ export interface VisualQueryModeller {
   getOperationDefinition(id: string): QueryBuilderOperationDefinition | undefined;
   renderQuery(query: VisualQuery, nested?: boolean): string
   renderLabels(labels: QueryBuilderLabelFilter[]): string;
+  innerQueryPlaceholder : string;
+}
+
+export interface QueryModellerOptions {
+  getOperations: () => QueryBuilderOperationDefinition[];
+    // Used as placeholder for other operations when showing documentation or explain for selected operation.
+  innerQueryPlaceholder?: string
 }
 
 export interface VisualQueryBinary<T> {

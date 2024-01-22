@@ -1,6 +1,6 @@
 import { css, cx } from '@emotion/css';
 import React, { useEffect, useState } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable, DraggableProvided } from 'react-beautiful-dnd';
 import { v4 } from 'uuid';
 
 import { DataSourceApi, GrafanaTheme2, TimeRange } from '@grafana/data';
@@ -31,7 +31,6 @@ interface Props<T extends VisualQuery> {
   highlight?: boolean;
   timeRange?: TimeRange;
   isConflictingOperation?: (operation: QueryBuilderOperation, otherOperations: QueryBuilderOperation[]) => boolean;
-  innerQueryPlaceholder: string;
 }
 
 export function OperationEditor<T extends VisualQuery>({
@@ -47,7 +46,6 @@ export function OperationEditor<T extends VisualQuery>({
   highlight,
   timeRange,
   isConflictingOperation,
-  innerQueryPlaceholder,
 }: Props<T>) {
   const def = queryModeller.getOperationDefinition(operation.id);
   const shouldFlash = useFlash(flash);
@@ -147,6 +145,38 @@ export function OperationEditor<T extends VisualQuery>({
     return isConflicting ? true : undefined;
   };
 
+    // We need to extract this into a component to prevent InlineField passing invalid to div which produces console error
+  const StyledOperationHeader = ({ provided }: { provided: DraggableProvided }) => (
+    <div
+      className={cx(
+        styles.card,
+        (shouldFlash || highlight) && styles.cardHighlight,
+        isConflicting && styles.cardError
+      )}
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      data-testid={`operations.${index}.wrapper`}
+    >
+      <OperationHeader
+        operation={operation}
+        dragHandleProps={provided.dragHandleProps}
+        definition={def}
+        index={index}
+        onChange={onChange}
+        onRemove={onRemove}
+        queryModeller={queryModeller}
+      />
+      <div className={styles.body}>{operationElements}</div>
+      {restParam}
+      {index < query.operations.length - 1 && (
+        <div className={styles.arrow}>
+          <div className={styles.arrowLine} />
+          <div className={styles.arrowArrow} />
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <Draggable draggableId={`operation-${index}`} index={index}>
       {(provided, snapshot) => (
@@ -155,35 +185,7 @@ export function OperationEditor<T extends VisualQuery>({
           invalid={isInvalid(snapshot.isDragging)}
           className={cx(styles.error, styles.cardWrapper)}
         >
-          <div
-            className={cx(
-              styles.card,
-              (shouldFlash || highlight) && styles.cardHighlight,
-              isConflicting && styles.cardError
-            )}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            data-testid={`operations.${index}.wrapper`}
-          >
-            <OperationHeader
-              operation={operation}
-              dragHandleProps={provided.dragHandleProps}
-              definition={def}
-              index={index}
-              onChange={onChange}
-              onRemove={onRemove}
-              queryModeller={queryModeller}
-              innerQueryPlaceholder={innerQueryPlaceholder}
-            />
-            <div className={styles.body}>{operationElements}</div>
-            {restParam}
-            {index < query.operations.length - 1 && (
-              <div className={styles.arrow}>
-                <div className={styles.arrowLine} />
-                <div className={styles.arrowArrow} />
-              </div>
-            )}
-          </div>
+          <StyledOperationHeader provided={provided} />
         </InlineField>
       )}
     </Draggable>
