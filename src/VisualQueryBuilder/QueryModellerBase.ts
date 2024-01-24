@@ -1,15 +1,15 @@
 import { Registry } from '@grafana/data';
 
-import { BINARY_OPERATIONS_KEY, VisualQuery, VisualQueryBinary, QueryBuilderLabelFilter, QueryBuilderOperation, VisualQueryModeller, QueryBuilderOperationDefinition, QueryModellerOptions } from './types';
+import { BINARY_OPERATIONS_KEY, VisualQuery, VisualQueryBinary, QueryBuilderLabelFilter, QueryBuilderOperation, VisualQueryModeller, QueryBuilderOperationDefinition } from './types';
 
 export abstract class QueryModellerBase implements VisualQueryModeller {
   protected operationsRegistry: Registry<QueryBuilderOperationDefinition>;
   private categories: string[] = [];
   innerQueryPlaceholder: string;
 
-  constructor(queryModellerOptions: QueryModellerOptions) {
-    this.operationsRegistry = new Registry<QueryBuilderOperationDefinition>(queryModellerOptions.getOperations);
-    this.innerQueryPlaceholder = queryModellerOptions.innerQueryPlaceholder || '<query>';
+  constructor(operationDefinitions: QueryBuilderOperationDefinition[], innerQueryPlaceholder?: string) {
+    this.operationsRegistry = new Registry<QueryBuilderOperationDefinition>(() => operationDefinitions);
+    this.innerQueryPlaceholder = innerQueryPlaceholder || '<query>';
   }
 
   protected setOperationCategories(categories: string[]) {
