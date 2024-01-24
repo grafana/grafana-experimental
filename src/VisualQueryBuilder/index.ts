@@ -1,6 +1,5 @@
 export { QueryModellerBase } from './QueryModellerBase';
 export { LabelFilters } from './components/LabelFilters';
-export { LabelParamEditor } from './components/LabelParamEditor';
 export { OperationExplainedBox } from './components/OperationExplainedBox';
 export { OperationList } from './components/OperationList';
 export { OperationListExplained } from './components/OperationListExplained';

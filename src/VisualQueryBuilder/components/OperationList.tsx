@@ -21,8 +21,6 @@ export interface Props<T extends VisualQuery> {
   highlightedOp?: QueryBuilderOperation;
   timeRange?: TimeRange;
   isConflictingOperation?: (operation: QueryBuilderOperation, otherOperations: QueryBuilderOperation[]) => boolean;
-  // This is going to be used as placeholder for other operations when showing documentation or explain for selected operation. 
-  innerQueryPlaceholder?: string;
 }
 
 export function OperationList<T extends VisualQuery>({
@@ -34,7 +32,6 @@ export function OperationList<T extends VisualQuery>({
   highlightedOp,
   timeRange,
   isConflictingOperation,
-  innerQueryPlaceholder = '<query>',
 }: Props<T>) {
   const styles = useStyles2(getStyles);
   const { operations } = query;
@@ -115,7 +112,6 @@ export function OperationList<T extends VisualQuery>({
                         highlight={highlightedOp === op}
                         timeRange={timeRange}
                         isConflictingOperation={isConflictingOperation}
-                        innerQueryPlaceholder={innerQueryPlaceholder}
                       />
                     );
                   })}

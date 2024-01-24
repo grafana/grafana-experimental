@@ -5,9 +5,11 @@ import { BINARY_OPERATIONS_KEY, VisualQuery, VisualQueryBinary, QueryBuilderLabe
 export abstract class QueryModellerBase implements VisualQueryModeller {
   protected operationsRegistry: Registry<QueryBuilderOperationDefinition>;
   private categories: string[] = [];
+  innerQueryPlaceholder: string;
 
-  constructor(getOperations: () => QueryBuilderOperationDefinition[]) {
-    this.operationsRegistry = new Registry<QueryBuilderOperationDefinition>(getOperations);
+  constructor(operationDefinitions: QueryBuilderOperationDefinition[], innerQueryPlaceholder?: string) {
+    this.operationsRegistry = new Registry<QueryBuilderOperationDefinition>(() => operationDefinitions);
+    this.innerQueryPlaceholder = innerQueryPlaceholder || '<query>';
   }
 
   protected setOperationCategories(categories: string[]) {
