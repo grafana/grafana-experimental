@@ -14,7 +14,7 @@ interface Props {
   defaultOp: string;
   item: Partial<QueryBuilderLabelFilter>;
   items: Array<Partial<QueryBuilderLabelFilter>>;
-  onChange: (value: QueryBuilderLabelFilter) => void;
+  onChange: (value: Partial<QueryBuilderLabelFilter>) => void;
   onGetLabelNames: (forLabel: Partial<QueryBuilderLabelFilter>) => Promise<Array<SelectableValue<string>>>;
   onGetLabelValues: (forLabel: Partial<QueryBuilderLabelFilter>) => Promise<Array<SelectableValue<string>>>;
   onDelete: () => void;
@@ -98,7 +98,6 @@ export function LabelFilterItem({
               if (change.value) {
                 onChange({
                   ...item,
-                  value: item.value ?? '',
                   op: item.op ?? defaultOp,
                   label: change.value,
                 });
@@ -116,9 +115,8 @@ export function LabelFilterItem({
               if (change.value) {
                 onChange({
                   ...item,
-                  label: item.label ?? '',
                   op: change.value,
-                  value: isMultiSelect(change.value) ? (item.value ?? '') : getSelectOptionsFromString(item?.value)[0],
+                  value: isMultiSelect(change.value) ? item.value  : getSelectOptionsFromString(item?.value)[0],
                 });
               }
             }}
@@ -159,7 +157,6 @@ export function LabelFilterItem({
                   ...item,
                   value: change.value,
                   op: item.op ?? defaultOp,
-                  label: item.label ?? '',
                 });
               } else {
                 // otherwise, we're dealing with a multi-value select which is array of options
