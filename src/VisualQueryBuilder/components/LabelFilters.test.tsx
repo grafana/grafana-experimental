@@ -89,6 +89,23 @@ describe('LabelFilters', () => {
     setup({ labelsFilters: [], labelFilterRequired: true });
     expect(screen.getByText(MISSING_LABEL_FILTER_ERROR_MESSAGE)).toBeInTheDocument();
   });
+  
+  it('runs onChange after all selects are changed', async () => {
+    const { onChange } = setup({ labelsFilters: [{ label: 'foo', op: '=', value: 'bar' }] });
+    await userEvent.click(getAddButton());
+    expect(screen.getAllByText('Select label')).toHaveLength(1);
+    expect(screen.getAllByText('Select value')).toHaveLength(1);
+    const { name, value, op } = getLabelSelects(1);
+    await selectOptionInTest(name, 'baz');
+    expect(onChange).not.toBeCalled();
+    await selectOptionInTest(op, '!=');
+    expect(onChange).not.toBeCalled();
+    await selectOptionInTest(value, 'qux');
+    expect(onChange).toBeCalledWith([
+      { label: "foo", op: "=", value: "bar" }, 
+      { label: "baz", op: "!=", value: "qux" }
+    ]);    
+  });
 });
 
 function setup(propOverrides?: Partial<ComponentProps<typeof LabelFilters>>) {
@@ -122,6 +139,7 @@ function getLabelSelects(index = 0) {
   const selects = getAllByRole(labels.parentElement!.parentElement!.parentElement!, 'combobox');
   return {
     name: selects[3 * index],
+    op: selects[3 * index + 1],
     value: selects[3 * index + 2],
   };
 }
