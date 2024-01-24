@@ -170,7 +170,7 @@ export function LabelFilterItem({
                   })
                   .filter((val: string | undefined) => val !== undefined)
                   .join(multiValueSeparator);
-                onChange({ ...item, label: item.label ?? '', value: changes, op: item.op ?? defaultOp });
+                onChange({ ...item, value: changes, op: item.op ?? defaultOp });
               }
             }}
             invalid={isConflicting || invalidValue}
