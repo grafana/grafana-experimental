@@ -2,10 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.7.8
+
+- Fix bug in `LabelFilters` component that caused creating incorrect query
+
+## v1.7.7
+
+- Remove a need to pass `innerQueryPlaceholder` prop to `OperationHeader`, `OperationList` and `OperationListExplained` and instead specify it in QueryModeller
+
+## v1.7.6
+
+- Release Visual query builder components
+
 ## v1.7.5
 
 - Add new ConfigDescriptionLink component
-
 
 ## v1.7.4
 
