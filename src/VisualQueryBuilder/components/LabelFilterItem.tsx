@@ -1,5 +1,6 @@
 import  { uniqBy } from 'lodash';
 import React, { useState } from 'react';
+import { v4 } from 'uuid';
 
 import { SelectableValue, toOption } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
@@ -70,6 +71,7 @@ export function LabelFilterItem({
   };
 
   const isConflicting = isConflictingLabelFilter(item, items);
+  const id = v4();
 
   return (
     <div data-testid="visual-query-builder-dimensions-filter-item">
@@ -77,8 +79,8 @@ export function LabelFilterItem({
         <InputGroup>
           <Select<string>
             placeholder="Select label"
-            aria-label={selectors.components.QueryBuilder.labelSelect}
-            inputId="visual-query-builder-dimensions-filter-item-key"
+            data-testid={selectors.components.QueryBuilder.labelSelect}
+            inputId={`visual-query-builder-dimensions-filter-item-key-${id}`}
             width="auto"
             value={item.label ? toOption(item.label) : null}
             allowCustomValue
@@ -107,7 +109,7 @@ export function LabelFilterItem({
           />
 
           <Select<string>
-            aria-label={selectors.components.QueryBuilder.matchOperatorSelect}
+            data-testid={selectors.components.QueryBuilder.matchOperatorSelect}
             value={toOption(item.op ?? defaultOp)}
             options={operators}
             width="auto"
@@ -125,8 +127,8 @@ export function LabelFilterItem({
 
           <Select<string>
             placeholder="Select value"
-            aria-label={selectors.components.QueryBuilder.valueSelect}
-            inputId="visual-query-builder-dimensions-filter-item-value"
+            data-testid={selectors.components.QueryBuilder.valueSelect}
+            inputId={`visual-query-builder-dimensions-filter-item-value-${id}`}
             width="auto"
             value={
               isMultiSelect()
