@@ -1,5 +1,5 @@
 import  { uniqBy } from 'lodash';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { v4 } from 'uuid';
 
 import { SelectableValue, toOption } from '@grafana/data';
@@ -71,7 +71,7 @@ export function LabelFilterItem({
   };
 
   const isConflicting = isConflictingLabelFilter(item, items);
-  const id = v4();
+  const { current: id } = useRef(v4());
 
   return (
     <div data-testid="visual-query-builder-dimensions-filter-item">
