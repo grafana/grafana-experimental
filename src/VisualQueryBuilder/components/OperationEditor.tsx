@@ -1,5 +1,5 @@
 import { css, cx } from '@emotion/css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Draggable, DraggableProvided } from 'react-beautiful-dnd';
 import { v4 } from 'uuid';
 
@@ -49,7 +49,7 @@ export function OperationEditor<T extends VisualQuery>({
 }: Props<T>) {
   const def = queryModeller.getOperationDefinition(operation.id);
   const shouldFlash = useFlash(flash);
-  const id = v4();
+  const { current: id } = useRef(v4());
 
   const theme = useTheme2();
   const isConflicting = isConflictingOperation ? isConflictingOperation(operation, query.operations) : false;

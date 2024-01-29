@@ -1,9 +1,8 @@
 import { css } from '@emotion/css';
 import React, { useState, useEffect } from 'react';
 
-import { DataSourceApi, GrafanaTheme2, PanelData, QueryHint } from '@grafana/data';
+import { DataSourceApi, GrafanaTheme2, PanelData, QueryHint, DataQuery } from '@grafana/data';
 import { reportInteraction } from '@grafana/runtime';
-import { DataQuery } from '@grafana/schema';
 import { Button, Tooltip, useStyles2 } from '@grafana/ui';
 
 import { VisualQuery, VisualQueryModeller } from '../types';
