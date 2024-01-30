@@ -4,29 +4,51 @@ import { Button, Icon, Tooltip, useTheme2 } from '@grafana/ui';
 import { css, cx } from '@emotion/css';
 import { DataSourceApi, GrafanaTheme2, TimeRange } from '@grafana/data';
 import { OperationHeader } from './OperationHeader';
-import { QueryBuilderOperation, QueryBuilderOperationDefinition, QueryBuilderOperationParamDef, QueryBuilderOperationParamValue, VisualQuery, VisualQueryModeller } from '../types';
+import {
+  QueryBuilderOperation,
+  QueryBuilderOperationDefinition,
+  QueryBuilderOperationParamDef,
+  QueryBuilderOperationParamValue,
+  VisualQuery,
+  VisualQueryModeller,
+} from '../types';
 import { getOperationParamEditor, getOperationParamId } from './OperationParamEditor';
 import { Stack } from '../../QueryEditor/Stack';
 import { v4 } from 'uuid';
 
 type Props = {
-    provided: DraggableProvided;
-    isConflicting: boolean,
-    index: number,
-    operation: QueryBuilderOperation,
-    definition: QueryBuilderOperationDefinition,
-    queryModeller: VisualQueryModeller;
-    query: VisualQuery;
-    onChange: (index: number, update: QueryBuilderOperation) => void;
-    onRemove: (index: number) => void;
-    onRunQuery: () => void;
-    datasource: DataSourceApi;
-    flash?: boolean,
-    highlight?: boolean,
-    timeRange?: TimeRange;
-  }
-  
-export function OperationEditorBody({ provided, flash, isConflicting, highlight, index, queryModeller, onChange, onRemove, operation, definition, query, timeRange, onRunQuery, datasource }: Props) {
+  provided: DraggableProvided;
+  isConflicting: boolean;
+  index: number;
+  operation: QueryBuilderOperation;
+  definition: QueryBuilderOperationDefinition;
+  queryModeller: VisualQueryModeller;
+  query: VisualQuery;
+  onChange: (index: number, update: QueryBuilderOperation) => void;
+  onRemove: (index: number) => void;
+  onRunQuery: () => void;
+  datasource: DataSourceApi;
+  flash?: boolean;
+  highlight?: boolean;
+  timeRange?: TimeRange;
+};
+
+export function OperationEditorBody({
+  provided,
+  flash,
+  isConflicting,
+  highlight,
+  index,
+  queryModeller,
+  onChange,
+  onRemove,
+  operation,
+  definition,
+  query,
+  timeRange,
+  onRunQuery,
+  datasource,
+}: Props) {
   const theme = useTheme2();
   const styles = getStyles(theme, isConflicting);
   const shouldFlash = useFlash(flash);
@@ -60,13 +82,9 @@ export function OperationEditorBody({ provided, flash, isConflicting, highlight,
     }
   }
 
-    return (
-      <div
-      className={cx(
-        styles.card,
-        (shouldFlash || highlight) && styles.cardHighlight,
-        isConflicting && styles.cardError
-      )}
+  return (
+    <div
+      className={cx(styles.card, (shouldFlash || highlight) && styles.cardHighlight, isConflicting && styles.cardError)}
       ref={provided.innerRef}
       {...provided.draggableProps}
       data-testid={`operations.${index}.wrapper`}
@@ -81,64 +99,62 @@ export function OperationEditorBody({ provided, flash, isConflicting, highlight,
         queryModeller={queryModeller}
       />
       <div className={styles.body}>
-      {
-      operation.params.map((param, paramIndex) => {
-      const paramDef = definition.params[Math.min(definition.params.length - 1, paramIndex)];
-      const Editor = getOperationParamEditor(paramDef);
+        {operation.params.map((param, paramIndex) => {
+          const paramDef = definition.params[Math.min(definition.params.length - 1, paramIndex)];
+          const Editor = getOperationParamEditor(paramDef);
 
-      return (
-        <div className={styles.paramRow} key={`${paramIndex}-1`}>
-          {!paramDef.hideName && (
-            <div className={styles.paramName}>
-              <label htmlFor={getOperationParamId(id, paramIndex)}>{paramDef.name}</label>
-              {paramDef.description && (
-                <Tooltip placement="top" content={paramDef.description} theme="info">
-                  <Icon name="info-circle" size="sm" className={styles.infoIcon} />
-                </Tooltip>
+          return (
+            <div className={styles.paramRow} key={`${paramIndex}-1`}>
+              {!paramDef.hideName && (
+                <div className={styles.paramName}>
+                  <label htmlFor={getOperationParamId(id, paramIndex)}>{paramDef.name}</label>
+                  {paramDef.description && (
+                    <Tooltip placement="top" content={paramDef.description} theme="info">
+                      <Icon name="info-circle" size="sm" className={styles.infoIcon} />
+                    </Tooltip>
+                  )}
+                </div>
               )}
+              <div className={styles.paramValue}>
+                <Stack gap={0.5} direction="row" alignItems="center" wrap={false}>
+                  <Editor
+                    index={paramIndex}
+                    paramDef={paramDef}
+                    value={operation.params[paramIndex]}
+                    operation={operation}
+                    operationId={id}
+                    onChange={onParamValueChanged}
+                    onRunQuery={onRunQuery}
+                    query={query}
+                    datasource={datasource}
+                    timeRange={timeRange}
+                    queryModeller={queryModeller}
+                  />
+                  {paramDef.restParam && (operation.params.length > definition.params.length || paramDef.optional) && (
+                    <Button
+                      data-testid={`operations.${index}.remove-rest-param`}
+                      size="sm"
+                      fill="text"
+                      icon="times"
+                      variant="secondary"
+                      title={`Remove ${paramDef.name}`}
+                      onClick={() => onRemoveRestParam(paramIndex)}
+                    />
+                  )}
+                </Stack>
+              </div>
             </div>
-          )}
-          <div className={styles.paramValue}>
-            <Stack gap={0.5} direction="row" alignItems="center" wrap={false}>
-              <Editor
-                index={paramIndex}
-                paramDef={paramDef}
-                value={operation.params[paramIndex]}
-                operation={operation}
-                operationId={id}
-                onChange={onParamValueChanged}
-                onRunQuery={onRunQuery}
-                query={query}
-                datasource={datasource}
-                timeRange={timeRange}
-                queryModeller={queryModeller}
-              />
-              {paramDef.restParam && (operation.params.length > definition.params.length || paramDef.optional) && (
-                <Button
-                  data-testid={`operations.${index}.remove-rest-param`}
-                  size="sm"
-                  fill="text"
-                  icon="times"
-                  variant="secondary"
-                  title={`Remove ${paramDef.name}`}
-                  onClick={() => onRemoveRestParam(paramIndex)}
-                />
-              )}
-            </Stack>
-          </div>
+          );
+        })}
+      </div>
+      {restParam}
+      {index < query.operations.length - 1 && (
+        <div className={styles.arrow}>
+          <div className={styles.arrowLine} />
+          <div className={styles.arrowArrow} />
         </div>
-      )
-    })
-  }
-  </div>
-  {restParam}
-  {index < query.operations.length - 1 && (
-    <div className={styles.arrow}>
-      <div className={styles.arrowLine} />
-      <div className={styles.arrowArrow} />
+      )}
     </div>
-  )}
-  </div>
   );
 }
 
@@ -246,7 +262,6 @@ function useFlash(flash?: boolean) {
 
   return keepFlash && flash;
 }
-
 
 function callParamChangedThenOnChange(
   def: QueryBuilderOperationDefinition,
