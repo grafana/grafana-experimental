@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.7.9
+
+- Fix bug in `OperationEditor` component causing re-mounting issue 
+- Update e2e selectors in `LabelFilters` to ensure easy testing
+
 ## v1.7.8
 
 - Fix bug in `LabelFilters` component that caused creating incorrect query
