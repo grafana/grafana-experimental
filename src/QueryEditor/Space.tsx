@@ -10,6 +10,9 @@ export interface SpaceProps {
   layout?: 'block' | 'inline';
 }
 
+/**
+ * @deprecated use the Space component from @grafana/ui instead. Available starting from @grafana/ui@10.4.0
+ */
 export const Space = (props: SpaceProps) => {
   const styles = useStyles2(useCallback((theme) => getStyles(theme, props), [props]));
 

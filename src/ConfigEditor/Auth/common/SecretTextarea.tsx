@@ -33,6 +33,7 @@ const getStyles = (theme: GrafanaTheme2) => {
 /**
  * Text area that does not disclose an already configured value but lets the user reset the current value and enter a new one.
  * Typically useful for asymmetric cryptography keys.
+ * @deprecated use the component from @grafana/ui instead. Available starting from @grafana/ui@9.2
  */
 export const SecretTextArea = ({ isConfigured, onReset, ...props }: Props) => {
   const styles = useStyles2(getStyles);

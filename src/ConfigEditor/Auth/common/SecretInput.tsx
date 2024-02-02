@@ -17,6 +17,9 @@ export type Props = React.ComponentProps<typeof Input> & {
 export const CONFIGURED_TEXT = 'configured';
 export const RESET_BUTTON_TEXT = 'Reset';
 
+/**
+ * @deprecated use the component from @grafana/ui instead. Available starting from @grafana/ui@9.2
+ */
 export const SecretInput = ({ isConfigured, onReset, ...props }: Props) => (
   <HorizontalGroup>
     {!isConfigured && <Input {...props} type="password" />}

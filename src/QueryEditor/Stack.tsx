@@ -12,6 +12,9 @@ interface StackProps {
   flexGrow?: CSSProperties['flexGrow'];
 }
 
+/**
+ * @deprecated use the Stack component from @grafana/ui instead. Available starting from @grafana/ui@10.2.3
+ */
 export const Stack = ({ children, ...props }: React.PropsWithChildren<StackProps>) => {
   const styles = useStyles2(useCallback((theme) => getStyles(theme, props), [props]));
 
