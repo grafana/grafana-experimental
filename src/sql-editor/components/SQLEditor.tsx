@@ -104,6 +104,11 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
     }
   }, []);
 
+  const onSqlBlur = (text: string) => {
+    onChange && onChange(text, false);
+    onBlur && onBlur(text);
+  };
+
   return (
     <div style={{ width }}>
       <CodeEditor
@@ -112,10 +117,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
         width={width ? `${width - 2}px` : undefined}
         language={id}
         value={query}
-        onBlur={(v) => {
-          onChange && onChange(v, false);
-          onBlur && onBlur();
-        }}
+        onBlur={onSqlBlur}
         showMiniMap={false}
         showLineNumbers={true}
         // Using onEditorDidMount instead of onBeforeEditorMount to support Grafana < 8.2.x
