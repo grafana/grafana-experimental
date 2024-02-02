@@ -52,7 +52,7 @@ interface SQLEditorProps {
    * Use for inspecting the query as it changes. I.e. for validation.
    */
   onChange?: (q: string, processQuery: boolean) => void;
-  onBlur?: () => void;
+  onBlur?: (text: string) => void;
   language?: LanguageDefinition;
   children?: (props: { formatQuery: () => void }) => React.ReactNode;
   width?: number;
@@ -403,13 +403,13 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
         const columns = await customProvider.columns?.resolve!(tableIdentifier);
         oo = columns
           ? columns.map<CustomSuggestion>((x) => ({
-              label: x.name,
-              insertText: x.completion ?? x.name,
-              kind: CompletionItemKind.Field,
-              sortText: CompletionItemPriority.High,
-              detail: x.type,
-              documentation: x.description,
-            }))
+            label: x.name,
+            insertText: x.completion ?? x.name,
+            kind: CompletionItemKind.Field,
+            sortText: CompletionItemPriority.High,
+            detail: x.type,
+            documentation: x.description,
+          }))
           : [];
       }
       return [...o, ...oo];
