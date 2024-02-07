@@ -52,7 +52,7 @@ interface SQLEditorProps {
    * Use for inspecting the query as it changes. I.e. for validation.
    */
   onChange?: (q: string, processQuery: boolean) => void;
-  onBlur?: () => void;
+  onBlur?: (text: string) => void;
   language?: LanguageDefinition;
   children?: (props: { formatQuery: () => void }) => React.ReactNode;
   width?: number;
@@ -104,6 +104,11 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
     }
   }, []);
 
+  const onSqlBlur = (text: string) => {
+    onChange && onChange(text, false);
+    onBlur && onBlur(text);
+  };
+
   return (
     <div style={{ width }}>
       <CodeEditor
@@ -112,10 +117,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
         width={width ? `${width - 2}px` : undefined}
         language={id}
         value={query}
-        onBlur={(v) => {
-          onChange && onChange(v, false);
-          onBlur && onBlur();
-        }}
+        onBlur={onSqlBlur}
         showMiniMap={false}
         showLineNumbers={true}
         // Using onEditorDidMount instead of onBeforeEditorMount to support Grafana < 8.2.x
@@ -403,13 +405,13 @@ function extendStandardRegistries(id: string, lid: string, customProvider: SQLCo
         const columns = await customProvider.columns?.resolve!(tableIdentifier);
         oo = columns
           ? columns.map<CustomSuggestion>((x) => ({
-              label: x.name,
-              insertText: x.completion ?? x.name,
-              kind: CompletionItemKind.Field,
-              sortText: CompletionItemPriority.High,
-              detail: x.type,
-              documentation: x.description,
-            }))
+            label: x.name,
+            insertText: x.completion ?? x.name,
+            kind: CompletionItemKind.Field,
+            sortText: CompletionItemPriority.High,
+            detail: x.type,
+            documentation: x.description,
+          }))
           : [];
       }
       return [...o, ...oo];

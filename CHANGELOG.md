@@ -1,6 +1,9 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
+## v1.7.10
+
+- Tweaks in type definitions for the `SQLEditor` component on the `blur` method
 
 ## v1.7.9
 
