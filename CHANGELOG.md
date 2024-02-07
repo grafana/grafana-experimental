@@ -1,9 +1,26 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
-## v1.7.6
+## v1.7.10
 
 - Tweaks in type definitions for the `SQLEditor` component on the `blur` method
+
+## v1.7.9
+
+- Fix bug in `OperationEditor` component causing re-mounting issue 
+- Update e2e selectors in `LabelFilters` to ensure easy testing
+
+## v1.7.8
+
+- Fix bug in `LabelFilters` component that caused creating incorrect query
+
+## v1.7.7
+
+- Remove a need to pass `innerQueryPlaceholder` prop to `OperationHeader`, `OperationList` and `OperationListExplained` and instead specify it in QueryModeller
+
+## v1.7.6
+
+- Release Visual query builder components
 
 ## v1.7.5
 
