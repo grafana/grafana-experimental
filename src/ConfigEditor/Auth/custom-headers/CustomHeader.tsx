@@ -1,7 +1,6 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { InlineFieldRow, InlineField, Input, IconButton, useTheme2 } from '@grafana/ui';
-import { SecretInput } from '../common';
+import { InlineFieldRow, InlineField, Input, IconButton, useTheme2, SecretInput } from '@grafana/ui';
 import type { LocalHeader } from '../types';
 import { useCommonStyles } from '../styles';
 

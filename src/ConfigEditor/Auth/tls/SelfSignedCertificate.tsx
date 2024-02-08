@@ -1,7 +1,6 @@
 import React from 'react';
 import { cx } from '@emotion/css';
-import { InlineField } from '@grafana/ui';
-import { SecretTextArea } from '../common';
+import { InlineField, SecretTextArea } from '@grafana/ui';
 import { TLSSettingsSection } from './TLSSettingsSection';
 import { useCommonStyles } from '../styles';
 
