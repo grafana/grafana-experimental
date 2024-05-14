@@ -13,16 +13,18 @@ export interface SpaceProps {
 /**
  * @deprecated use the Space component from @grafana/ui instead. Available starting from @grafana/ui@10.4.0
  */
-export const Space = (props: SpaceProps) => {
-  const styles = useStyles2(useCallback((theme) => getStyles(theme, props), [props]));
+export const Space = ({
+  v = 0,
+  h = 0,
+  layout = 'block',
+}: SpaceProps) => {
+  const styles = useStyles2(useCallback((theme) => getStyles(theme, {
+    v,
+    h,
+    layout,
+  }), [v, h, layout]));
 
   return <span className={cx(styles.wrapper)} />;
-};
-
-Space.defaultProps = {
-  v: 0,
-  h: 0,
-  layout: 'block',
 };
 
 const getStyles = (theme: GrafanaTheme2, props: SpaceProps) => ({
