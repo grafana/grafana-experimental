@@ -315,7 +315,7 @@ describe('utils', () => {
       });
     });
 
-    it('should call `selfSignedCertificate.onToggle` correctly', () => {
+    it('should call `selfSignedCertificate.onToggle` correctly when toggled on', () => {
       const tls = getTLSProps(config, onChange);
 
       tls?.selfSignedCertificate.onToggle(true);
@@ -327,6 +327,26 @@ describe('utils', () => {
           ...config.jsonData,
           tlsAuthWithCACert: true,
         },
+      });
+    });
+
+    it('should call `selfSignedCertificate.onToggle` correctly when toggled off', () => {
+      const testConfig: Config = {
+        ...config,
+        jsonData: { ...config.jsonData, tlsAuthWithCACert: true },
+        secureJsonData: { ...config.secureJsonData, tlsCACert: 'cert' },
+        secureJsonFields: { ...config.secureJsonFields, tlsCACert: true },
+      };
+      const tls = getTLSProps(testConfig, onChange);
+
+      tls?.selfSignedCertificate.onToggle(false);
+
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalledWith({
+        ...testConfig,
+        jsonData: { ...testConfig.jsonData, tlsAuthWithCACert: false },
+        secureJsonData: { ...testConfig.secureJsonData, tlsCACert: '' },
+        secureJsonFields: { ...testConfig.secureJsonFields, tlsCACert: false },
       });
     });
 
@@ -358,7 +378,7 @@ describe('utils', () => {
       });
     });
 
-    it('should call `TLSClientAuth.onToggle` correctly', () => {
+    it('should call `TLSClientAuth.onToggle` correctly when toggled on', () => {
       const tls = getTLSProps(config, onChange);
 
       tls?.TLSClientAuth.onToggle(true);
@@ -367,6 +387,26 @@ describe('utils', () => {
       expect(onChange).toHaveBeenCalledWith({
         ...config,
         jsonData: { ...config.jsonData, tlsAuth: true },
+      });
+    });
+
+    it('should call `TLSClientAuth.onToggle` correctly when toggled off', () => {
+      const testConfig: Config = {
+        ...config,
+        jsonData: { ...config.jsonData, tlsAuth: true, serverName: 'test.server.name' },
+        secureJsonData: { ...config.secureJsonData, tlsClientCert: 'cert', tlsClientKey: 'key' },
+        secureJsonFields: { ...config.secureJsonFields, tlsClientCert: true, tlsClientKey: true },
+      };
+      const tls = getTLSProps(testConfig, onChange);
+
+      tls?.TLSClientAuth.onToggle(false);
+
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalledWith({
+        ...testConfig,
+        jsonData: { ...testConfig.jsonData, tlsAuth: false, serverName: '' },
+        secureJsonData: { ...testConfig.secureJsonData, tlsClientCert: '', tlsClientKey: '' },
+        secureJsonFields: { ...testConfig.secureJsonFields, tlsClientCert: false, tlsClientKey: false },
       });
     });
 
