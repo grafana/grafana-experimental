@@ -88,10 +88,17 @@ export function getTLSProps<C extends Config = Config>(config: C, onChange: OnCh
       enabled: Boolean(config.jsonData.tlsAuthWithCACert),
       certificateConfigured: config.secureJsonFields.tlsCACert,
       onToggle: (enabled) =>
-        onChange({
-          ...config,
-          jsonData: { ...config.jsonData, tlsAuthWithCACert: enabled },
-        }),
+        enabled
+          ? onChange({
+              ...config,
+              jsonData: { ...config.jsonData, tlsAuthWithCACert: enabled },
+            })
+          : onChange({
+              ...config,
+              jsonData: { ...config.jsonData, tlsAuthWithCACert: enabled },
+              secureJsonData: { ...config.secureJsonData, tlsCACert: '' },
+              secureJsonFields: { ...config.secureJsonFields, tlsCACert: false },
+            }),
       onCertificateChange: (certificate) =>
         onChange({
           ...config,
@@ -110,10 +117,17 @@ export function getTLSProps<C extends Config = Config>(config: C, onChange: OnCh
       clientCertificateConfigured: config.secureJsonFields.tlsClientCert,
       clientKeyConfigured: config.secureJsonFields.tlsClientKey,
       onToggle: (enabled) =>
-        onChange({
-          ...config,
-          jsonData: { ...config.jsonData, tlsAuth: enabled },
-        }),
+        enabled
+          ? onChange({
+              ...config,
+              jsonData: { ...config.jsonData, tlsAuth: enabled },
+            })
+          : onChange({
+              ...config,
+              jsonData: { ...config.jsonData, tlsAuth: enabled, serverName: '' },
+              secureJsonData: { ...config.secureJsonData, tlsClientCert: '', tlsClientKey: '' },
+              secureJsonFields: { ...config.secureJsonFields, tlsClientCert: false, tlsClientKey: false },
+            }),
       onServerNameChange: (serverName) =>
         onChange({
           ...config,
