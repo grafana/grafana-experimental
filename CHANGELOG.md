@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## v1.7.12
 
-- Fix "TLS Client Authentication" fields are not being cleared when setting is toggled off
+- Auth: Fix "TLS Client Authentication" fields are not being cleared when setting is toggled off
 
 ## v1.7.11
 
