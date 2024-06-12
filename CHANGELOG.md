@@ -1,16 +1,22 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
+
+## v1.7.12
+
+- Fix "TLS Client Authentication" fields are not being cleared when setting is toggled off
+
 ## v1.7.11
 
 - Replace usage of React's deprecated `defaultProps`
+
 ## v1.7.10
 
 - Tweaks in type definitions for the `SQLEditor` component on the `blur` method
 
 ## v1.7.9
 
-- Fix bug in `OperationEditor` component causing re-mounting issue 
+- Fix bug in `OperationEditor` component causing re-mounting issue
 - Update e2e selectors in `LabelFilters` to ensure easy testing
 
 ## v1.7.8
