@@ -2,7 +2,7 @@ import React from 'react';
 import { screen, render, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AuthMethodSettings, Props } from './AuthMethodSettings';
-import { AuthMethod, DefaultAuthMethod } from '../types';
+import { AuthMethod, AuthMethodSelectOption } from '../types';
 
 type PartialProps = Partial<Omit<Props, 'basicAuth'> & { basicAuth?: Partial<Props['basicAuth']> }>;
 const getProps = (partialProps?: PartialProps): Props => ({
@@ -32,7 +32,7 @@ describe('<AuthMethodSettings />', () => {
   it('should override Basic auth name and display it', async () => {
     const props = getProps({
       selectedMethod: AuthMethod.BasicAuth,
-      defaultOptionsOverrides: { [AuthMethod.BasicAuth]: { label: 'Override '} } as Record<AuthMethod, DefaultAuthMethod>,
+      defaultOptionsOverrides: { [AuthMethod.BasicAuth]: { label: 'Override '} } as Record<AuthMethod, AuthMethodSelectOption>,
     });
     render(<AuthMethodSettings {...props} />);
 

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## v1.8
 
-- Auth: Refactoring and renaming some inputs
+- Auth: Refactoring and renaming some inputs so this can be a breaking change
 
 ## v1.7.12
 
