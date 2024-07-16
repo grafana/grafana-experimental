@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/css';
-import { AuthMethod, DefaultAuthMethod, CustomMethod, CustomMethodId } from './types';
+import { AuthMethod, AuthMethodSelectOption, CustomMethod, CustomMethodId } from './types';
 import { AuthMethodSettings } from './auth-method/AuthMethodSettings';
 import { TLSSettings, Props as TLSSettingsProps } from './tls/TLSSettings';
 import { Props as BasicAuthProps } from './auth-method/BasicAuth';
@@ -11,7 +11,7 @@ export type Props = {
   selectedMethod: AuthMethod | CustomMethodId;
   mostCommonMethod?: AuthMethod | CustomMethodId;
   visibleMethods?: Array<AuthMethod | CustomMethodId>;
-  defaultOptionsOverrides?: Partial<Record<AuthMethod, DefaultAuthMethod>>;
+  defaultOptionsOverrides?: Partial<Record<AuthMethod, AuthMethodSelectOption>>;
   customMethods?: CustomMethod[];
   onAuthMethodSelect: (authType: AuthMethod | CustomMethodId) => void;
   basicAuth?: Omit<BasicAuthProps, 'readOnly'>;
