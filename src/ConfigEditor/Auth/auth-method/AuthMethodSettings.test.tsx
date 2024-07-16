@@ -32,7 +32,7 @@ describe('<AuthMethodSettings />', () => {
   it('should override Basic auth name and display it', async () => {
     const props = getProps({
       selectedMethod: AuthMethod.BasicAuth,
-      extendedDefaultOptions: { [AuthMethod.BasicAuth]: { label: 'Override '} } as Record<AuthMethod, DefaultAuthMethod>,
+      defaultOptionsOverrides: { [AuthMethod.BasicAuth]: { label: 'Override '} } as Record<AuthMethod, DefaultAuthMethod>,
     });
     render(<AuthMethodSettings {...props} />);
 

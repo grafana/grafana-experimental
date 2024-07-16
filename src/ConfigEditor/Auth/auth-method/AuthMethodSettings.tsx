@@ -4,7 +4,7 @@ import { useTheme2, Select } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { BasicAuth, Props as BasicAuthProps } from './BasicAuth';
 import { ConfigSubSection } from '../../ConfigSection';
-import { AuthMethod, CustomMethod, CustomMethodId , DefaultAuthMethod } from '../types';
+import { AuthMethod, CustomMethod, CustomMethodId , AuthMethodSelectOption } from '../types';
 
 const defaultOptions: Record<AuthMethod, SelectableValue<AuthMethod>> = {
   [AuthMethod.BasicAuth]: {
@@ -35,7 +35,7 @@ export type Props = {
   selectedMethod: AuthMethod | CustomMethodId;
   mostCommonMethod?: AuthMethod | CustomMethodId;
   visibleMethods?: Array<AuthMethod | CustomMethodId>;
-  extendedDefaultOptions?: Partial<Record<AuthMethod, DefaultAuthMethod>>;
+  defaultOptionsOverrides?: Partial<Record<AuthMethod, AuthMethodSelectOption>>;
   customMethods?: CustomMethod[];
   onAuthMethodSelect: (authType: AuthMethod | CustomMethodId) => void;
   basicAuth?: Omit<BasicAuthProps, 'readOnly'>;
@@ -46,7 +46,7 @@ export const AuthMethodSettings: React.FC<Props> = ({
   selectedMethod,
   mostCommonMethod,
   visibleMethods: visibleMethodsFromProps,
-  extendedDefaultOptions,
+  defaultOptionsOverrides,
   customMethods,
   onAuthMethodSelect,
   basicAuth,
@@ -80,13 +80,9 @@ export const AuthMethodSettings: React.FC<Props> = ({
     const preparedDefaultOptions = {} as Record<AuthMethod, SelectableValue<AuthMethod>>;
     let k: keyof typeof AuthMethod;
     for (k in defaultOptions) {
-      if (extendedDefaultOptions && extendedDefaultOptions[k]) {
-        preparedDefaultOptions[k] = {
-          ...defaultOptions[k],
-          ...extendedDefaultOptions[k],
-        }
-      } else {
-        preparedDefaultOptions[k] = defaultOptions[k];
+      preparedDefaultOptions[k] = {
+        ...defaultOptions[k],
+        ...defaultOptionsOverrides?.[k],
       }
     }
 
@@ -107,7 +103,7 @@ export const AuthMethodSettings: React.FC<Props> = ({
         }
         return option;
       });
-  }, [visibleMethods, customMethods, extendedDefaultOptions, mostCommonMethod, hasSelect]);
+  }, [visibleMethods, customMethods, defaultOptionsOverrides, mostCommonMethod, hasSelect]);
 
   let selected = selectedMethod;
   if (!hasSelect) {

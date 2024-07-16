@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.8
+
+- Auth: Refactoring and renaming some inputs
+
 ## v1.7.12
 
 - Auth: Fix "TLS Client Authentication" fields are not being cleared when setting is toggled off
