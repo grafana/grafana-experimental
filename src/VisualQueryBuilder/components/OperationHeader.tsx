@@ -1,6 +1,6 @@
 import { css } from '@emotion/css';
 import React, { useState } from 'react';
-import { DraggableProvided } from 'react-beautiful-dnd';
+import { DraggableProvided } from '@hello-pangea/dnd';
 
 import { GrafanaTheme2, SelectableValue } from '@grafana/data';
 import { Button, Select, useStyles2 } from '@grafana/ui';

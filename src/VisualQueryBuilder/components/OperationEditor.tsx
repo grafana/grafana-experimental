@@ -1,6 +1,6 @@
 import { css, cx } from '@emotion/css';
 import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 
 import { DataSourceApi, GrafanaTheme2, TimeRange } from '@grafana/data';
 import { InlineField, useTheme2 } from '@grafana/ui';
