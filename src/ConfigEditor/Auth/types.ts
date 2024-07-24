@@ -7,7 +7,7 @@ export enum AuthMethod {
   CrossSiteCredentials = 'CrossSiteCredentials',
 }
 
-export interface DefaultAuthMethod {
+export interface AuthMethodSelectOption {
   label?: string;
   description?: string;
 };

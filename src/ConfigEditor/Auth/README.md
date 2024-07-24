@@ -162,9 +162,18 @@ If `customHeaders` is not passed, custom headers section will not be rendered.
 
 ## Mixing old and new style props
 
-In some cases you might want to use the `convertLegacyAuthProps` helper to create base properties that can then be extended with custom parameters. This is useful when the provisioning file used has similar structure to the one defined in ()[]. It can make using the `Auth` component extremely easy and still provide enough flexibility to customize it for your needs. For instance using the `BasicAuth` we can change it's name and description shown in the dropdown, as well as tooltips.
+In some cases you might want to use the `convertLegacyAuthProps` helper to create base properties that can then be extended with custom parameters. This is for instance useful when the provisioning file used has the basic authentication defined (example below):
 
-```ts
+```yaml
+    basicAuth: true
+    basicAuthUser: username
+    secureJsonData:
+      basicAuthPassword: password
+```
+
+It can make using the `Auth` component extremely easy and still provide enough flexibility to customize it for your needs. For instance using the `BasicAuth` we can change it's name and description shown in the dropdown, as well as the tooltips.
+
+```tsx
 import { Auth, AuthMethod, convertLegacyAuthProps } from '@grafana/experimental';
 
 export const ConfigEditor = ({ options, onOptionsChange }) => {
@@ -180,9 +189,11 @@ export const ConfigEditor = ({ options, onOptionsChange }) => {
       ...convertedProps.basicAuth,
       userTooltip: 'The user is the username assigned to the MongoDB account.',
       passwordTooltip: 'The password is the password assigned to the MongoDB account.',
-    }
+    },
+    // when custom headers section should not be visible and props were converted using the helper function it is required to set the value to null
+    customHeaders={null}
   };
-  const extendDefaultAuth = {
+  const extendedDefaultAuth = {
     [AuthMethod.BasicAuth]: {
       label: 'Credentials',
       description: 'Authenticate with default credentials assigned to the MongoDB account upon creation.'
@@ -193,10 +204,8 @@ export const ConfigEditor = ({ options, onOptionsChange }) => {
     <div>
       <Auth
         {...newAuthProps}
-        extendedDefaultOptions={extendDefaultAuth}
+        defaultOptionsOverrides={extendedDefaultAuth}
         visibleMethods={AuthMethodsList}
-        // when custom headers section should not be visible and props were converted using the helper function it is required to set the value to null
-        customHeaders={null}
       />
     </div>
   );
@@ -209,7 +218,7 @@ You can extend the component with your custom auth method(s) by passing it to th
 
 `customMethods` is an array of the following objects:
 
-```ts
+```tsx
 type CustomMethod = {
   id: `custom-${string}`;
   label: string;
