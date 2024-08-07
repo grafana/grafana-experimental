@@ -3,6 +3,7 @@ import { css } from '@emotion/css';
 import { Checkbox, Tooltip, Icon, useTheme2 } from '@grafana/ui';
 
 export type Props = {
+  children?: React.ReactNode;
   enabled: boolean;
   label: string;
   tooltipText: string;
