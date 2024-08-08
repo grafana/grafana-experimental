@@ -83,4 +83,17 @@ describe('<BasicAuth />', () => {
     expect(screen.getByPlaceholderText('User')).toBeDisabled();
     expect(screen.getByPlaceholderText('Password')).toBeDisabled();
   });
+
+  it('should render custom username and password labels and placeholders', () => {
+    const props = getProps({
+      userLabel: 'user-test-label',
+      userPlaceholder: 'user-test-placeholder',
+      passwordLabel: 'pwd-test-label',
+      passwordPlaceholder: 'pwd-test-placeholder',
+    });
+    render(<BasicAuth {...props} />);
+
+    expect(screen.getByLabelText('user-test-label *')).toHaveAttribute('placeholder', 'user-test-placeholder');
+    expect(screen.getByLabelText('pwd-test-label *')).toHaveAttribute('placeholder', 'pwd-test-placeholder');
+  });
 });

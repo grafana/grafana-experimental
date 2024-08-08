@@ -6,8 +6,12 @@ import { useCommonStyles } from '../styles';
 export type Props = {
   user?: string;
   passwordConfigured: boolean;
+  userLabel?: string;
   userTooltip?: PopoverContent;
+  userPlaceholder?: string;
+  passwordLabel?: string;
   passwordTooltip?: PopoverContent;
+  passwordPlaceholder?: string;
   onUserChange: (user: string) => void;
   onPasswordChange: (password: string) => void;
   onPasswordReset: () => void;
@@ -17,8 +21,12 @@ export type Props = {
 export const BasicAuth: React.FC<Props> = ({
   user,
   passwordConfigured,
+  userLabel = 'User',
   userTooltip = 'The username of the data source account',
+  userPlaceholder = 'User',
+  passwordLabel = 'Password',
   passwordTooltip = 'The password of the data source account',
+  passwordPlaceholder = 'Password',
   onUserChange,
   onPasswordChange,
   onPasswordReset,
@@ -34,7 +42,7 @@ export const BasicAuth: React.FC<Props> = ({
     <>
       <InlineField
         className={commonStyles.inlineFieldNoMarginRight}
-        label="User"
+        label={userLabel}
         labelWidth={24}
         tooltip={userTooltip}
         required
@@ -45,7 +53,7 @@ export const BasicAuth: React.FC<Props> = ({
       >
         <Input
           id="basic-auth-user-input"
-          placeholder="User"
+          placeholder={userPlaceholder}
           value={user}
           onChange={(e) => onUserChange(e.currentTarget.value)}
           required
@@ -57,7 +65,7 @@ export const BasicAuth: React.FC<Props> = ({
           commonStyles.inlineFieldWithSecret,
           styles.lastInlineField
         )}
-        label="Password"
+        label={passwordLabel}
         labelWidth={24}
         tooltip={passwordTooltip}
         required
@@ -70,7 +78,7 @@ export const BasicAuth: React.FC<Props> = ({
           id="basic-auth-password-input"
           isConfigured={passwordConfigured}
           onReset={readOnly ? () => {} : onPasswordReset}
-          placeholder="Password"
+          placeholder={passwordPlaceholder}
           onChange={(e) => onPasswordChange(e.currentTarget.value)}
           required
         />
