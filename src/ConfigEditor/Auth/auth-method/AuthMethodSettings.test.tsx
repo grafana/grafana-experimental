@@ -47,7 +47,7 @@ describe('<AuthMethodSettings />', () => {
     await openSelect(user);
 
     const selectOptionsMenu = screen.getByLabelText('Select options menu');
-    expect(screen.getAllByTestId('data-testid Select option')).toHaveLength(3);
+    expect(screen.getAllByLabelText('Select option')).toHaveLength(3);
     expect(within(selectOptionsMenu).getByText('Basic authentication')).toBeInTheDocument();
     expect(within(selectOptionsMenu).getByText('Forward OAuth Identity')).toBeInTheDocument();
     expect(within(selectOptionsMenu).getByText('No Authentication')).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe('<AuthMethodSettings />', () => {
 
     await openSelect(user);
 
-    const allOptions = screen.getAllByTestId('data-testid Select option');
+    const allOptions = screen.getAllByLabelText('Select option');
     expect(allOptions).toHaveLength(2);
     expect(within(allOptions[0]).getByText('Enable cross-site access control requests')).toBeInTheDocument();
     expect(within(allOptions[1]).getByText('No Authentication')).toBeInTheDocument();
