@@ -42,7 +42,7 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const AuthMethodSettings: React.FC<Props> = ({
+export const AuthMethodSettings = ({
   selectedMethod,
   mostCommonMethod,
   visibleMethods: visibleMethodsFromProps,
@@ -51,7 +51,7 @@ export const AuthMethodSettings: React.FC<Props> = ({
   onAuthMethodSelect,
   basicAuth,
   readOnly,
-}) => {
+}: Props) => {
   const [authMethodChanged, setAuthMethodChanged] = useState(false);
   const { colors, spacing } = useTheme2();
   const visibleMethods: Array<AuthMethod | CustomMethodId> = useMemo(

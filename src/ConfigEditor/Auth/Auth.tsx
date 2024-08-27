@@ -20,7 +20,7 @@ export type Props = {
   readOnly?: boolean;
 };
 
-export const Auth: React.FC<Props> = ({
+export const Auth = ({
   selectedMethod,
   mostCommonMethod,
   visibleMethods,
@@ -31,7 +31,7 @@ export const Auth: React.FC<Props> = ({
   TLS,
   customHeaders,
   readOnly = false,
-}) => {
+}: Props) => {
   const styles = {
     container: css({
       maxWidth: 578,

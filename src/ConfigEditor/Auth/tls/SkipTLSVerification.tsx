@@ -7,7 +7,7 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const SkipTLSVerification: React.FC<Props> = ({ enabled, onToggle, readOnly }) => {
+export const SkipTLSVerification = ({ enabled, onToggle, readOnly }: Props) => {
   return (
     <TLSSettingsSection
       enabled={enabled}

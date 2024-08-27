@@ -16,7 +16,7 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const SelfSignedCertificate: React.FC<Props> = ({
+export const SelfSignedCertificate = ({
   enabled,
   certificateConfigured,
   onToggle,
@@ -24,7 +24,7 @@ export const SelfSignedCertificate: React.FC<Props> = ({
   onCertificateReset,
   tooltips,
   readOnly,
-}) => {
+}: Props) => {
   const commonStyles = useCommonStyles();
 
   return (

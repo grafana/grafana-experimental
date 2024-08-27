@@ -6,12 +6,11 @@ import { useStyles2 } from '@grafana/ui';
 
 export interface Props {
   title?: React.ReactNode;
-  children?: React.ReactNode;
   markdown?: string;
   stepNumber?: number;
 }
 
-export function OperationExplainedBox({ title, stepNumber, markdown, children }: Props) {
+export function OperationExplainedBox({ title, stepNumber, markdown, children }: React.PropsWithChildren<Props>) {
   const styles = useStyles2(getStyles);
 
   return (

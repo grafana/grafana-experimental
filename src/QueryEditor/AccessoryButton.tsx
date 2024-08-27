@@ -5,7 +5,7 @@ import React from 'react';
 
 interface AccessoryButtonProps extends ButtonProps {}
 
-export const AccessoryButton: React.FC<AccessoryButtonProps> = ({ className, ...props }) => {
+export const AccessoryButton = ({ className, ...props }: AccessoryButtonProps) => {
   const styles = useStyles2(getButtonStyles);
 
   return <Button {...props} className={cx(className, styles.button)} />;

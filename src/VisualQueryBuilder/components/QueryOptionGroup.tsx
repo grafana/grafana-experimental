@@ -14,10 +14,9 @@ interface Props {
   title: string;
   collapsedInfo: string[];
   queryStats?: QueryStats | null;
-  children: React.ReactNode;
 }
 
-export function QueryOptionGroup({ title, children, collapsedInfo, queryStats }: Props) {
+export function QueryOptionGroup({ title, children, collapsedInfo, queryStats }: React.PropsWithChildren<Props>) {
   const [isOpen, toggleOpen] = useToggle(false);
   const styles = useStyles2(getStyles);
 

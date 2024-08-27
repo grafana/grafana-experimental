@@ -11,7 +11,7 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const CustomHeaders: React.FC<Props> = ({ headers: headersFromProps, onChange, readOnly }) => {
+export const CustomHeaders = ({ headers: headersFromProps, onChange, readOnly }: Props) => {
   const { spacing } = useTheme2();
 
   const [headers, setHeaders] = useState<LocalHeader[]>(

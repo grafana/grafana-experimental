@@ -9,7 +9,6 @@ export type Props = {
   isInitiallyOpen?: boolean;
   kind?: 'section' | 'sub-section';
   className?: string;
-  children: ReactNode;
 };
 
 export const GenericConfigSection = ({
@@ -20,7 +19,7 @@ export const GenericConfigSection = ({
   isInitiallyOpen = true,
   kind = 'section',
   className,
-}: Props) => {
+}: React.PropsWithChildren<Props>) => {
   const { colors, typography, spacing } = useTheme2();
   const [isOpen, setIsOpen] = useState(isCollapsible ? isInitiallyOpen : true);
   const iconName: IconName = isOpen ? 'angle-up' : 'angle-down';

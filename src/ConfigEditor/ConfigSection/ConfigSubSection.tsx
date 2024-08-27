@@ -3,7 +3,7 @@ import { GenericConfigSection, Props as GenericConfigSectionProps } from './Gene
 
 type Props = Omit<GenericConfigSectionProps, 'kind'>;
 
-export const ConfigSubSection = ({ children, ...props }: Props) => {
+export const ConfigSubSection = ({ children, ...props }: React.PropsWithChildren<Props>) => {
   return (
     <GenericConfigSection {...props} kind="sub-section">
       {children}
