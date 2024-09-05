@@ -2,9 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## v1.8
+## v2.0.0
 
 - Auth: Refactoring and renaming some inputs so this can be a breaking change
+
+## v1.8.0
+
+- Auth: add ability to customize labels and placeholders for user/password fields
+
+## v1.7.13
+
+- Switched from "react-beautiful-dnd" to "@hello-pangea/dnd"
 
 ## v1.7.12
 

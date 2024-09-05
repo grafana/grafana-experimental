@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DraggableProvided } from 'react-beautiful-dnd';
+import { DraggableProvided } from '@hello-pangea/dnd';
 import { Button, Icon, Tooltip, useTheme2 } from '@grafana/ui';
 import { css, cx } from '@emotion/css';
 import { DataSourceApi, GrafanaTheme2, TimeRange } from '@grafana/data';
