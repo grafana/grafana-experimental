@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.0.0
+
+- Auth: Refactoring and renaming some inputs so this can be a breaking change
+
 ## v1.8.0
 
 - Auth: add ability to customize labels and placeholders for user/password fields
