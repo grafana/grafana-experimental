@@ -6,11 +6,7 @@ import { useStyles2 } from '@grafana/ui';
 
 import { Stack } from '../../QueryEditor/Stack';
 
-interface Props {
-  children: React.ReactNode;
-}
-
-export function OperationsEditorRow({ children }: Props) {
+export function OperationsEditorRow({ children }: React.PropsWithChildren) {
   const styles = useStyles2(getStyles);
 
   return (

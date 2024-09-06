@@ -12,7 +12,7 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const CustomHeader: React.FC<Props> = ({ header, onChange, onBlur, onDelete, readOnly }) => {
+export const CustomHeader = ({ header, onChange, onBlur, onDelete, readOnly }: Props) => {
   const { spacing } = useTheme2();
   const commonStyles = useCommonStyles();
   const styles = {

@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-
+import { TextEncoder } from 'util';
 // https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 Object.defineProperty(global, 'matchMedia', {
   writable: true,
@@ -16,3 +16,5 @@ Object.defineProperty(global, 'matchMedia', {
 });
 
 HTMLCanvasElement.prototype.getContext = () => {};
+
+global.TextEncoder = TextEncoder;

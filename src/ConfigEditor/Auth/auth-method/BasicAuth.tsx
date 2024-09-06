@@ -18,7 +18,7 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const BasicAuth: React.FC<Props> = ({
+export const BasicAuth = ({
   user,
   passwordConfigured,
   userLabel = 'User',
@@ -31,7 +31,7 @@ export const BasicAuth: React.FC<Props> = ({
   onPasswordChange,
   onPasswordReset,
   readOnly,
-}) => {
+}: Props) => {
   const commonStyles = useCommonStyles();
   const styles = {
     lastInlineField: css({

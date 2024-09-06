@@ -70,7 +70,7 @@ interface LanguageRegistries {
 const LANGUAGES_CACHE = new Map<string, LanguageRegistries>();
 const INSTANCE_CACHE = new Map<string, Registry<SuggestionsRegistryItem>>();
 
-export const SQLEditor: React.FC<SQLEditorProps> = ({
+export const SQLEditor = ({
   children,
   onBlur,
   onChange,
@@ -78,7 +78,7 @@ export const SQLEditor: React.FC<SQLEditorProps> = ({
   language = { id: STANDARD_SQL_LANGUAGE },
   width,
   height,
-}) => {
+}: React.PropsWithChildren<SQLEditorProps>) => {
   const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor | null>(null);
   const langUid = useRef<string>();
   // create unique language id for each SQLEditor instance

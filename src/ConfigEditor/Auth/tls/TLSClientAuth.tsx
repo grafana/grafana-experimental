@@ -23,7 +23,7 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const TLSClientAuth: React.FC<Props> = ({
+export const TLSClientAuth = ({
   enabled,
   serverName,
   clientCertificateConfigured,
@@ -36,7 +36,7 @@ export const TLSClientAuth: React.FC<Props> = ({
   onClientKeyReset,
   tooltips,
   readOnly,
-}) => {
+}: Props) => {
   const commonStyles = useCommonStyles();
 
   return (

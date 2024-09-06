@@ -8,14 +8,13 @@ import { Field, Icon, PopoverContent, ReactUtils, Tooltip, useStyles2 } from '@g
 
 interface EditorFieldProps extends ComponentProps<typeof Field> {
   label: string;
-  children: React.ReactElement;
   width?: number | string;
   optional?: boolean;
   tooltip?: PopoverContent;
   tooltipInteractive?: boolean;
 }
 
-export const EditorField: React.FC<EditorFieldProps> = (props) => {
+export const EditorField = (props: React.PropsWithChildren<EditorFieldProps>) => {
   const { label, optional, tooltip, tooltipInteractive, children, width, ...fieldProps } = props;
 
   const styles = useStyles2(useCallback((theme) => getStyles(theme, width), [width]));

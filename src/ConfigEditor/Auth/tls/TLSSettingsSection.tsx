@@ -10,7 +10,7 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const TLSSettingsSection: React.FC<Props> = ({ children, enabled, label, tooltipText, onToggle, readOnly }) => {
+export const TLSSettingsSection = ({ children, enabled, label, tooltipText, onToggle, readOnly }: React.PropsWithChildren<Props>) => {
   const { colors, spacing } = useTheme2();
   const styles = {
     container: css({

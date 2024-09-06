@@ -13,12 +13,12 @@ export type Props = {
   readOnly: boolean;
 };
 
-export const TLSSettings: React.FC<Props> = ({
+export const TLSSettings = ({
   selfSignedCertificate,
   TLSClientAuth,
   skipTLSVerification,
   readOnly,
-}) => {
+}: Props) => {
   const { spacing } = useTheme2();
 
   const styles = {
