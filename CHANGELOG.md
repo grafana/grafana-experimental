@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.1.0
+
+-  Bump @grafana dependencies and React to 18
+
 ## v2.0.0
 
 - Auth: Refactoring and renaming some inputs so this can be a breaking change
