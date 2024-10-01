@@ -78,7 +78,7 @@ export const SQLEditor = ({
   language = { id: STANDARD_SQL_LANGUAGE },
   width,
   height,
-}: React.PropsWithChildren<SQLEditorProps>) => {
+}: SQLEditorProps) => {
   const monacoRef = useRef<monacoTypes.editor.IStandaloneCodeEditor | null>(null);
   const langUid = useRef<string>();
   // create unique language id for each SQLEditor instance
