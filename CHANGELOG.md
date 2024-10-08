@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## v2.1.1
+## v2.1.2
 
-- Relax peer dependencies
+- Chore: Relax peer dependencies
 
 ## v2.1.1
 
