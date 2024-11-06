@@ -34,7 +34,7 @@ The new components usage looks like this:
 import {
   ConfigSection,
   ConnectionSettings,
-  Auth
+  Auth,
   AdvancedHttpSettings,
   convertLegacyAuthProps,
 } from '@grafana/experimental'
