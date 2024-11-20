@@ -66,7 +66,7 @@ export const OperationHeader = React.memo<Props>(
                   onClick={() => onToggle(index)}
                   fill="text"
                   variant="secondary"
-                  title="Disable operation"
+                  title={operation.disabled ? "Enable operation" : "Disable operation"}
                 />
               )}
               <Button
