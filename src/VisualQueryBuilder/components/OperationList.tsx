@@ -51,6 +51,10 @@ export function OperationList<T extends VisualQuery>({
     onChange({ ...query, operations: updatedList });
   };
 
+  const onToggle = (index: number) => {
+    onOperationChange(index, { ...operations[index], disabled: !operations[index].disabled, });
+  };
+
   const addOptions: CascaderOption[] = queryModeller.getCategories().map((category) => {
     return {
       value: category,
@@ -107,6 +111,7 @@ export function OperationList<T extends VisualQuery>({
                         datasource={datasource}
                         onChange={onOperationChange}
                         onRemove={onRemove}
+                        onToggle={onToggle}
                         onRunQuery={onRunQuery}
                         flash={opsToHighlight[index]}
                         highlight={highlightedOp === op}
