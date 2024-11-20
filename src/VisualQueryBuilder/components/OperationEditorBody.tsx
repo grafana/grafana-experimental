@@ -184,6 +184,7 @@ const getStyles = (theme: GrafanaTheme2, isConflicting: boolean) => {
     }),
     disabled: css({
       opacity: 0.5,
+      transition: 'none',
     }),
     cardError: css({
       boxShadow: `0px 0px 4px 0px ${theme.colors.warning.main}`,
