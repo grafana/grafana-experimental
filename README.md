@@ -1,10 +1,9 @@
 # Grafana Experimental
 
-> [!WARNING]
-> As part of our ongoing efforts to improve and streamline our UI components, we are gradually deprecating this repository.\
-> Components previously housed here are being migrated to other UI components packages such as [grafana/ui](https://github.com/grafana/grafana/tree/main/packages/grafana-ui) and [grafana/plugin-ui](https://github.com/grafana/plugin-ui).\
-> Please note that future development and improvements should happen in the respective new locations. We recommend developers to start using and referencing the new packages in their projects.\
-> Thank you for your understanding and cooperation during this transition.
+> [!CAUTION]  
+> This repository has been **deprecated**.  
+> Components previously housed here have been migrated to [@grafana/plugin-ui](https://github.com/grafana/plugin-ui).  
+> Please use [@grafana/plugin-ui](https://github.com/grafana/plugin-ui) for any future development and improvements. Thank you for your understanding.
 
 The main difference between grafana/experimental and grafana/ui is how the components are versioned. Having a separate "experimental" package allows us to release breaking changes when necessary while the grafana/ui package follows a slower-moving policy.
 
