@@ -2,10 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## v2.1.6
-
-- Make `<Auth />` component usable with Playwright following our [testing guidelines](https://github.com/grafana/grafana/blob/401265522e584e4e71a1d92d5af311564b1ec33e/contribute/style-guides/testing.md)
-
 ## v2.1.5
 
 - Add deprecation message
