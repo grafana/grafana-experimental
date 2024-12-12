@@ -2,9 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## v2.1.3
+## v2.1.5
 
 - Add deprecation message
+
+## v2.1.3
+
+- Query builder: Add support to disable operations
 
 ## v2.1.2
 
