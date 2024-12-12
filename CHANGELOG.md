@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.1.3
+
+- Add deprecation message
+
 ## v2.1.2
 
 - Chore: Relax peer dependencies
