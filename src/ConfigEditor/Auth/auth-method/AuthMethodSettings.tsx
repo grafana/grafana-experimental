@@ -1,10 +1,10 @@
 import React, { ReactElement, useMemo, useState } from 'react';
 import { css } from '@emotion/css';
-import { useTheme2, Select } from '@grafana/ui';
+import { useTheme2, Select, Field } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import { BasicAuth, Props as BasicAuthProps } from './BasicAuth';
 import { ConfigSubSection } from '../../ConfigSection';
-import { AuthMethod, CustomMethod, CustomMethodId , AuthMethodSelectOption } from '../types';
+import { AuthMethod, CustomMethod, CustomMethodId, AuthMethodSelectOption } from '../types';
 
 const defaultOptions: Record<AuthMethod, SelectableValue<AuthMethod>> = {
   [AuthMethod.BasicAuth]: {
@@ -83,7 +83,7 @@ export const AuthMethodSettings = ({
       preparedDefaultOptions[k] = {
         ...defaultOptions[k],
         ...defaultOptionsOverrides?.[k],
-      }
+      };
     }
 
     const allOptions: Record<AuthMethod | CustomMethodId, SelectableValue<AuthMethod | CustomMethodId>> = {
@@ -119,11 +119,11 @@ export const AuthMethodSettings = ({
     AuthFieldsComponent = customMethods?.find((m) => m.id === selected)?.component ?? null;
   }
 
-  const title = hasSelect ? 'Authentication methods' : preparedOptions[0].label ?? '';
+  const title = hasSelect ? 'Authentication methods' : (preparedOptions[0].label ?? '');
 
   const description = hasSelect
     ? 'Choose an authentication method to access the data source'
-    : preparedOptions[0].description ?? '';
+    : (preparedOptions[0].description ?? '');
 
   const styles = {
     authMethods: css({
@@ -142,15 +142,18 @@ export const AuthMethodSettings = ({
     <ConfigSubSection title={title} description={description}>
       <div className={styles.authMethods}>
         {hasSelect && (
-          <Select
-            options={preparedOptions}
-            value={selected}
-            onChange={(option) => {
-              setAuthMethodChanged(true);
-              onAuthMethodSelect(option.value!);
-            }}
-            disabled={readOnly}
-          />
+          <Field label="Authentication method">
+            <Select
+              inputId="auth-method-select"
+              options={preparedOptions}
+              value={selected}
+              onChange={(option) => {
+                setAuthMethodChanged(true);
+                onAuthMethodSelect(option.value!);
+              }}
+              disabled={readOnly}
+            />
+          </Field>
         )}
         {AuthFieldsComponent && <div className={styles.selectedMethodFields}>{AuthFieldsComponent}</div>}
       </div>
