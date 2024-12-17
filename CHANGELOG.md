@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.1.6
+
+- Auth: Make AuthMethodSettings select more Playwright friendly.
+
 ## v2.1.5
 
 - Add deprecation message
